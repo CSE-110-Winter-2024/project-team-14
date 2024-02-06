@@ -8,6 +8,7 @@ import java.util.Objects;
 
 /**
  * Just a dummy domain model that does nothing in particular. Delete me.
+ * Aasiyah did not delete this in case we need it for reference later
  */
 public class Dummy {
     private final @Nullable Integer id;
