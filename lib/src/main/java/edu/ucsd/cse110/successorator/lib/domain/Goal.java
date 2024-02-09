@@ -9,10 +9,10 @@ public class Goal implements Serializable {
 
     @NonNull
     private final String text;
+    private final Integer id;
     private final boolean completed;
-    private final int id;
 
-    Goal(@NonNull String text, int id, boolean completed) {
+    public Goal(@NonNull String text, Integer id, boolean completed) {
         this.text = text;
         this.id = id;
         this.completed = completed;
@@ -21,6 +21,8 @@ public class Goal implements Serializable {
     public String getGoalText() {
         return this.text;
     }
+
+    public Integer id() { return this.id; }
 
     public boolean isCompleted() {
         return this.completed;
