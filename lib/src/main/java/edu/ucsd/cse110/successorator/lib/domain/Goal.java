@@ -1,47 +1,38 @@
 package edu.ucsd.cse110.successorator.lib.domain;
-
 import androidx.annotation.NonNull;
-
+import androidx.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Objects;
-
 public class Goal implements Serializable {
-
-    @NonNull
-    private final String text;
+    private final @Nullable Integer id;
+    private final @NonNull String taskText;
     private final boolean completed;
-    private final int id;
-
-    Goal(@NonNull String text, int id, boolean completed) {
-        this.text = text;
+    private final @NonNull Integer sortOrder;
+    public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder) {
         this.id = id;
+        this.taskText = taskText;
         this.completed = completed;
+        this.sortOrder = sortOrder;
     }
-
-    public String getGoalText() {
-        return this.text;
+    public @Nullable Integer id() {
+        return this.id;
     }
-
-    public boolean isCompleted() {
+    public @Nullable String taskText() {
+        return this.taskText;
+    }
+    public boolean completed() {
         return this.completed;
     }
-
+    public @Nullable Integer sortOrder() {
+        return this.sortOrder;
+    }
+    public Goal withId(int id) {
+        return new Goal(id, this.taskText, this.completed, this.sortOrder);
+    }
+    public Goal withSortOrder(int sortOrder) {
+        return new Goal(this.id, this.taskText, this.completed, sortOrder);
+    }
     public Goal toggleCompleted() {
-        return new Goal(this.text, this.id, !completed);
+        return new Goal(this.id, this.taskText, !this.completed, this.sortOrder);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Goal goal = (Goal) o;
-        return completed == goal.completed && Objects.equals(text, goal.text);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(text, completed, id);
-    }
-
-
 }
