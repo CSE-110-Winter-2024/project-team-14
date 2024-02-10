@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListFragment;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
@@ -29,5 +30,9 @@ public class MainActivity extends AppCompatActivity {
         var view = ActivityMainBinding.inflate(getLayoutInflater());
 
         setContentView(view.getRoot());
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, CardListFragment.newInstance())
+                .commit();
     }
 }
