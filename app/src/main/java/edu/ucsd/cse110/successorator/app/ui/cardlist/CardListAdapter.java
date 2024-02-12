@@ -5,12 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-
 import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.app.databinding.CardListItemBinding;
 
@@ -22,22 +19,23 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // get the goal for this position
-        var goal = getItem(position);
+        // Get the goal for this position
+        Goal goal = getItem(position);
         assert goal != null;
 
-        // check if a view is being reused
+        // Check if an existing view is being reused, otherwise inflate the view
         CardListItemBinding binding;
-        if (convertView != null) {
-            // if so, bind to it
-            binding = CardListItemBinding.bind(convertView);
-        } else {
-            // otherwise inflate a new view from our layout xml
-            var layoutInflater = LayoutInflater.from(getContext());
+        if (convertView == null) {
+            // Inflate a new view
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             binding = CardListItemBinding.inflate(layoutInflater, parent, false);
+        } else {
+            // Reuse existing view
+            binding = CardListItemBinding.bind(convertView);
         }
 
-        // populate the view with the goal's data
+        // Populate the view with the goal's data
+        // Assuming Goal class has getDescription() method for the task description
         binding.taskText.setText(goal.taskText());
 
         return binding.getRoot();
@@ -45,17 +43,16 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
 
     @Override
     public boolean hasStableIds() {
+        // Return true if your items' ids are unique and stable
         return true;
     }
 
     @Override
     public long getItemId(int position) {
-        var goal = getItem(position);
+        // Assuming Goal class has getId() method returning a unique ID as long
+        Goal goal = getItem(position);
         assert goal != null;
-
-        var id = goal.id();
-        assert id != null;
-
-        return id;
+        return goal.id();
     }
+
 }

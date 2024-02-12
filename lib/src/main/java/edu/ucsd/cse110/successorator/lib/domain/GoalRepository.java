@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -27,4 +28,13 @@ public class GoalRepository {
     public void save(Goal goal) {
         dataSource.putGoal(goal);
     }
+
+    public void append(Goal goal) {
+        dataSource.addGoal(goal);
+    }
+
+    public void remove(int id) {
+        dataSource.removeGoal(id);
+    }
+
 }

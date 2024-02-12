@@ -1,66 +1,79 @@
 package edu.ucsd.cse110.successorator.app;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
+import edu.ucsd.cse110.successorator.app.ui.dialog.CreateGoalDialogFragment;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
+// Assuming CardListAdapter is suitable for displaying Goal objects.
+// If not, replace CardListAdapter with your Goal-specific adapter.
+import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
+
 public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding view;
+    private ActivityMainBinding binding;
     private MainViewModel model;
     private CardListAdapter adapter;
 
-//    String fruitList[] = {"Apple", "Banana", "Apricot", "Orange", "Melon"};
-//    ListView listView;
-
-    protected void onCreate(@Nullable Bundle savedInstanceState, @NonNull LayoutInflater inflater, @Nullable ViewGroup container) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set the title for the activity; replace R.string.app_title with your actual title resource ID
         setTitle(R.string.app_title);
 
-        // initialize the model
+        // Initialize the InMemoryDataSource, GoalRepository, and MainViewModel
         var dataSource = InMemoryDataSource.fromDefault();
-        this.model = new MainViewModel(new GoalRepository(dataSource));
+        var goalRepository = new GoalRepository(dataSource);
+        this.model = new MainViewModel(goalRepository);
 
-        // initialize the Adapter (with an empty list first)
-        this.adapter = new CardListAdapter(this, List.of());
-        this.model.getOrderedCards().observe(cards -> {
-            if (cards == null) return;
+        // Initialize the binding
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        // Initialize the adapter with an empty list
+        this.adapter = new CardListAdapter(this, new ArrayList<>());
+
+//         Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
+        //doesnt require live data so we do not need this, goals
+        model.getOrderedGoals().observe((List<Goal> goals) -> {
+            if (goals == null) return;
+
             adapter.clear();
-            System.out.println(cards);
-            adapter.addAll(new ArrayList<>(cards));
+            adapter.addAll(goals);
+            Goal g1 = new Goal(10, "abc", false, -1);
+            adapter.add(g1);
             adapter.notifyDataSetChanged();
         });
 
-        // initialize the view
-        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        binding.cardList.setAdapter(adapter);
 
-        // set the adapter on the ListView
-        view.cardList.setAdapter(adapter);
+        binding.addButton.setOnClickListener(v -> {
+            CreateGoalDialogFragment dialog = CreateGoalDialogFragment.newInstance();
+            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
+            dialog.show(getSupportFragmentManager(), "CreateGoalDialog");
+        });
 
-        // observe model -> call view
-
-        // observe view -> call model
-
-        setContentView(view.getRoot());
-
-//        listView = (ListView) findViewById(R.id.card_list);
-//        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.card_list_item, R.id.task_text, fruitList);
-//        listView.setAdapter(arrayAdapter);
+        // Set the adapter on the ListView using the binding
+        binding.cardList.setAdapter(adapter);
     }
+
+//    @Nullable
+//    @Override
+//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
+//                             Bundle savedInstanceState){
+//
+//    }
 }
