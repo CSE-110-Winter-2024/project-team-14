@@ -46,12 +46,12 @@ public class MainViewModel extends ViewModel {
             orderedGoals.setValue(newOrderedGoals);
         });
 
-        // When the ordering changes, update the current goal.
-        orderedGoals.observe(goals -> {
-            if (goals == null || goals.isEmpty()) return;
-            var goal = goals.get(0);
-            goalDescription.setValue(goal.taskText()); // Assuming Goal has a getDescription method.
-        });
+//        // When the ordering changes, update the current goal.
+//        orderedGoals.observe(goals -> {
+//            if (goals == null || goals.isEmpty()) return;
+//            var goal = goals.get(0);
+//            goalDescription.setValue(goal.taskText()); // Assuming Goal has a getDescription method.
+//        });
     }
 
     public Subject<String> getGoalDescription() {
@@ -74,11 +74,15 @@ public class MainViewModel extends ViewModel {
         orderedGoals.setValue(goals);
     }
 
-    public void addGoal(Goal goal) {
+    public void append(Goal goal) {
         goalRepository.append(goal);
     }
 
-    public void removeGoal(int id) {
+    public void remove(int id) {
         goalRepository.remove(id);
+    }
+
+    public void updateGoal(Goal goal) {
+        goalRepository.updateGoal(goal);
     }
 }
