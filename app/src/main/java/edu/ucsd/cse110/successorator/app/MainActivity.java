@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         });
         adapter.notifyDataSetChanged();
 
-        binding.cardList.set
+
 
 
         //adapter.notifyDataSetChanged();
