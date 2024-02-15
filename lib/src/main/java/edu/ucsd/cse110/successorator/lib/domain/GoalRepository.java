@@ -30,7 +30,7 @@ public class GoalRepository {
     }
 
     public void append(Goal goal) {
-        dataSource.addGoal(goal);
+        dataSource.putGoal(goal);
     }
 
     public void remove(int id) {

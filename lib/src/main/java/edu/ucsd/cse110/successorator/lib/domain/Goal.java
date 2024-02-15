@@ -18,7 +18,7 @@ public class Goal implements Serializable {
     public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder) {
         this.id = id;
         this.taskText = taskText;
-        this.completed = completed;
+        this.completed = false;
         this.sortOrder = sortOrder;
     }
 

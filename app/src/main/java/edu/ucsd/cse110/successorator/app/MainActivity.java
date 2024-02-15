@@ -52,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
             if (goals == null) return;
 
             adapter.clear();
-            adapter.addAll(goals);
-            Goal g1 = new Goal(10, "abc", false, -1);
-            adapter.add(g1);
+            adapter.addAll(new ArrayList<>(goals));
+            //adapter.add(new Goal(0, "Hi", false, 100));
             adapter.notifyDataSetChanged();
         });
 
@@ -62,18 +61,18 @@ public class MainActivity extends AppCompatActivity {
 
         binding.addButton.setOnClickListener(v -> {
             CreateGoalDialogFragment dialog = CreateGoalDialogFragment.newInstance();
-            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
             dialog.show(getSupportFragmentManager(), "CreateGoalDialog");
+//            binding.getRoot();
+//            adapter.notifyDataSetChanged();
         });
+        adapter.notifyDataSetChanged();
 
-        // Set the adapter on the ListView using the binding
-        binding.cardList.setAdapter(adapter);
+        binding.cardList.set
+
+
+        //adapter.notifyDataSetChanged();
+
+        //binding.cardList.setAdapter(adapter);
     }
 
-//    @Nullable
-//    @Override
-//    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable
-//                             Bundle savedInstanceState){
-//
-//    }
 }

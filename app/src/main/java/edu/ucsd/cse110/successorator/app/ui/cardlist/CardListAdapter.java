@@ -8,12 +8,16 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.app.databinding.CardListItemBinding;
 
 public class CardListAdapter extends ArrayAdapter<Goal> {
     public CardListAdapter(Context context, List<Goal> goals) {
+
         super(context, 0, new ArrayList<>(goals));
+
     }
 
     @NonNull
@@ -25,13 +29,13 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
 
         // Check if an existing view is being reused, otherwise inflate the view
         CardListItemBinding binding;
-        if (convertView == null) {
-            // Inflate a new view
-            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            binding = CardListItemBinding.inflate(layoutInflater, parent, false);
-        } else {
-            // Reuse existing view
+        if (convertView != null) {
+            // if so, bind to it
             binding = CardListItemBinding.bind(convertView);
+        } else {
+            // otherwise inflate a new view from our layout XML.
+            var layoutInflater = LayoutInflater.from(getContext());
+            binding = CardListItemBinding.inflate(layoutInflater, parent, false);
         }
 
         // Populate the view with the goal's data
@@ -52,7 +56,11 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         // Assuming Goal class has getId() method returning a unique ID as long
         Goal goal = getItem(position);
         assert goal != null;
-        return goal.id();
+
+        var id = goal.id();
+
+        assert id != null;
+        return id;
     }
 
 }

@@ -62,6 +62,7 @@ public class MainViewModel extends ViewModel {
         return orderedGoals;
     }
 
+    //not correct
     public void completeGoal() {
         var goals = this.orderedGoals.getValue();
         if (goals == null || goals.isEmpty()) return;
@@ -75,10 +76,25 @@ public class MainViewModel extends ViewModel {
     }
 
     public void addGoal(Goal goal) {
-        goalRepository.append(goal);
+        goalRepository.append(goal); // Add the goal to the repository
+
+        // Now, re-fetch or update the list of goals to reflect this addition
+        var updatedGoals = goalRepository.findAll().getValue(); // Assuming findAll() returns a Subject<List<Goal>>
+        if (updatedGoals != null) {
+            var newOrderedGoals = updatedGoals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+
+            orderedGoals.setValue(newOrderedGoals); // Update the ordered goals to trigger UI update
+        }
     }
+
 
     public void removeGoal(int id) {
         goalRepository.remove(id);
+    }
+
+    public void append(Goal goal){
+        goalRepository.append(goal);
     }
 }
