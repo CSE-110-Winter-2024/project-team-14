@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
             adapter.clear();
             adapter.addAll(goals);
-//            Goal g1 = new Goal(1, "abc", false, -1);
-//            adapter.add(g1);
             adapter.notifyDataSetChanged();
         });
 
@@ -70,18 +68,11 @@ public class MainActivity extends AppCompatActivity {
         // Set the adapter on the ListView using the binding
         binding.cardList.setAdapter(adapter);
         binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
-
-
                 Goal clickedGoal = adapter.getItem(position);
                 if (clickedGoal == null) return;
-                System.out.println(clickedGoal.completed());
-                
+
                 model.updateGoal(clickedGoal);
                 adapter.notifyDataSetChanged();
-                System.out.println(clickedGoal.completed());
-
-                System.out.println(clickedGoal.taskText());
-
         });
     }
 }

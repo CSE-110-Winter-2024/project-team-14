@@ -11,7 +11,7 @@ import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class InMemoryDataSource {
-    private int nextId = 5;
+    private int nextId = 0;
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
     private final Map<Integer, Goal> goals = new HashMap<>();
@@ -75,19 +75,25 @@ public class InMemoryDataSource {
 
     public void updateGoal(Goal goal) {
         if (this.goals.containsKey(goal.id())) {
-            System.out.println(goal.completed() + "before");
             Goal updatedGoal = goal.toggleCompleted();
-            System.out.println(updatedGoal.completed() + "after");
 
-            goal.withSortOrder(getMaxSortOrder() + 1);
-            this.goals.put(goal.id(), updatedGoal);
+            if (updatedGoal.completed()) {
+                removeGoal(updatedGoal.id()); // remove and shift sort orders
+                postInsert(); // update maxSortOrder
+                Goal newSortedGoal = updatedGoal.withSortOrder(getMaxSortOrder() + 1);
+                addGoal(newSortedGoal);
+            } else {
+                shiftSortOrders(0, getMaxSortOrder(), 1); // make space at beginning for it
+                removeGoal(updatedGoal.id());
+                postInsert();
+                Goal newSortedGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
+                addGoal(newSortedGoal);
+            }
 
             if(goalSubjects.containsKey(goal.id())) {
-                goalSubjects.get(goal.id()).setValue(updatedGoal);
+                goalSubjects.get(updatedGoal.id()).setValue(updatedGoal);
             }
         }
-
-
         allGoalsSubject.setValue(getGoals());
     }
 
