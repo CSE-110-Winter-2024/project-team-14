@@ -77,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
             adapter.clear();
             adapter.addAll(goals);
-            Goal g1 = new Goal(10, "abc", false, -1);
-            adapter.add(g1);
+            //Goal g1 = new Goal(10, "abc", false, -1);
+           // adapter.add(g1);
             adapter.notifyDataSetChanged();
         });
 
@@ -95,11 +95,23 @@ public class MainActivity extends AppCompatActivity {
        // binding.dateTextView.setText(currentDateandTime);
 
 
-        // Schedule the alarm to trigger DateUpdateReceiver at 2 AM every day
-     //   scheduleAlarm();
+        // Set the adapter on the ListView using the binding
+        binding.cardList.setAdapter(adapter);
+        binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
+            Goal clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return;
+
+            model.updateGoal(clickedGoal);
+            adapter.notifyDataSetChanged();
+        });
 
         // Update the date immediately
         updateDate();
+
+
+        // Schedule the alarm to trigger DateUpdateReceiver at 2 AM every day
+     //   scheduleAlarm();
+
 
         //---------------------------- Attempt 2---------------------------------------
         /*
