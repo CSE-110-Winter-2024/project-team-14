@@ -22,6 +22,8 @@
             </intent-filter>
         </activity>
 
+        <!-- Add your BroadcastReceiver declaration here -->
+        <receiver android:name=".DateUpdateReceiver" />
     </application>
 
 </manifest>

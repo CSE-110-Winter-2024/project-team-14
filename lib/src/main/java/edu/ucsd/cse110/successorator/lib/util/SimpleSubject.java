@@ -32,6 +32,16 @@ public class SimpleSubject<T> implements MutableSubject<T> {
         observers.remove(observer);
     }
 
+    @Override
+    public void registerObserver(Observer<String> observer) {
+
+    }
+
+    @Override
+    public void unregisterObserver(Observer<String> observer) {
+
+    }
+
     /**
      * Notifies all observers of the subject's new value. Used internally.
      */
