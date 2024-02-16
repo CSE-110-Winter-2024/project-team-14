@@ -48,8 +48,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
         var front = view.goalFrontEditText.getText().toString();
 
         var goal = new Goal(null, front,false,-1);
-        activityModel.addGoal(goal);
-        //view.notify();
+        activityModel.append(goal);
 
         dialog.dismiss();
     }

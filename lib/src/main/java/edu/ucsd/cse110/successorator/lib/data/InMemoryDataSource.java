@@ -12,7 +12,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class InMemoryDataSource {
 
-    private int nextId = 0;
+    private int nextId = 1;
 
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
@@ -25,6 +25,28 @@ public class InMemoryDataSource {
         // Initialize `nextId` based on DEFAULT_GOALS to ensure uniqueness
 //
         //fromDefault();
+    }
+
+    public final static List<Goal> DEFAULT_GOALS = List.of(
+            new Goal(0, "Wash dishes", false, 0),
+            new Goal(1, "Do laundry", false, 1),
+            new Goal(2, "Cook lunch", false, 2)
+//            new Goal(3, "Cook lunch1", false, 3),
+//            new Goal(4, "Cook lunch2", false, 4)
+    );
+
+    public static InMemoryDataSource fromDefault() {
+        var data = new InMemoryDataSource();
+        data.addGoals(DEFAULT_GOALS);
+        return data;
+    }
+
+    public int getMinSortOrder() {
+        return minSortOrder;
+    }
+
+    public int getMaxSortOrder() {
+        return maxSortOrder;
     }
 
     public List<Goal> getGoals() {
@@ -50,54 +72,104 @@ public class InMemoryDataSource {
         return allGoalsSubject;
     }
 
-    public void putGoal(Goal goal) {
-        var fixedCard = preInsert(goal);
+    public void addGoal(Goal goal) {
+        Goal fixedGoal;
+        if (goal.id() == null) {
+            fixedGoal = preInsert(goal);
+            fixedGoal = fixedGoal.withSortOrder(fixedGoal.id());
 
-        assert fixedCard.id() != null;
+        } else {
+            fixedGoal = preInsert(goal);
+        }
+        assert fixedGoal.id() != null;
 
-        fixedCard = fixedCard.withSortOrder(fixedCard.id());
-
-        goals.put(fixedCard.id(), fixedCard);
+        this.goals.put(fixedGoal.id(), fixedGoal);
         postInsert();
-        //assertSortOrderConstraints();
+        assertSortOrderConstraints();
 
-        if (goalSubjects.containsKey(fixedCard.id())) {
-            goalSubjects.get(fixedCard.id()).setValue(fixedCard);
+        if (goalSubjects.containsKey(fixedGoal.id())) {
+            goalSubjects.get(fixedGoal.id()).setValue(fixedGoal);
         }
         allGoalsSubject.setValue(getGoals());
-
-
     }
 
-    public void putGoals(List<Goal> goals) {
-        goals.forEach(goal -> this.goals.put(goal.id(), goal));
-        goals.forEach(goal -> goalSubjects.computeIfAbsent(goal.id(), k -> new SimpleSubject<>()).setValue(goal));
-        allGoalsSubject.setValue(getGoals()); // Update the list of all goals
+        public void addGoals(List<Goal> goals) {
+        var fixedGoals = goals.stream()
+                .map(this::preInsert)
+                .collect(Collectors.toList());
+
+        fixedGoals.forEach(goal -> this.goals.put(goal.id(), goal));
+        postInsert();
+        assertSortOrderConstraints();
+
+        fixedGoals.forEach(card -> {
+            if (goalSubjects.containsKey(card.id())) {
+                goalSubjects.get(card.id()).setValue(card);
+            }
+        });
+        allGoalsSubject.setValue(getGoals());
     }
 
-    public int getMinSortOrder() {
-        return Integer.MAX_VALUE;
+    public void removeGoal(int id) {
+        if (!goals.containsKey(id)) return; // No action if goal doesn't exist
+        var card = this.goals.get(id);
+        var sortOrder = card.sortOrder();
+
+        goals.remove(id);
+        shiftSortOrders(sortOrder, maxSortOrder, -1);
+
+        if (goalSubjects.containsKey(id)) {
+            goalSubjects.get(id).setValue(null);
+        }
+        allGoalsSubject.setValue(getGoals());
     }
 
-    public int getMaxSortOrder() {
-        return Integer.MIN_VALUE;
+    public void updateGoal(Goal goal) {
+        if (this.goals.containsKey(goal.id())) {
+            Goal updatedGoal = goal.toggleCompleted();
+
+            if (updatedGoal.completed()) {
+                removeGoal(updatedGoal.id()); // remove and shift sort orders
+                postInsert(); //update maxSortOrder
+                Goal newSortedGoal = updatedGoal.withSortOrder(getMaxSortOrder() + 1);
+                addGoal(newSortedGoal);
+
+            } else {
+                shiftSortOrders(0, getMaxSortOrder(), 1); //make space at beginning for it
+                removeGoal(updatedGoal.id());
+                postInsert();
+                Goal newSortedGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
+                addGoal(newSortedGoal);
+            }
+
+            if (goalSubjects.containsKey(goal.id())) {
+                goalSubjects.get(updatedGoal.id()).setValue(updatedGoal);
+            }
+        }
+        allGoalsSubject.setValue(getGoals());
     }
 
-    public void addGoal(Goal goal) {
+    public void shiftSortOrders(int from, int to, int by) {
+        var goals = this.goals.values().stream()
+                .filter(goal -> goal.sortOrder() >= from && goal.sortOrder() <= to)
+                .map(goal -> goal.withSortOrder(goal.sortOrder() + by)) // Adjust sortOrder
+                .collect(Collectors.toList());
 
-        //var nextId  = goals.values().stream().mapToInt(Goal::id).max().orElse(0) + 1;
+        addGoals(goals); // Re-insert adjusted goals
+    }
 
-        // Assign a new ID if the goal's ID is null
-        int newId = goal.id() == null ? nextId : goal.id();
-
-        // Create a new goal with the assigned ID if necessary
-        Goal newGoal = goal.id() == null ? goal.withId(newId) : goal;
-
-        // Add the new goal to the map
-        goals.put(newGoal.id(), newGoal);
-        goalSubjects.computeIfAbsent(newGoal.id(), k -> new SimpleSubject<>()).setValue(newGoal);
-        allGoalsSubject.setValue(getGoals()); // Notify observers of the change
-        System.out.println(goal.taskText());
+    private Goal preInsert(Goal goal) {
+        var id = goal.id();
+        if (id == null) {
+            // If the card has no id, give it one.
+            goal = goal.withId(nextId++);
+        }
+        else if (id > nextId) {
+            // If the card has an id, update nextId if necessary to avoid giving out the same
+            // one. This is important for when we pre-load cards like in fromDefault().
+            nextId = id + 1;
+        }
+        return goal;
     }
 
     private void postInsert() {
@@ -113,74 +185,20 @@ public class InMemoryDataSource {
                 .orElse(Integer.MIN_VALUE);
     }
 
-    private Goal preInsert(Goal goal) {
-        assert goal != null;
-        var id = goal.id();
-        if (id == null) {
-            // If the card has no id, give it one.
-            goal = goal.withId(nextId++ + 1);
-        }
-        else if (id > nextId) {
-            // If the card has an id, update nextId if necessary to avoid giving out the same
-            // one. This is important for when we pre-load cards like in fromDefault().
-            nextId = id + 1;
-        }
-
-        return goal;
-    }
-
-    public void removeGoal(int id) {
-        if (!goals.containsKey(id)) return; // No action if goal doesn't exist
-
-        var goal = goals.get(id);
-        var sortOrder = goal.sortOrder(); // Assuming sortOrder exists
-
-        goals.remove(id);
-        shiftSortOrders(sortOrder, getMaxSortOrder(), -1); // Adjust sort orders
-
-        goalSubjects.remove(id); // Remove associated subject
-        allGoalsSubject.setValue(getGoals()); // Update the list of all goals
-    }
-
-    public void shiftSortOrders(int from, int to, int by) {
-        var adjustedGoals = goals.values().stream()
-                .filter(goal -> goal.sortOrder() >= from && goal.sortOrder() <= to)
-                .map(goal -> goal.withSortOrder(goal.sortOrder() + by)) // Adjust sortOrder
+        private void assertSortOrderConstraints() {
+            // Get all the sort orders...
+            var sortOrders = goals.values().stream()
+                .map(Goal::sortOrder)
                 .collect(Collectors.toList());
 
-        putGoals(adjustedGoals); // Re-insert adjusted goals
-    }
+            // Non-negative...
+            assert sortOrders.stream().allMatch(i -> i >= 0);
 
-    public static InMemoryDataSource fromDefault() {
-        var data = new InMemoryDataSource();
-        for (Goal goal : DEFAULT_GOALS) {
-            data.putGoal(goal);
+            // Unique...
+            assert sortOrders.size() == sortOrders.stream().distinct().count();
+
+            // Between min and max...
+            assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
+            assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
         }
-        return data;
-    }
-
-    public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Wash dishes", false, 0),
-            new Goal(1, "Do laundry", false, 1),
-            new Goal(2, "Cook lunch", false, 2),
-            new Goal(3, "Cook lunch1", false, 3),
-            new Goal(4, "Cook lunch2", false, 4)
-    );
-
-//    private void assertSortOrderConstraints() {
-//        // Get all the sort orders...
-//        var sortOrders = goals.values().stream()
-//                .map(Goal::sortOrder)
-//                .collect(Collectors.toList());
-//
-//        // Non-negative...
-//        assert sortOrders.stream().allMatch(i -> i >= 0);
-//
-//        // Unique...
-//        assert sortOrders.size() == sortOrders.stream().distinct().count();
-//
-//        // Between min and max...
-//        assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
-//        assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
-//    }
 }

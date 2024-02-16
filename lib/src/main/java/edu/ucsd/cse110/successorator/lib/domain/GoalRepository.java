@@ -25,16 +25,20 @@ public class GoalRepository {
         return dataSource.getAllGoalsSubject();
     }
 
-    public void save(Goal goal) {
-        dataSource.putGoal(goal);
+    public void save(List<Goal> goals) {
+        dataSource.addGoals(goals);
     }
 
     public void append(Goal goal) {
-        dataSource.putGoal(goal);
+        dataSource.addGoal(goal);
     }
 
     public void remove(int id) {
         dataSource.removeGoal(id);
+    }
+
+    public void updateGoal(Goal goal) {
+        dataSource.updateGoal(goal);
     }
 
 }

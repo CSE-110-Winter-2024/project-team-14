@@ -17,9 +17,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
-
     private final MutableSubject<List<Goal>> orderedGoals;
-    private final MutableSubject<String> goalDescription;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -33,7 +31,6 @@ public class MainViewModel extends ViewModel {
         this.goalRepository = goalRepository;
 
         this.orderedGoals = new SimpleSubject<>();
-        this.goalDescription = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
@@ -45,56 +42,23 @@ public class MainViewModel extends ViewModel {
 
             orderedGoals.setValue(newOrderedGoals);
         });
-
-        // When the ordering changes, update the current goal.
-        orderedGoals.observe(goals -> {
-            if (goals == null || goals.isEmpty()) return;
-            var goal = goals.get(0);
-            goalDescription.setValue(goal.taskText()); // Assuming Goal has a getDescription method.
-        });
-    }
-
-    public Subject<String> getGoalDescription() {
-        return goalDescription;
     }
 
     public Subject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
     }
 
-    //not correct
-    public void completeGoal() {
-        var goals = this.orderedGoals.getValue();
-        if (goals == null || goals.isEmpty()) return;
-
-        // Complete the current goal and update the list.
-        var completedGoal = goals.remove(0);
-        goalRepository.remove(completedGoal.sortOrder());
-
-        // Optionally, save the updated list back to the repository.
-        orderedGoals.setValue(goals);
-    }
-
-    public void addGoal(Goal goal) {
-        goalRepository.append(goal); // Add the goal to the repository
-
-        // Now, re-fetch or update the list of goals to reflect this addition
-        var updatedGoals = goalRepository.findAll().getValue(); // Assuming findAll() returns a Subject<List<Goal>>
-        if (updatedGoals != null) {
-            var newOrderedGoals = updatedGoals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList());
-
-            orderedGoals.setValue(newOrderedGoals); // Update the ordered goals to trigger UI update
-        }
-    }
-
-
-    public void removeGoal(int id) {
+    public void remove(int id) {
         goalRepository.remove(id);
     }
 
     public void append(Goal goal){
         goalRepository.append(goal);
     }
+
+    public void updateGoal(Goal goal) {
+        goalRepository.updateGoal(goal);
+    }
+
+
 }

@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
-            //adapter.add(new Goal(0, "Hi", false, 100));
             adapter.notifyDataSetChanged();
         });
 
@@ -69,9 +68,16 @@ public class MainActivity extends AppCompatActivity {
         binding.addButton.setOnClickListener(v -> {
             CreateGoalDialogFragment dialog = CreateGoalDialogFragment.newInstance();
             dialog.show(getSupportFragmentManager(), "CreateGoalDialog");
-            //setContentView();
+        });
 
-            //adapter.notifyDataSetChanged();
+        binding.cardList.setAdapter(adapter);
+
+        binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
+            Goal clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return;
+
+            model.updateGoal(clickedGoal);
+            adapter.notifyDataSetChanged();
         });
 
     }
