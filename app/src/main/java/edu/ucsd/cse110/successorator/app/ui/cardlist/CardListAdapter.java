@@ -1,6 +1,7 @@
 package edu.ucsd.cse110.successorator.app.ui.cardlist;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,14 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         // Populate the view with the goal's data
         // Assuming Goal class has getDescription() method for the task description
         binding.taskText.setText(goal.taskText());
+
+        //reference: https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
+        if(goal.completed()) {
+            binding.taskText.setPaintFlags(binding.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
+        }
+        else{
+            binding.taskText.setPaintFlags(0);;
+        }
 
         return binding.getRoot();
     }
