@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -35,10 +37,12 @@ public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     private MainViewModel model;
     private CardListAdapter adapter;
-
+    //private Calendar calendar;
     TextView dateTextView;
 
     private List<Observer<String>> observers = new ArrayList<Observer<String>>();
+
+    Calendar calendar = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,34 +53,9 @@ public class MainActivity extends AppCompatActivity {
         // Set the content view to activity_main
         setContentView(R.layout.activity_main);
 
-        //
-
-
-        // Get the current date and time using Calendar
-        Calendar calendar = Calendar.getInstance();
-
-        // Format the date using SimpleDateFormat
-//        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
-//        String currentDateandTime = sdf.format(calendar.getTime());
 
         // Find the dateTextView
         dateTextView = findViewById(R.id.dateTextView);
-
-        // Check if there's saved instance state
-//        if (savedInstanceState != null) {
-//            // Restore the text from saved instance state
-//            dateTextViewText = savedInstanceState.getString(KEY_TEXTVIEW_TEXT);
-//            dateTextView.setText(dateTextViewText);
-//        } else {
-//            // Set date text
-//            dateTextView.setText(currentDateandTime);;
-//        }
-
-//        // Register DateChanged as an observer for date changes
-//        DateChanged dateChangedObserver = new DateChanged();
-//        registerObserver(dateChangedObserver);
-//
-
 
 
         // Initialize the InMemoryDataSource, GoalRepository, and MainViewModel
@@ -117,11 +96,28 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Schedule the alarm to trigger DateUpdateReceiver at 2 AM every day
-        scheduleAlarm();
+     //   scheduleAlarm();
 
         // Update the date immediately
         updateDate();
+
+        //---------------------------- Attempt 2---------------------------------------
+        /*
+        Attempt 2: trying to implement with button at bottom with onCLicked
+        */
+
+//        // Find the arrow button and set a click listener
+//        Button arrowButton = findViewById(R.id.arrowButton); // Replace `arrow_button` with the actual ID of your arrow button
+//        arrowButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                moveNextDate(); // Call the `moveNextDate` method when the arrow button is clicked
+//            }
+//        });
+
     }
+
+
 
 //    @Nullable
 //    @Override
@@ -130,7 +126,10 @@ public class MainActivity extends AppCompatActivity {
 //
 //    }
 
-    //add menu option for ->
+
+    //------------------------------Attempt 1 with menu---------------------------------
+
+//    //add menu option for ->
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.action_bar, menu);
@@ -149,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void moveNextDate() {
         // Update the date immediately
-        updateDate();
+        updateDateButton();
 
         // Clear all finished items in the list
         List<Goal> goals = model.getOrderedGoals().getValue();
@@ -170,38 +169,49 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // Schedule the alarm to trigger DateUpdateReceiver at 2 AM every day
-    private void scheduleAlarm() {
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, DateUpdateReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-
-        // Set the alarm to trigger at 2 AM every day
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 2);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-    }
-
     // Update the date immediately
     void updateDate() {
-        Calendar calendar = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
         String currentDateandTime = sdf.format(calendar.getTime());
         binding.dateTextView.setText(currentDateandTime);
     }
 
-    // BroadcastReceiver used to update the date at 2 AM every day
-    public static class DateUpdateReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Update the date immediately
-            MainActivity mainActivity = new MainActivity();
-            mainActivity.updateDate();
-        }
+    //update date with button click
+    void updateDateButton() {
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault());
+        String currentDateandTime = sdf.format(calendar.getTime());
+        binding.dateTextView.setText(currentDateandTime);
     }
+
+
+//-----------------------------Real time update at 2am-----------------------
+    //    // Schedule the alarm to trigger DateUpdateReceiver at 2 AM every day
+//    private void scheduleAlarm() {
+//        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent intent = new Intent(this, DateUpdateReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+//
+//        // Set the alarm to trigger at 2 AM every day
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTimeInMillis(System.currentTimeMillis());
+//        calendar.set(Calendar.HOUR_OF_DAY, 2);
+//        calendar.set(Calendar.MINUTE, 0);
+//        calendar.set(Calendar.SECOND, 0);
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+//    }
+
+    //write another updateDate method for calender.add to add the date proper
+//
+//    // BroadcastReceiver used to update the date at 2 AM every day
+//    public static class DateUpdateReceiver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            // Update the date immediately
+//            MainActivity mainActivity = new MainActivity();
+//            mainActivity.updateDate();
+//        }
+//    }
 
 }
 

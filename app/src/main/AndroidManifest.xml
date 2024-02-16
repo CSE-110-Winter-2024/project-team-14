@@ -23,7 +23,7 @@
         </activity>
 
         <!-- Add your BroadcastReceiver declaration here -->
-        <receiver android:name=".DateUpdateReceiver" />
+       <!-- <receiver android:name=".DateUpdateReceiver" /> -->
     </application>
 
 </manifest>
