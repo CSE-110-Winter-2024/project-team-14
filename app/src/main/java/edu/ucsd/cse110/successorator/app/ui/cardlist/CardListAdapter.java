@@ -22,9 +22,9 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the goal for this position
-        Goal goal = getItem(position);
+        var goal = getItem(position);
         assert goal != null;
 
         // Check if an existing view is being reused, otherwise inflate the view
