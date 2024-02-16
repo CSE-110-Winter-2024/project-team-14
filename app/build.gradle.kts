@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "edu.ucsd.cse110.successorator"
+    namespace = "edu.ucsd.cse110.successorator.app"
     compileSdk = 34
 
     defaultConfig {
@@ -20,8 +20,8 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":lib"))
     project(":lib")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
