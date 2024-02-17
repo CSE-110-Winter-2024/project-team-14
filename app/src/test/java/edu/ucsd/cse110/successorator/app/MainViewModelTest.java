@@ -52,7 +52,7 @@ public class MainViewModelTest {
         GoalRepository repo = new GoalRepository(data);
         var mvm = new MainViewModel(repo);
 
-        Goal g = new Goal(0, "do homework", false, 1);
+        Goal g = new Goal(null, "do homework", false, 1);
         mvm.append(g);
         System.out.println(data.getGoals().get(0).taskText());
         //mvm.updateGoal(g);
