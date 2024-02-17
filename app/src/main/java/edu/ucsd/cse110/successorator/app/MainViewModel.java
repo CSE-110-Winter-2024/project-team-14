@@ -77,17 +77,17 @@ public class MainViewModel extends ViewModel {
         currentDateTime.setValue(newDateTime);
     }
 
-    public void completeGoal() {
-        var goals = this.orderedGoals.getValue();
-        if (goals == null || goals.isEmpty()) return;
-
-        // Complete the current goal and update the list.
-        var completedGoal = goals.remove(0);
-        goalRepository.remove(completedGoal.sortOrder());
-
-        // Optionally, save the updated list back to the repository.
-        orderedGoals.setValue(goals);
-    }
+//    public void completeGoal() {
+//        var goals = this.orderedGoals.getValue();
+//        if (goals == null || goals.isEmpty()) return;
+//
+//        // Complete the current goal and update the list.
+//        var completedGoal = goals.remove(0);
+//        goalRepository.remove(completedGoal.sortOrder());
+//
+//        // Optionally, save the updated list back to the repository.
+//        orderedGoals.setValue(goals);
+//    }
 
     public void append(Goal goal) {
         goalRepository.append(goal);

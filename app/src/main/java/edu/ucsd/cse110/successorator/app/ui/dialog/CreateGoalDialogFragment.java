@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
+import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
@@ -29,16 +30,6 @@ public class CreateGoalDialogFragment extends DialogFragment{
         return fragment;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-
-        var modelOwner = requireActivity();
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.activityModel = modelProvider.get(MainViewModel.class);
-    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
@@ -54,9 +45,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
     }
 
     private void onPositiveButtonClick(DialogInterface dialog, int which){
-        var goalText = view.goalFrontEditText.getText().toString();
+        var front = view.goalFrontEditText.getText().toString();
 
-        var goal = new Goal(null, goalText,false,-1);
+        var goal = new Goal(null, front,false,-1);
         activityModel.append(goal);
 
         dialog.dismiss();
@@ -66,5 +57,14 @@ public class CreateGoalDialogFragment extends DialogFragment{
         dialog.cancel();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+        var modelOwner = requireActivity();
+        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
+        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
+        this.activityModel = modelProvider.get(MainViewModel.class);
+    }
 
 }
