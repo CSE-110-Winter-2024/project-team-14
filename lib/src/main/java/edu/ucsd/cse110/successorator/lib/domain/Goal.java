@@ -25,7 +25,7 @@ public class Goal implements Serializable {
     public @Nullable Integer id() {
         return id;
     }
-    public @Nullable String taskText() {
+    public @NonNull String taskText() {
         return taskText;
     }
     public boolean completed() {
