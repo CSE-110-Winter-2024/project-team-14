@@ -39,6 +39,7 @@ import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
 import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 
+
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
     private MainViewModel model;
