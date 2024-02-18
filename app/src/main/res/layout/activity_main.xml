@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="#00CACACA"
+    android:backgroundTint="#57959595">
 
         <ListView
             android:id="@+id/card_list"
@@ -14,30 +15,49 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_button"
+            app:layout_constraintTop_toBottomOf="@+id/padView"
+            app:layout_constraintVertical_bias="1.0"
             tools:listitem="@layout/card_list_item" />
 
-        <Button
+        <ImageButton
             android:id="@+id/add_button"
-            android:layout_width="88dp"
+            android:layout_width="66dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="+"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="#00FFFFFF"
+            android:src="@drawable/ic_add_button2"
             android:textSize="34sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/padView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.907"
+            app:layout_constraintHorizontal_bias="0.953"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/dateTextView"
+            android:id="@+id/padView"
+            android:layout_width="0dp"
+            android:layout_height="24dp"
+            android:background="@color/light_teal"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/add_button"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Feb 12"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/card_list"
+            android:fontFamily="@font/sample_font_family"
+            android:text="February 13"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@+id/padView"
             app:layout_constraintEnd_toStartOf="@+id/add_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

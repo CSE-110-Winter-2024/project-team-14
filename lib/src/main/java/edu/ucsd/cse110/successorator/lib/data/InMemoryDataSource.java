@@ -93,7 +93,7 @@ public class InMemoryDataSource {
         allGoalsSubject.setValue(getGoals());
     }
 
-    public void addGoals(List<Goal> goals) {
+        public void addGoals(List<Goal> goals) {
         var fixedGoals = goals.stream()
                 .map(this::preInsert)
                 .collect(Collectors.toList());
@@ -185,20 +185,20 @@ public class InMemoryDataSource {
                 .orElse(Integer.MIN_VALUE);
     }
 
-    private void assertSortOrderConstraints() {
-        // Get all the sort orders...
-        var sortOrders = goals.values().stream()
+        private void assertSortOrderConstraints() {
+            // Get all the sort orders...
+            var sortOrders = goals.values().stream()
                 .map(Goal::sortOrder)
                 .collect(Collectors.toList());
 
-        // Non-negative...
-        assert sortOrders.stream().allMatch(i -> i >= 0);
+            // Non-negative...
+            assert sortOrders.stream().allMatch(i -> i >= 0);
 
-        // Unique...
-        assert sortOrders.size() == sortOrders.stream().distinct().count();
+            // Unique...
+            assert sortOrders.size() == sortOrders.stream().distinct().count();
 
-        // Between min and max...
-        assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
-        assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
-    }
+            // Between min and max...
+            assert sortOrders.stream().allMatch(i -> i >= minSortOrder);
+            assert sortOrders.stream().allMatch(i -> i <= maxSortOrder);
+        }
 }
