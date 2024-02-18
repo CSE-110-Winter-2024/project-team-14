@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
         // 2. INITIALIZE VIEWQ
         // Initialize the binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
