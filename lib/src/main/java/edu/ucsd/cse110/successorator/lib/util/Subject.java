@@ -26,8 +26,4 @@ public interface Subject<T> {
      * @param observer The observer to remove.
      */
     void removeObserver(Observer<T> observer);
-
-    void registerObserver(Observer<String> observer);
-
-    void unregisterObserver(Observer<String> observer);
 }

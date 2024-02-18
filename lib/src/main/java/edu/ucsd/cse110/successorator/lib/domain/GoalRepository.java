@@ -30,7 +30,7 @@ public class GoalRepository {
     }
 
     public void append(Goal goal) {
-        dataSource.addGoal(goal.withSortOrder(dataSource.getMaxSortOrder() + 1));
+        dataSource.addGoal(goal);
     }
 
     public void remove(int id) {
