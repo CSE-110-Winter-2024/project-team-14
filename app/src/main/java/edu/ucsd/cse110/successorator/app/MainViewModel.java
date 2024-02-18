@@ -5,18 +5,24 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
+import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
+    private final TimeKeeper timeKeeper;
+
+    private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -24,12 +30,15 @@ public class MainViewModel extends ViewModel {
             creationExtras -> {
                 var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                 assert app != null;
-                return new MainViewModel(app.getGoalRepository());
+                return new MainViewModel(app.getGoalRepository(), new InMemoryTimeKeeper());
             });
 
-    public MainViewModel(GoalRepository goalRepository) {
+    public MainViewModel(GoalRepository goalRepository, TimeKeeper timeKeeper) {
         this.goalRepository = goalRepository;
+        this.timeKeeper = timeKeeper;
 
+        this.currentDateTime = new SimpleSubject<>();
+        this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
@@ -41,6 +50,17 @@ public class MainViewModel extends ViewModel {
                     .collect(Collectors.toList());
 
             orderedGoals.setValue(newOrderedGoals);
+        });
+
+
+        currentDateTime.observe(dateTime -> {
+            // TODO: Do some comparison between dateTime and TimeKeeper's marked.
+            if (false) {
+                // rollover();
+            }
+
+            // THEN mark the new past time.
+            timeKeeper.markDateTime(dateTime);
         });
     }
 
@@ -60,5 +80,14 @@ public class MainViewModel extends ViewModel {
         goalRepository.updateGoal(goal);
     }
 
+    public void setCurrentDateTime(LocalDateTime newDateTime) {
+        currentDateTime.setValue(newDateTime);
+    }
+    public MutableSubject<LocalDateTime> getCurrentDateTime() {
+        return currentDateTime;
+    }
+    private void rollover() {
+        // TODO: do the rollover
+    }
 
 }
