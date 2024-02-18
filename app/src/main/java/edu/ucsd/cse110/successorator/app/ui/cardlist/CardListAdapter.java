@@ -1,16 +1,20 @@
 package edu.ucsd.cse110.successorator.app.ui.cardlist;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.app.databinding.CardListItemBinding;
 
@@ -43,12 +47,15 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         // Assuming Goal class has getDescription() method for the task description
         binding.taskText.setText(goal.taskText());
 
-        //reference: https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
+        // Reference: https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
         if(goal.completed()) {
             binding.taskText.setPaintFlags(binding.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
+            int color = ContextCompat.getColor(getContext(), R.color.gray);
+            binding.taskText.setBackgroundColor(color);
         }
         else{
-            binding.taskText.setPaintFlags(0);;
+            binding.taskText.setPaintFlags(0);
+            binding.taskText.setBackgroundColor(0);
         }
 
         return binding.getRoot();
