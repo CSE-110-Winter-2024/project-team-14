@@ -131,15 +131,15 @@ public class InMemoryDataSource {
             if (updatedGoal.completed()) {
                 removeGoal(updatedGoal.id()); // remove and shift sort orders
                 postInsert(); //update maxSortOrder
-                Goal newSortedGoal = updatedGoal.withSortOrder(getMaxSortOrder() + 1);
-                addGoal(newSortedGoal);
+                Goal newSortGoal = updatedGoal.withSortOrder(getMaxSortOrder() + 1);
+                addGoal(newSortGoal);
 
             } else {
                 shiftSortOrders(0, getMaxSortOrder(), 1); //make space at beginning for it
                 removeGoal(updatedGoal.id());
                 postInsert();
-                Goal newSortedGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
-                addGoal(newSortedGoal);
+                Goal newSortGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
+                addGoal(newSortGoal);
             }
 
             if (goalSubjects.containsKey(goal.id())) {
