@@ -50,29 +50,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // 1. INITIALIZE MODEL
-        // Initialize the InMemoryDataSource, GoalRepository, and MainViewModel
-
-
-
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-
-        // Initialize the InMemoryDataSource, GoalRepository, and MainViewModel
-//        var dataSource = InMemoryDataSource.fromDefault();
-//        var goalRepository = new GoalRepository(dataSource);
-//        this.model = new MainViewModel(goalRepository);
         var timeKeeper = new InMemoryTimeKeeper();
-
-        //TODO: idk how to also initialize the timekeeper
-        // this.model = new MainViewModel(goalRepository, timeKeeper);
         this.model = modelProvider.get(MainViewModel.class);
 
-
-
-        // 2. INITIALIZE VIEWQ
-        // Initialize the binding
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         // TODO: need to change new ArrayList<>() to persisted list from last time opened
@@ -102,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             dialog.show(getSupportFragmentManager(), "CreateGoalDialog");
         });
 
-      //  binding.cardList.setAdapter(adapter); //added
+        //  binding.cardList.setAdapter(adapter); //added
 
         binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
             Goal clickedGoal = adapter.getItem(position);
