@@ -39,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
 
-        // Initialize the InMemoryDataSource, GoalRepository, and MainViewModel
-//        var dataSource = InMemoryDataSource.fromDefault();
-//        var goalRepository = new GoalRepository(dataSource);
-//        this.model = new MainViewModel(goalRepository);
         this.model = modelProvider.get(MainViewModel.class);
 
         // Initialize the binding
@@ -51,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the adapter with an empty list
         this.adapter = new CardListAdapter(this, List.of());
-
 
 //         Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
         //doesnt require live data so we do not need this, goals
