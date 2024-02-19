@@ -53,7 +53,6 @@ public class MainViewModel extends ViewModel {
             orderedGoals.setValue(newOrderedGoals);
         });
 
-
         currentDateTime.observe(dateTime -> {
             if(dateTime != null && timeKeeper.getMarkedDateTime().getValue() != null) {
                 var twoAMNextDay = (timeKeeper.getMarkedDateTime().getValue())
