@@ -4,9 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 public class MainViewModelTest {
 
@@ -56,5 +59,17 @@ public class MainViewModelTest {
 //        mvm.append(g);
 //        System.out.println(data.getGoals().get(0).taskText());
 //        //mvm.updateGoal(g);
+//    }
+
+//    @Test
+//    public void updateTime() {
+//        InMemoryDataSource data = new InMemoryDataSource();
+//        GoalRepository repo = new SimpleGoalRepository(data);
+//        var mvm = new MainViewModel(repo);
+//
+//        mvm.setCurrentDateTime(LocalDateTime.now());
+//        assertEquals(LocalDateTime.now().getHour(), mvm.getCurrentDateTime().getValue().getHour());
+//        assertEquals(LocalDateTime.now().getMinute(), mvm.getCurrentDateTime().getValue().getMinute());
+//
 //    }
 }
