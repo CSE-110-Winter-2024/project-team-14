@@ -12,7 +12,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class InMemoryDataSource {
 
-    private int nextId = 0;
+    private int nextId = 1;
 
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
@@ -73,7 +73,6 @@ public class InMemoryDataSource {
         if (goal.id() == null) {
             fixedGoal = preInsert(goal);
             fixedGoal = fixedGoal.withSortOrder(fixedGoal.id());
-
         } else {
             fixedGoal = preInsert(goal);
         }
