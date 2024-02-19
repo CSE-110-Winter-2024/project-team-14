@@ -92,7 +92,7 @@ public class MainViewModel extends ViewModel {
         return currentDateTime;
     }
     private void rollover() {
-        for(var g: orderedGoals.getValue()) {
+        for (var g : orderedGoals.getValue()) {
             if (g.completed()) {
                 goalRepository.remove(g.id());
             }
