@@ -41,9 +41,12 @@ public interface GoalDao {
     @Query("UPDATE goals SET sort_order = sort_order + :by " + "WHERE sort_order >= :from AND sort_order <= :to")
     void shiftSortOrders(int from, int to, int by);
 
+    @Query("SELECT MAX(sort_order) FROM goals WHERE completed = false")
+    int getMaxSortOrderForUncompletedGoals();
+
     @Transaction
     default int append(GoalEntity goal) {
-        var maxSortOrder = getMaxSortOrder();
+        var maxSortOrder = getMaxSortOrderForUncompletedGoals();
         var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1);
         return Math.toIntExact(insert(newGoal));
     }
@@ -57,13 +60,13 @@ public interface GoalDao {
         if (goal.completed == false) {
             // append
             var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1);
+            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000);
             newGoalId = Math.toIntExact(insert(newFlashcard));
         }
 

@@ -15,6 +15,7 @@ public class InMemoryDataSource {
     private int nextId = 1;
     private int nextUncompletedSortOrder = 3;
 
+
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
 
@@ -29,11 +30,7 @@ public class InMemoryDataSource {
     }
 
     public final static List<Goal> DEFAULT_GOALS = List.of(
-            new Goal(0, "Wash dishes", false, 0),
-            new Goal(1, "Do laundry", false, 1),
-            new Goal(2, "Cook lunch", false, 2)
-//            new Goal(3, "Cook lunch1", false, 3),
-//            new Goal(4, "Cook lunch2", false, 4)
+
     );
 
     public static InMemoryDataSource fromDefault() {
@@ -109,7 +106,7 @@ public class InMemoryDataSource {
         allGoalsSubject.setValue(getGoals());
     }
 
-        public void addGoals(List<Goal> goals) {
+    public void addGoals(List<Goal> goals) {
         var fixedGoals = goals.stream()
                 .map(this::preInsert)
                 .collect(Collectors.toList());
@@ -151,7 +148,7 @@ public class InMemoryDataSource {
                 addGoal(newSortedGoal);
                 nextUncompletedSortOrder--;
             } else {
-                shiftSortOrders(0, getMaxSortOrder(), 1); //make space at beginning for it
+                //shiftSortOrders(0, getMaxSortOrder(), 1); //make space at beginning for it
                 removeGoal(updatedGoal.id());
                 postInsert();
                 Goal newSortedGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
@@ -200,6 +197,10 @@ public class InMemoryDataSource {
                 .map(Goal::sortOrder)
                 .max(Integer::compareTo)
                 .orElse(Integer.MIN_VALUE);
+
+        if (maxSortOrder >= 1000){
+            maxSortOrder--;
+        }
     }
 
         private void assertSortOrderConstraints() {
