@@ -5,8 +5,10 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -17,6 +19,8 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
+
+    private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -29,7 +33,8 @@ public class MainViewModel extends ViewModel {
 
     public MainViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
-
+        this.currentDateTime = new SimpleSubject<>();
+        this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
@@ -41,6 +46,11 @@ public class MainViewModel extends ViewModel {
                     .collect(Collectors.toList());
 
             orderedGoals.setValue(newOrderedGoals);
+        });
+
+
+        currentDateTime.observe(dateTime -> {
+
         });
     }
 
@@ -60,5 +70,13 @@ public class MainViewModel extends ViewModel {
         goalRepository.updateGoal(goal);
     }
 
+    public void setCurrentDateTime(LocalDateTime newDateTime) {
+        currentDateTime.setValue(newDateTime);
+    }
+    public MutableSubject<LocalDateTime> getCurrentDateTime() {
+        return currentDateTime;
+    }
+
 
 }
+
