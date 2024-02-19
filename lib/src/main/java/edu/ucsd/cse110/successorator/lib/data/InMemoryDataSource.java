@@ -13,6 +13,7 @@ import edu.ucsd.cse110.successorator.lib.util.Subject;
 public class InMemoryDataSource {
 
     private int nextId = 1;
+    private int nextUncompletedSortOrder = 3;
 
     private int minSortOrder = Integer.MAX_VALUE;
     private int maxSortOrder = Integer.MIN_VALUE;
@@ -49,6 +50,18 @@ public class InMemoryDataSource {
         return maxSortOrder;
     }
 
+    public int getNextUncompletedSortOrder() {
+        return nextUncompletedSortOrder;
+    }
+
+    public boolean hasCompletedGoals() {
+        var completedGoals = getGoals().stream()
+                .filter(Goal::completed)
+                .collect(Collectors.toList());
+
+        return completedGoals.size() > 0;
+    }
+
     public List<Goal> getGoals() {
         return new ArrayList<>(goals.values());
     }
@@ -76,12 +89,15 @@ public class InMemoryDataSource {
         Goal fixedGoal;
         if (goal.id() == null) {
             fixedGoal = preInsert(goal);
-            fixedGoal = fixedGoal.withSortOrder(fixedGoal.id());
-
+            fixedGoal = fixedGoal.withSortOrder(getNextUncompletedSortOrder());
         } else {
             fixedGoal = preInsert(goal);
         }
         assert fixedGoal.id() != null;
+
+        if (hasCompletedGoals()) {
+            shiftSortOrders(getNextUncompletedSortOrder(), getMaxSortOrder(), 1);
+        }
 
         this.goals.put(fixedGoal.id(), fixedGoal);
         postInsert();
@@ -133,13 +149,14 @@ public class InMemoryDataSource {
                 postInsert(); //update maxSortOrder
                 Goal newSortedGoal = updatedGoal.withSortOrder(getMaxSortOrder() + 1);
                 addGoal(newSortedGoal);
-
+                nextUncompletedSortOrder--;
             } else {
                 shiftSortOrders(0, getMaxSortOrder(), 1); //make space at beginning for it
                 removeGoal(updatedGoal.id());
                 postInsert();
                 Goal newSortedGoal = updatedGoal.withSortOrder(getMinSortOrder() - 1);
                 addGoal(newSortedGoal);
+                nextUncompletedSortOrder++;
             }
 
             if (goalSubjects.containsKey(goal.id())) {
