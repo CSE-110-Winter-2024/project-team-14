@@ -36,8 +36,6 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
 import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
-import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
-import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 
 
@@ -53,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        var timeKeeper = new InMemoryTimeKeeper();
         this.model = modelProvider.get(MainViewModel.class);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // TODO: need to change new ArrayList<>() to persisted list from last time opened
+
         this.adapter = new CardListAdapter(this, new ArrayList<>());
 
         // 3. M -> V (MAKE VIEWS MATCH MODEL)
@@ -101,25 +98,6 @@ public class MainActivity extends AppCompatActivity {
         model.setCurrentDateTime(LocalDateTime.now());
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.action_bar, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        var itemId = item.getItemId();
-        if (itemId == R.id.action_bar_menu_move_views) {
-            var tomorrowJustPast2Am = LocalDateTime.now()
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .plusDays(1)
-                    .withHour(2)
-                    .withMinute(1);
-            model.setCurrentDateTime(tomorrowJustPast2Am);
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
 }
 

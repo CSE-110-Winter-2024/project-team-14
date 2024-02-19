@@ -13,16 +13,12 @@ import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
-import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
-    private final TimeKeeper timeKeeper;
-
 
     private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
@@ -32,13 +28,11 @@ public class MainViewModel extends ViewModel {
             creationExtras -> {
                 var app = (SuccessoratorApplication) creationExtras.get(APPLICATION_KEY);
                 assert app != null;
-                return new MainViewModel(app.getGoalRepository(), new InMemoryTimeKeeper());
+                return new MainViewModel(app.getGoalRepository());
             });
 
-    public MainViewModel(GoalRepository goalRepository, TimeKeeper timeKeeper) {
+    public MainViewModel(GoalRepository goalRepository) {
         this.goalRepository = goalRepository;
-        this.timeKeeper = timeKeeper;
-
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
@@ -56,16 +50,7 @@ public class MainViewModel extends ViewModel {
 
 
         currentDateTime.observe(dateTime -> {
-            // TODO: Do some comparison between dateTime and TimeKeeper's marked.
-            if(dateTime != null && timeKeeper.getMarkedDateTime().getValue() != null) {
-                var twoAMNextDay = (timeKeeper.getMarkedDateTime().getValue())
-                        .plusDays(1).withHour(2).withMinute(0).withSecond(0);
-                if (dateTime.isAfter(twoAMNextDay)) {
-                    rollover();
-                }
-            }
-            // THEN mark the new past time.
-            timeKeeper.markDateTime(dateTime);
+
         });
     }
 
@@ -91,13 +76,7 @@ public class MainViewModel extends ViewModel {
     public MutableSubject<LocalDateTime> getCurrentDateTime() {
         return currentDateTime;
     }
-    private void rollover() {
-        for(var g: orderedGoals.getValue()) {
-            if (g.completed()) {
-                goalRepository.remove(g.id());
-            }
-        }
-    }
+
 
 }
 
