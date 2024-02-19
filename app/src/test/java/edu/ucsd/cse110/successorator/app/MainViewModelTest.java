@@ -143,10 +143,13 @@ public class MainViewModelTest {
         LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
         // Set the updated date and time in the mainViewModel
         mainViewModel.setCurrentDateTime(nextDay2AM);
-        assertEquals(orderedGoals.size(), 2);
 
-        assertEquals(orderedGoals.get(0).taskText(), g.taskText());
-        assertEquals(orderedGoals.get(1).taskText(), g2.taskText());
+        List<Goal> orderedGoals2 = mainViewModel.getOrderedGoals().getValue();
+
+        assertEquals(orderedGoals2.size(), 2);
+
+        assertEquals(orderedGoals2.get(0).taskText(), g.taskText());
+        assertEquals(orderedGoals2.get(1).taskText(), g2.taskText());
     }
 
     @Test
