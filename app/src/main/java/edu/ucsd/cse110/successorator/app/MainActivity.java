@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     .truncatedTo(ChronoUnit.DAYS)
                     .plusDays(1)
                     .withHour(2)
-                    .withMinute(1);
+                    .withMinute(0);
             model.setCurrentDateTime(tomorrowJustPast2Am);
         }
         return super.onOptionsItemSelected(item);

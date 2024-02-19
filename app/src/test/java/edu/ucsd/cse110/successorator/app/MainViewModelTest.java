@@ -106,7 +106,7 @@ public class MainViewModelTest {
         // Add one day to get to the next day
         LocalDateTime nextDayDateTime = currentDateTime.plusDays(1);
         // Set the time to 2 AM
-        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
         // Set the updated date and time in the mainViewModel
         mainViewModel.setCurrentDateTime(nextDay2AM);
 
@@ -137,18 +137,53 @@ public class MainViewModelTest {
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
         assertEquals(orderedGoals.size(), 3);
 
+        // Get the current date and time
+        LocalDateTime currentDateTime = mainViewModel.getCurrentDateTime().getValue();
+        // Add one day to get to the next day
+        LocalDateTime nextDayDateTime = currentDateTime.plusDays(1);
+        // Set the time to 2 AM
+        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
+        // Set the updated date and time in the mainViewModel
+        mainViewModel.setCurrentDateTime(nextDay2AM);
+        assertEquals(orderedGoals.size(), 2);
+
+        assertEquals(orderedGoals.get(0).taskText(), g.taskText());
+        assertEquals(orderedGoals.get(1).taskText(), g2.taskText());
+    }
+
+    @Test
+    public void listPersistenceAllTasksComplete() {
+        InMemoryDataSource data = new InMemoryDataSource();
+        GoalRepository repo = new SimpleGoalRepository(data);
+        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
+        var mainViewModel = new MainViewModel(repo, timeKeeper);
+
+        mainViewModel.setCurrentDateTime(LocalDateTime.now());
+
+        Goal g = new Goal(null, "do homework", true, 1);
+        mainViewModel.append(g);
+        Goal g2 = new Goal(null, "do homework2", true, 2);
+        mainViewModel.append(g2);
+        Goal g3 = new Goal(null, "do homework3", true, 3);
+        mainViewModel.append(g3);
+
+        List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
+        assertEquals(orderedGoals.size(), 3);
+
+//        mainViewModel.updateGoal(g);
+//        mainViewModel.updateGoal(g2);
+//        mainViewModel.updateGoal(g3);
 
         // Get the current date and time
         LocalDateTime currentDateTime = mainViewModel.getCurrentDateTime().getValue();
         // Add one day to get to the next day
         LocalDateTime nextDayDateTime = currentDateTime.plusDays(1);
         // Set the time to 2 AM
-        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0).withSecond(0).withNano(0);
+        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
         // Set the updated date and time in the mainViewModel
         mainViewModel.setCurrentDateTime(nextDay2AM);
 
-        assertEquals(orderedGoals.size(), 2);
-        assertEquals(orderedGoals.get(0).taskText(), g.taskText());
-        assertEquals(orderedGoals.get(1).taskText(), g2.taskText());
+        assertEquals(orderedGoals.size(), 0);
+
     }
 }
