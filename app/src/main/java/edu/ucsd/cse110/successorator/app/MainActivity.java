@@ -56,17 +56,26 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        this.adapter = new CardListAdapter(this, new ArrayList<>());
+        this.adapter = new CardListAdapter(this, List.of());
 
         // 3. M -> V (MAKE VIEWS MATCH MODEL)
         // Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
         // doesnt require live data so we do not need this, goals
-        model.getOrderedGoals().observe((List<Goal> goals) -> {
-            if (goals == null) return;
+        model.getOrderedGoals().observe(goals -> {
+            if (goals == null) {
+                binding.noGoalsText.setVisibility(View.VISIBLE);
+                return;
+            }
 
             adapter.clear();
-            adapter.addAll(goals);
+            adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
+            if (goals.size() == 0) {
+                binding.noGoalsText.setVisibility(View.VISIBLE);
+            }
+            else {
+                binding.noGoalsText.setVisibility(View.INVISIBLE);
+            }
         });
         binding.cardList.setAdapter(adapter);
 
