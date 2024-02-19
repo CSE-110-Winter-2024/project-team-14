@@ -40,22 +40,22 @@ public class MainViewModelTest {
         assertEquals(1, orderedGoals.getValue().size());
     }
 
-//    @Test
-//    public void remove() {
-//        InMemoryDataSource data = new InMemoryDataSource();
-//        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
-//        GoalRepository repo = new SimpleGoalRepository(data);
-//        var mvm = new MainViewModel(repo, timeKeeper);
-//
-//        Goal g1 = new Goal(null, "do homework", false, 1);
-//        mvm.append(g1);
-//        mvm.append(new Goal(null, "wash dishes", false, 2));
-//        mvm.remove(1);
-//        var orderedGoals = mvm.getOrderedGoals();
-//
-//        assertEquals(1, orderedGoals.getValue().size());
-////        assertEquals("wash dishes", mvm.getOrderedGoals().getValue().get(0).taskText());
-//    }
+    @Test
+    public void remove() {
+        InMemoryDataSource data = new InMemoryDataSource();
+        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
+        GoalRepository repo = new SimpleGoalRepository(data);
+        var mvm = new MainViewModel(repo, timeKeeper);
+
+        Goal g1 = new Goal(null, "do homework", false, 0);
+        mvm.append(g1);
+        mvm.append(new Goal(null, "wash dishes", false, 1));
+        mvm.remove(1);
+        var orderedGoals = mvm.getOrderedGoals();
+
+        assertEquals(1, orderedGoals.getValue().size());
+        assertEquals("do homework", mvm.getOrderedGoals().getValue().get(0).taskText());
+    }
 
     @Test
     public void updateGoal() {
