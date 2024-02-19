@@ -170,10 +170,6 @@ public class MainViewModelTest {
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
         assertEquals(orderedGoals.size(), 3);
 
-//        mainViewModel.updateGoal(g);
-//        mainViewModel.updateGoal(g2);
-//        mainViewModel.updateGoal(g3);
-
         // Get the current date and time
         LocalDateTime currentDateTime = mainViewModel.getCurrentDateTime().getValue();
         // Add one day to get to the next day
@@ -182,8 +178,9 @@ public class MainViewModelTest {
         LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
         // Set the updated date and time in the mainViewModel
         mainViewModel.setCurrentDateTime(nextDay2AM);
+        List<Goal> orderedGoals2 = mainViewModel.getOrderedGoals().getValue();
 
-        assertEquals(orderedGoals.size(), 0);
+        assertEquals(orderedGoals2.size(), 0);
 
     }
 }
