@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         binding.cardList.setAdapter(adapter);
 
         model.getCurrentDateTime().observe((dateTime) -> {
-            var formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+            var formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.getDefault());
             binding.dateTextView.setText(dateTime.format(formatter));
         });
 
@@ -98,7 +98,25 @@ public class MainActivity extends AppCompatActivity {
         model.setCurrentDateTime(LocalDateTime.now());
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+        if (itemId == R.id.action_bar_menu_move_views) {
+            var tomorrowJustPast2Am = model.getCurrentDateTime().getValue()
+                    .truncatedTo(ChronoUnit.DAYS)
+                    .plusDays(1)
+                    .withHour(2)
+                    .withMinute(1);
+            model.setCurrentDateTime(tomorrowJustPast2Am);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 

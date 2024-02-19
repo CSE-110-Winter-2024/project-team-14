@@ -56,7 +56,7 @@
             android:fontFamily="@font/sample_font_family"
             android:text="February 13"
             android:textColor="@color/black"
-            android:textSize="36sp"
+            android:textSize="25dp"
             app:layout_constraintBottom_toTopOf="@+id/padView"
             app:layout_constraintEnd_toStartOf="@+id/add_button"
             app:layout_constraintStart_toStartOf="parent"
