@@ -82,4 +82,16 @@ public class MainViewModelTest {
         assertEquals(LocalDateTime.now().getMinute(), mvm.getCurrentDateTime().getValue().getMinute());
 
     }
+    @Test
+    public void listPersistence() {
+        InMemoryDataSource data = new InMemoryDataSource();
+        GoalRepository repo = new SimpleGoalRepository(data);
+        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
+        var mvm = new MainViewModel(repo, timeKeeper);
+
+        mvm.setCurrentDateTime(LocalDateTime.now());
+        assertEquals(LocalDateTime.now().getHour(), mvm.getCurrentDateTime().getValue().getHour());
+        assertEquals(LocalDateTime.now().getMinute(), mvm.getCurrentDateTime().getValue().getMinute());
+
+    }
 }
