@@ -36,8 +36,6 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
 import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
-import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
-import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.Observer;
 
 
@@ -53,12 +51,11 @@ public class MainActivity extends AppCompatActivity {
         var modelOwner = this;
         var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
         var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        var timeKeeper = new InMemoryTimeKeeper();
         this.model = modelProvider.get(MainViewModel.class);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        // TODO: need to change new ArrayList<>() to persisted list from last time opened
+
         this.adapter = new CardListAdapter(this, new ArrayList<>());
 
         // 3. M -> V (MAKE VIEWS MATCH MODEL)
@@ -120,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
 
 
