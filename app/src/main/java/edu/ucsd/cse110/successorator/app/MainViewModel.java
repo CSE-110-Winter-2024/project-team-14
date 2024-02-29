@@ -96,5 +96,29 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    public void filterByContext(String context) {
+        goalRepository.findByContext(context).observe(goals -> {
+            if (goals == null) return;
+
+            var newOrderedGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+
+            orderedGoals.setValue(newOrderedGoals);
+        });
+    }
+
+
+    public void cancelFilter() {
+        goalRepository.findAll().observe(goals -> {
+            if (goals == null) return;
+
+            var newOrderedGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+
+            orderedGoals.setValue(newOrderedGoals);
+        });
+    }
 }
 

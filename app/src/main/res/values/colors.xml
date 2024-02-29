@@ -6,6 +6,10 @@
     <color name="dark_teal">#FF35606e</color>
     <color name="light_teal">#FF7ab1c2</color>
     <color name="black">#FF000000</color>
-    <color name = "gray">#BDBDBD</color>
+    <color name="gray">#BDBDBD</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="homeDotColor">#FFF36E</color>
+    <color name="workDotColor">#ADD8E6</color>
+    <color name="schoolDotColor">#CBC3E3</color>
+    <color name="errandsDotColor">#90EE90</color>
 </resources>

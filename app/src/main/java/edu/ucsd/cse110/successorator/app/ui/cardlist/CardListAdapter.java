@@ -58,7 +58,29 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
             binding.taskText.setBackgroundColor(0);
         }
 
+        int dotColor = getDotColorForContext(goal.context());
+        binding.contextDot.setColorFilter(dotColor);
+
         return binding.getRoot();
+    }
+
+    private int getDotColorForContext(String context) {
+        int color;
+        switch (context) {
+            case "Home":
+                color = ContextCompat.getColor(getContext(), R.color.homeDotColor);
+                break;
+            case "Work":
+                color = ContextCompat.getColor(getContext(), R.color.workDotColor);
+                break;
+            case "School":
+                color = ContextCompat.getColor(getContext(), R.color.schoolDotColor);
+                break;
+            default:
+                color = ContextCompat.getColor(getContext(), R.color.errandsDotColor);
+                break;
+        }
+        return color;
     }
 
     @Override

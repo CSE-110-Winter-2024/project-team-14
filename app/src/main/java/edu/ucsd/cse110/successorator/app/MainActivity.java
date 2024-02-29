@@ -1,110 +1,44 @@
 package edu.ucsd.cse110.successorator.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.PopupMenu;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
 import androidx.lifecycle.ViewModelProvider;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
-import edu.ucsd.cse110.successorator.app.ui.dialog.CreateGoalDialogFragment;
-import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.PendingFragment;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.RecurringFragment;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.TodayFragment;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.TomorrowFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
-import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
-import edu.ucsd.cse110.successorator.lib.util.Observer;
 
 
 public class MainActivity extends AppCompatActivity {
-    ActivityMainBinding binding;
-    private MainViewModel model;
-    private CardListAdapter adapter;
+    private MainViewModel activityModel;
+    private ActivityMainBinding view;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle(R.string.app_title);
 
-        var modelOwner = this;
-        var modelFactory = ViewModelProvider.Factory.from(MainViewModel.initializer);
-        var modelProvider = new ViewModelProvider(modelOwner, modelFactory);
-        this.model = modelProvider.get(MainViewModel.class);
+        this.view = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(view.getRoot());
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        this.adapter = new CardListAdapter(this, List.of());
-
-        // 3. M -> V (MAKE VIEWS MATCH MODEL)
-        // Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
-        // doesnt require live data so we do not need this, goals
-        model.getOrderedGoals().observe(goals -> {
-            if (goals == null) {
-                binding.noGoalsText.setVisibility(View.VISIBLE);
-                return;
-            }
-
-            adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
-            adapter.notifyDataSetChanged();
-            if (goals.size() == 0) {
-                binding.noGoalsText.setVisibility(View.VISIBLE);
-            }
-            else {
-                binding.noGoalsText.setVisibility(View.INVISIBLE);
-            }
-        });
-        binding.cardList.setAdapter(adapter);
-
-        model.getCurrentDateTime().observe((dateTime) -> {
-            var formatter = DateTimeFormatter.ofPattern("MMMM d, yyyy", Locale.getDefault());
-            binding.dateTextView.setText(dateTime.format(formatter));
-        });
-
-        // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
-        binding.addButton.setOnClickListener(v -> {
-            CreateGoalDialogFragment dialog = CreateGoalDialogFragment.newInstance();
-            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
-            dialog.show(getSupportFragmentManager(), "CreateGoalDialog");
-        });
-
-        //  binding.cardList.setAdapter(adapter); //added
-
-        binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
-            Goal clickedGoal = adapter.getItem(position);
-            if (clickedGoal == null) return;
-            model.updateGoal(clickedGoal);
-            //adapter.notifyDataSetChanged(); //added
-        });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        model.setCurrentDateTime(LocalDateTime.now());
+        ViewModelProvider.Factory factory = ViewModelProvider.AndroidViewModelFactory.getInstance(getApplication());
+        activityModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
     }
 
     @Override
@@ -113,18 +47,88 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        var itemId = item.getItemId();
-        if (itemId == R.id.action_bar_menu_move_views) {
-            var tomorrowJustPast2Am = model.getCurrentDateTime().getValue()
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .plusDays(1)
-                    .withHour(2)
-                    .withMinute(1);
-            model.setCurrentDateTime(tomorrowJustPast2Am);
+    public void swapToToday() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, TodayFragment.newInstance())
+                .commit();
+    }
+
+    public void swapToTomorrow() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, TomorrowFragment.newInstance())
+                .commit();
+    }
+
+    public void swapToPending() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, PendingFragment.newInstance())
+                .commit();
+    }
+
+    public void swapToRecurring() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, RecurringFragment.newInstance())
+                .commit();
+    }
+
+    public void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        if (view.getId() == R.id.dropdown_button) {
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu_views, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    // Handle menu item clicks here
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.today_button) {
+                        swapToToday();
+                        return true;
+                    } else if (itemId == R.id.tomorrow_button) {
+                        swapToTomorrow();
+                        return true;
+                    } else if (itemId == R.id.pending_button) {
+                        swapToPending();
+                        return true;
+                    } else if (itemId == R.id.recurring_button) {
+                        swapToRecurring();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
         }
-        return super.onOptionsItemSelected(item);
+        else {
+            popupMenu.getMenuInflater().inflate(R.menu.popup_menu_focus, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    // Handle menu item clicks here
+                    int itemId = item.getItemId();
+                    if (itemId == R.id.home_button) {
+                        activityModel.filterByContext("Home");
+                        return true;
+                    } else if (itemId == R.id.work_button) {
+                        activityModel.filterByContext("Work");
+                        return true;
+                    } else if (itemId == R.id.school_button) {
+                        activityModel.filterByContext("School");
+                        return true;
+                    } else if (itemId == R.id.errands_button) {
+                        activityModel.filterByContext("Errands");
+                        return true;
+                    } else if (itemId == R.id.cancel_button) {
+                        activityModel.cancelFilter();
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            });
+        }
+        popupMenu.show();
     }
 }
 

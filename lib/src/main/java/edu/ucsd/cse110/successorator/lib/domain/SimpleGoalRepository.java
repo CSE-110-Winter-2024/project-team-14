@@ -1,5 +1,7 @@
 package edu.ucsd.cse110.successorator.lib.domain;
 
+import androidx.annotation.NonNull;
+
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -24,6 +26,11 @@ public class SimpleGoalRepository implements GoalRepository {
 
     @Override
     public Subject<List<Goal>> findAll() {
+        return dataSource.getAllGoalsSubject();
+    }
+
+    @Override
+    public Subject<List<Goal>> findByContext(@NonNull String context) {
         return dataSource.getAllGoalsSubject();
     }
 
