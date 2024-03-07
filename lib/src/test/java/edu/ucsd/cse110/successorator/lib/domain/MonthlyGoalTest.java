@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-public class RecurringGoalTest {
+public class MonthlyGoalTest {
 
     @Test
     public void setNextDateWeekly() {
@@ -23,6 +23,16 @@ public class RecurringGoalTest {
                 false, 2, currentTime);
         var expected = currentTime.plusMonths(1).withDayOfMonth(3);
         assertEquals(expected, monthlyGoal.nextDate);
+    }
+
+    @Test
+    public void findDayNumberInMonthTest() {
+        LocalDateTime currentTime = LocalDateTime.now().withDayOfMonth(31);
+        MonthlyGoal monthlyGoal = new MonthlyGoal(1, "take out trash",
+                false, 2, currentTime);
+
+        assertEquals(5, monthlyGoal.findDayNumberInMonth());
+
     }
 
     @Test

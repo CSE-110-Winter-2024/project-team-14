@@ -8,13 +8,16 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.successorator.app.util.LiveDataSubjectAdapter;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
+import edu.ucsd.cse110.successorator.lib.domain.RecurringGoal;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public class RoomGoalRepository implements GoalRepository {
     private final GoalDao goalDao;
+    private final RecurringGoalDao recurringGoalDao;
 
-    public RoomGoalRepository(GoalDao goalDao) {
+    public RoomGoalRepository(GoalDao goalDao, RecurringGoalDao recurringGoalDao) {
         this.goalDao = goalDao;
+        this.recurringGoalDao = recurringGoalDao;
     }
 
     @Override
@@ -47,15 +50,25 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void append(Goal goal) {
+    public void addOneTimeGoal(Goal goal) {
         goalDao.append(GoalEntity.fromGoal(goal));
     }
 
     @Override
-    public void remove(int id) {
+    public void removeOneTimeGoal(int id) {
         goalDao.delete(id);
     }
 
     @Override
-    public void updateGoal(Goal goal) { goalDao.updateGoal(GoalEntity.fromGoal(goal)); }
+    public void updateOneTimeGoal(Goal goal) { goalDao.updateGoal(GoalEntity.fromGoal(goal)); }
+
+    @Override
+    public void addRecurringGoal(RecurringGoal goal) {
+        recurringGoalDao.addRecurringGoal(RecurringGoalEntity.fromRecurringGoal(goal));
+    }
+
+    @Override
+    public void removeRecurringGoal(int id) {
+        recurringGoalDao.delete(id);
+    }
 }

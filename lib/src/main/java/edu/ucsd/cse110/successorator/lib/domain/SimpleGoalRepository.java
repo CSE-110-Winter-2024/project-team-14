@@ -33,17 +33,27 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void append(Goal goal) {
+    public void addOneTimeGoal(Goal goal) {
         dataSource.addGoal(goal.withSortOrder(dataSource.getMaxSortOrder() + 1));
     }
 
     @Override
-    public void remove(int id) {
+    public void addRecurringGoal(RecurringGoal goal) {
+
+    }
+
+    @Override
+    public void removeRecurringGoal(int id) {
+
+    }
+
+    @Override
+    public void removeOneTimeGoal(int id) {
         dataSource.removeGoal(id);
     }
 
     @Override
-    public void updateGoal(Goal goal) {
+    public void updateOneTimeGoal(Goal goal) {
         dataSource.updateGoal(goal);
     }
 

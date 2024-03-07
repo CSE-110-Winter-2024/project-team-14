@@ -5,11 +5,9 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -71,15 +69,15 @@ public class MainViewModel extends ViewModel {
     }
 
     public void remove(int id) {
-        goalRepository.remove(id);
+        goalRepository.removeOneTimeGoal(id);
     }
 
     public void append(Goal goal){
-        goalRepository.append(goal);
+        goalRepository.addOneTimeGoal(goal);
     }
 
     public void updateGoal(Goal goal) {
-        goalRepository.updateGoal(goal);
+        goalRepository.updateOneTimeGoal(goal);
     }
 
     public void setCurrentDateTime(LocalDateTime newDateTime) {
@@ -91,7 +89,7 @@ public class MainViewModel extends ViewModel {
     private void rollover() {
         for (var g : orderedGoals.getValue()) {
             if (g.completed()) {
-                goalRepository.remove(g.id());
+                goalRepository.removeOneTimeGoal(g.id());
             }
         }
     }

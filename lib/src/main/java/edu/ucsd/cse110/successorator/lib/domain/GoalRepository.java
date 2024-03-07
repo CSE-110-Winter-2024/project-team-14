@@ -13,9 +13,13 @@ public interface GoalRepository {
 
     void save(List<Goal> goals);
 
-    void append(Goal goal);
+    void addOneTimeGoal(Goal goal);
 
-    void remove(int id);
+    void addRecurringGoal(RecurringGoal goal);
 
-    void updateGoal(Goal goal);
+    void removeRecurringGoal(int id);
+
+    void removeOneTimeGoal(int id);
+
+    void updateOneTimeGoal(Goal goal);
 }

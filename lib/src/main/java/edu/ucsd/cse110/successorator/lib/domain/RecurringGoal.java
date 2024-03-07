@@ -17,4 +17,12 @@ public abstract class RecurringGoal extends Goal{
 
     public abstract LocalDateTime setNextDate();
 
+    public LocalDateTime getStartDate() {
+        return this.startDate;
+    }
+
+    public LocalDateTime getNextDate() {
+        return this.nextDate;
+    }
+
 }

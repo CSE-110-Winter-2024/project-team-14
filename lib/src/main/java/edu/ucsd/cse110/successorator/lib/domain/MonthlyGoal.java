@@ -14,50 +14,35 @@ public class MonthlyGoal extends RecurringGoal {
     @Override
     public LocalDateTime setNextDate() {
 
-        //The following code checks which day of the month the start day is,
-        // e.g. the second Tuesday of the month
-
-        DayOfWeek dayOfWeekToRepeat;
-        LocalDateTime nextDate;
-        LocalDateTime checkDayOfMonth;
-        int count = 0;
-        dayOfWeekToRepeat = this.startDate.getDayOfWeek();
-        int maxDayOfMonth = getLastDayOfMonth(this.startDate.getMonthValue());
-
-        int i = 1;
-        do {
-            checkDayOfMonth = startDate.withDayOfMonth(i);
-            if (checkDayOfMonth.getDayOfWeek().equals(dayOfWeekToRepeat)) {
-                count +=1;
-            }
-            i+=1;
-        } while (!startDate.equals(checkDayOfMonth));
+        int dayOfMonth = findDayNumberInMonth();
+        DayOfWeek dayOfWeekToRepeat = startDate.getDayOfWeek();
+        LocalDateTime nextMonth = startDate.withDayOfMonth(1).plusMonths(1);
+        int maxDayOfMonth = getLastDayOfMonth(nextMonth.getMonthValue());
 
         //iterate through the next month until you get to the specific day of the week
         //e.g. the second Tuesday of the next month
-        LocalDateTime nextMonth = startDate.withDayOfMonth(1).plusMonths(1);
-        int days = 0;
+        int daysFound = 0;
         for(int j = 1; j <= maxDayOfMonth; j++) {
             var currDate = nextMonth.withDayOfMonth(j);
             var currDay = currDate.getDayOfWeek();
             if(currDay.equals(dayOfWeekToRepeat)) {
-                days+= 1;
+                daysFound += 1;
             }
-            if (days == count) {
+            if (daysFound == dayOfMonth) {
                 nextDate = currDate;
                 return nextDate;
             }
         }
 
         //if the day doesn't exist in the next month, rollover
-        var currDate = nextMonth.plusMonths(1);
-        var currDay = currDate.getDayOfWeek();
+        nextMonth = nextMonth.plusMonths(1);
+        var currDate = nextMonth;
+        var currDay = nextMonth.getDayOfWeek();
         while(!currDay.equals(dayOfWeekToRepeat)) {
             currDate = currDate.plusDays(1);
             currDay = currDate.getDayOfWeek();
         }
         nextDate = currDate;
-
         return nextDate;
     }
 
@@ -75,5 +60,25 @@ public class MonthlyGoal extends RecurringGoal {
             return 28;
         }
 
+    }
+
+    //Checks which day of the month the start day is,
+    // e.g. the second Tuesday of the month
+
+    public int findDayNumberInMonth() {
+        DayOfWeek dayOfWeekToRepeat = this.startDate.getDayOfWeek();;
+        LocalDateTime currentDayOfMonth;
+        int count = 0;
+        int maxDayOfMonth = getLastDayOfMonth(this.startDate.getMonthValue());
+        int i = 1;
+
+        do {
+            currentDayOfMonth = startDate.withDayOfMonth(i);
+            if (currentDayOfMonth.getDayOfWeek().equals(dayOfWeekToRepeat)) {
+                count +=1;
+            }
+            i+=1;
+        } while (!startDate.equals(currentDayOfMonth));
+        return count;
     }
 }

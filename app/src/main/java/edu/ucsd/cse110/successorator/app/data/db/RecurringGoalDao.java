@@ -12,22 +12,22 @@ import java.util.List;
 @Dao
 public interface RecurringGoalDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insert(GoalEntity flashcard);
+    Long insert(RecurringGoalEntity goal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<GoalEntity> flashcards);
+    List<Long> insert(List<RecurringGoalEntity> goals);
 
     @Query("SELECT * FROM goals WHERE id = :id")
-    GoalEntity find(int id);
+    RecurringGoalEntity find(int id);
 
     @Query("SELECT * FROM goals ORDER BY sort_order")
-    List<GoalEntity> findAll();
+    List<RecurringGoalEntity> findAll();
 
     @Query("SELECT * FROM goals WHERE id = :id")
-    LiveData<GoalEntity> findAsLiveData(int id);
+    LiveData<RecurringGoalEntity> findAsLiveData(int id);
 
     @Query("SELECT * FROM goals ORDER BY sort_order")
-    LiveData<List<GoalEntity>> findAllAsLiveData();
+    LiveData<List<RecurringGoalEntity>> findAllAsLiveData();
 
     @Query("SELECT COUNT(*) FROM goals")
     int count();
@@ -45,32 +45,33 @@ public interface RecurringGoalDao {
     int getMaxSortOrderForUncompletedGoals();
 
     @Transaction
-    default int append(GoalEntity goal) {
+    default int addRecurringGoal(RecurringGoalEntity goal) {
         var maxSortOrder = getMaxSortOrderForUncompletedGoals();
-        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1);
-        return Math.toIntExact(insert(newGoal));
+        var newRecurringGoal = new RecurringGoalEntity(goal.taskText,
+                goal.completed, maxSortOrder + 1, goal.startDate, goal.nextDate);
+        return Math.toIntExact(insert(newRecurringGoal));
     }
 
     @Query("DELETE FROM goals WHERE id = :id")
     void delete(int id);
 
-    @Transaction
-    default int updateGoal(GoalEntity goal) {
-        int newGoalId;
-        if (goal.completed == false) {
-            // append
-            var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000);
-            newGoalId = Math.toIntExact(insert(newGoal));
-        }
-        else {
-            // prepend
-            shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000);
-            newGoalId = Math.toIntExact(insert(newFlashcard));
-        }
-
-        delete(goal.id);
-        return newGoalId;
-    }
+//    @Transaction
+//    default int updateGoal(GoalEntity goal) {
+//        int newGoalId;
+//        if (goal.completed == false) {
+//            // append
+//            var maxSortOrder = getMaxSortOrder();
+//            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000);
+//            newGoalId = Math.toIntExact(insert(newGoal));
+//        }
+//        else {
+//            // prepend
+//            shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
+//            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000);
+//            newGoalId = Math.toIntExact(insert(newFlashcard));
+//        }
+//
+//        delete(goal.id);
+//        return newGoalId;
+//    }
 }
