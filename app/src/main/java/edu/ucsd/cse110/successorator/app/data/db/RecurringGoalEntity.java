@@ -8,9 +8,11 @@ import androidx.room.PrimaryKey;
 import java.time.LocalDateTime;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.MonthlyGoal;
 import edu.ucsd.cse110.successorator.lib.domain.RecurringGoal;
+import edu.ucsd.cse110.successorator.lib.domain.WeeklyGoal;
 
-@Entity(tableName = "goals")
+@Entity(tableName = "Recurring Goals")
 
 public class RecurringGoalEntity {
     @PrimaryKey(autoGenerate = true)
@@ -32,25 +34,46 @@ public class RecurringGoalEntity {
     @ColumnInfo(name= "next_date")
     public LocalDateTime nextDate;
 
+    @ColumnInfo(name="type")
+    public String type;
 
-    RecurringGoalEntity(@NonNull String taskText, boolean completed,
-                        int sortOrder, LocalDateTime startDate, LocalDateTime nextDate) {
+
+    RecurringGoalEntity(@NonNull String taskText, boolean completed, int sortOrder,
+                        LocalDateTime startDate, LocalDateTime nextDate, String type) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.startDate = startDate;
         this.nextDate = nextDate;
+        this.type = type;
     }
 
     public static RecurringGoalEntity fromRecurringGoal(@NonNull RecurringGoal goal) {
         var recurringGoal = new RecurringGoalEntity(goal.taskText(), goal.completed(),
-                goal.sortOrder(), goal.getStartDate(), goal.getNextDate());
+                goal.sortOrder(), goal.getStartDate(), goal.getNextDate(), goal.GetType());
         recurringGoal.id = goal.id();
         return recurringGoal;
     }
 
-//    public @NonNull RecurringGoal toRecurringGoal() {
-//        return new weeklyGoal(id, taskText, completed, sortOrder, startDate);
-//    }
+    public RecurringGoal toRecurringGoal() {
+        switch(type) {
+            case "monthly":
+                return new MonthlyGoal(id, taskText, completed, sortOrder, startDate);
+
+            case "weekly" :
+                return new WeeklyGoal(id, taskText, completed, sortOrder, startDate);
+
+            case "yearly":
+                 //return new YearlyGoal(id, taskText, completed, sortOrder, startDate);
+                 break;
+
+        }
+
+        return null;
+    }
+
+    public Goal toOneTimeGoal() {
+        return new Goal(id, taskText, completed, sortOrder);
+    }
 }
 

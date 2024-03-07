@@ -7,8 +7,14 @@ import java.time.LocalDateTime;
 
 public class WeeklyGoal extends RecurringGoal {
 
-    public WeeklyGoal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder, LocalDateTime startDate) {
-        super(id, taskText, completed, sortOrder, startDate);
+    public WeeklyGoal(@Nullable Integer id, @NonNull String taskText, boolean completed,
+                      int sortOrder, LocalDateTime startDate) {
+        super(id, taskText, completed, sortOrder, startDate, "weekly");
+    }
+
+    @Override
+    public String GetType() {
+        return this.type;
     }
 
     @Override

@@ -8,7 +8,6 @@ import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.app.data.db.SuccessoratorDatabase;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-import edu.ucsd.cse110.successorator.lib.domain.SimpleGoalRepository;
 
 public class SuccessoratorApplication extends Application {
     private InMemoryDataSource dataSource;
@@ -32,7 +31,7 @@ public class SuccessoratorApplication extends Application {
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);
 
         if (isFirstRun && database.goalDao().count() == 0) {
-            goalRepository.save(InMemoryDataSource.DEFAULT_GOALS);
+            goalRepository.saveOneTimeGoal(InMemoryDataSource.DEFAULT_GOALS);
 
             sharedPreferences.edit()
                     .putBoolean("isFirstRun", false)

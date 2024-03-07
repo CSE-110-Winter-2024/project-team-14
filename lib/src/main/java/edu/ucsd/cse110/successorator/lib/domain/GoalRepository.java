@@ -5,13 +5,21 @@ import java.util.List;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
 
 public interface GoalRepository {
-    Integer count();
+    Integer countOneTimeGoals();
 
-    Subject<Goal> find(int id);
+    Integer countRecurringGoals();
 
-    Subject<List<Goal>> findAll();
+    Subject<Goal> findOneTimeGoal(int id);
 
-    void save(List<Goal> goals);
+    Subject<RecurringGoal> findRecurringGoal(int id);
+
+    Subject<List<Goal>> findAllOneTimeGoals();
+
+    Subject<List<RecurringGoal>> findAllRecurringGoals();
+
+    void saveOneTimeGoal(List<Goal> goals);
+
+    void saveRecurringGoal(List<RecurringGoal> goals);
 
     void addOneTimeGoal(Goal goal);
 

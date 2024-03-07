@@ -13,22 +13,22 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
-    public Integer count() {
+    public Integer countOneTimeGoals() {
         return dataSource.getGoals().size();
     }
 
     @Override
-    public Subject<Goal> find(int id) {
+    public Subject<Goal> findOneTimeGoal(int id) {
         return dataSource.getGoalSubject(id);
     }
 
     @Override
-    public Subject<List<Goal>> findAll() {
+    public Subject<List<Goal>> findAllOneTimeGoals() {
         return dataSource.getAllGoalsSubject();
     }
 
     @Override
-    public void save(List<Goal> goals) {
+    public void saveOneTimeGoal(List<Goal> goals) {
         dataSource.addGoals(goals);
     }
 

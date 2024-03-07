@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import edu.ucsd.cse110.successorator.app.data.db.RecurringGoalDao;
+import edu.ucsd.cse110.successorator.app.data.db.RoomGoalRepository;
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
@@ -24,7 +26,7 @@ public class MainViewModelTest {
         var mvm = new MainViewModel(repo, timeKeeper);
 
         Goal g = new Goal(null, "do homework", false, 4);
-        mvm.append(g);
+        mvm.appendOneTimeGoal(g);
 
         assertEquals("do homework", mvm.getOrderedGoals().getValue().get(0).taskText());
     }
@@ -36,7 +38,7 @@ public class MainViewModelTest {
         GoalRepository repo = new SimpleGoalRepository(data);
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        mvm.append(new Goal(null, "do homework", false, 4));
+        mvm.appendOneTimeGoal(new Goal(null, "do homework", false, 4));
         var orderedGoals = mvm.getOrderedGoals();
         assertEquals(1, orderedGoals.getValue().size());
     }
@@ -49,9 +51,9 @@ public class MainViewModelTest {
         var mvm = new MainViewModel(repo, timeKeeper);
 
         Goal g1 = new Goal(null, "do homework", false, 0);
-        mvm.append(g1);
-        mvm.append(new Goal(null, "wash dishes", false, 1));
-        mvm.remove(1);
+        mvm.appendOneTimeGoal(g1);
+        mvm.appendOneTimeGoal(new Goal(null, "wash dishes", false, 1));
+        mvm.removeOneTimeGoal(1);
         var orderedGoals = mvm.getOrderedGoals();
 
         assertEquals(1, orderedGoals.getValue().size());
@@ -66,7 +68,7 @@ public class MainViewModelTest {
         var mvm = new MainViewModel(repo, timeKeeper);
 
         Goal g = new Goal(null, "do homework", false, 1);
-        mvm.append(g);
+        mvm.appendOneTimeGoal(g);
         System.out.println(data.getGoals().get(0).taskText());
         //mvm.updateGoal(g);
     }
@@ -93,11 +95,11 @@ public class MainViewModelTest {
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
         Goal g = new Goal(null, "do homework", false, 1);
-        mainViewModel.append(g);
+        mainViewModel.appendOneTimeGoal(g);
         Goal g2 = new Goal(null, "do homework2", false, 2);
-        mainViewModel.append(g2);
+        mainViewModel.appendOneTimeGoal(g2);
         Goal g3 = new Goal(null, "do homework3", false, 3);
-        mainViewModel.append(g3);
+        mainViewModel.appendOneTimeGoal(g3);
 
         // Get the current date and time
         LocalDateTime currentDateTime = mainViewModel.getCurrentDateTime().getValue();
@@ -126,11 +128,11 @@ public class MainViewModelTest {
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
         Goal g = new Goal(null, "do homework", false, 1);
-        mainViewModel.append(g);
+        mainViewModel.appendOneTimeGoal(g);
         Goal g2 = new Goal(null, "do homework2", false, 2);
-        mainViewModel.append(g2);
+        mainViewModel.appendOneTimeGoal(g2);
         Goal g3 = new Goal(null, "do homework3", true, 3);
-        mainViewModel.append(g3);
+        mainViewModel.appendOneTimeGoal(g3);
 
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
         assertEquals(orderedGoals.size(), 3);
@@ -162,11 +164,11 @@ public class MainViewModelTest {
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
         Goal g = new Goal(null, "do homework", true, 1);
-        mainViewModel.append(g);
+        mainViewModel.appendOneTimeGoal(g);
         Goal g2 = new Goal(null, "do homework2", true, 2);
-        mainViewModel.append(g2);
+        mainViewModel.appendOneTimeGoal(g2);
         Goal g3 = new Goal(null, "do homework3", true, 3);
-        mainViewModel.append(g3);
+        mainViewModel.appendOneTimeGoal(g3);
 
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
         assertEquals(orderedGoals.size(), 3);
@@ -182,6 +184,11 @@ public class MainViewModelTest {
         List<Goal> orderedGoals2 = mainViewModel.getOrderedGoals().getValue();
 
         assertEquals(orderedGoals2.size(), 0);
+
+    }
+
+    @Test
+    public void addWeeklyGoalTest() {
 
     }
 }

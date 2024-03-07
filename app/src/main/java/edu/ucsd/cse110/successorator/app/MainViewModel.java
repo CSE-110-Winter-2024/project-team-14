@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
+import edu.ucsd.cse110.successorator.lib.domain.RecurringGoal;
 import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
@@ -41,7 +42,7 @@ public class MainViewModel extends ViewModel {
         this.orderedGoals = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
-        goalRepository.findAll().observe(goals -> {
+        goalRepository.findAllOneTimeGoals().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
             var newOrderedGoals = goals.stream()
@@ -68,15 +69,15 @@ public class MainViewModel extends ViewModel {
         return orderedGoals;
     }
 
-    public void remove(int id) {
+    public void removeOneTimeGoal(int id) {
         goalRepository.removeOneTimeGoal(id);
     }
 
-    public void append(Goal goal){
+    public void appendOneTimeGoal(Goal goal){
         goalRepository.addOneTimeGoal(goal);
     }
 
-    public void updateGoal(Goal goal) {
+    public void updateOneTimeGoal(Goal goal) {
         goalRepository.updateOneTimeGoal(goal);
     }
 
@@ -93,6 +94,15 @@ public class MainViewModel extends ViewModel {
             }
         }
     }
+
+    public void addRecurringGoal(RecurringGoal goal) {
+        goalRepository.addRecurringGoal(goal);
+    }
+
+    public void deleteRecurringGoal(RecurringGoal goal) {
+        goalRepository.removeRecurringGoal(goal.id());
+    }
+
 
 }
 

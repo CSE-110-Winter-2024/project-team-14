@@ -1,42 +1,29 @@
 package edu.ucsd.cse110.successorator.app;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
 import androidx.lifecycle.ViewModelProvider;
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.dialog.CreateGoalDialogFragment;
-import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
 import edu.ucsd.cse110.successorator.app.ui.cardlist.CardListAdapter;
-import edu.ucsd.cse110.successorator.lib.util.Observer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -96,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         binding.cardList.setOnItemClickListener((parent, view, position, id) -> {
             Goal clickedGoal = adapter.getItem(position);
             if (clickedGoal == null) return;
-            model.updateGoal(clickedGoal);
+            model.updateOneTimeGoal(clickedGoal);
             //adapter.notifyDataSetChanged(); //added
         });
     }

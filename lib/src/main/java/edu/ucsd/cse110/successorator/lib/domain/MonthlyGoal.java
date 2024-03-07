@@ -8,7 +8,12 @@ import java.time.LocalDateTime;
 
 public class MonthlyGoal extends RecurringGoal {
     public MonthlyGoal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder, LocalDateTime startDate) {
-        super(id, taskText, completed, sortOrder, startDate);
+        super(id, taskText, completed, sortOrder, startDate, "monthly");
+    }
+
+    @Override
+    public String GetType() {
+        return this.type;
     }
 
     @Override

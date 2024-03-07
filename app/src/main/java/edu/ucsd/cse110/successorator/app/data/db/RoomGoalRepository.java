@@ -21,17 +21,27 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public Integer count() { return goalDao.count(); }
+    public Integer countOneTimeGoals() { return goalDao.count(); }
 
     @Override
-    public Subject<Goal> find(int id) {
+    public Integer countRecurringGoals() { return recurringGoalDao.count(); }
+
+    @Override
+    public Subject<Goal> findOneTimeGoal(int id) {
         var entityLiveData = goalDao.findAsLiveData(id);
         var goalLiveData = Transformations.map(entityLiveData, GoalEntity::toGoal);
         return new LiveDataSubjectAdapter<>(goalLiveData);
     }
 
     @Override
-    public Subject<List<Goal>> findAll() {
+    public Subject<RecurringGoal> findRecurringGoal(int id) {
+        var entityLiveData = recurringGoalDao.findAsLiveData(id);
+        var goalLiveData = Transformations.map(entityLiveData, RecurringGoalEntity::toRecurringGoal);
+        return new LiveDataSubjectAdapter<>(goalLiveData);
+    }
+
+    @Override
+    public Subject<List<Goal>> findAllOneTimeGoals() {
         var entitiesLiveData = goalDao.findAllAsLiveData();
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
@@ -42,11 +52,30 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public void save(List<Goal> goals) {
+    public Subject<List<RecurringGoal>> findAllRecurringGoals() {
+        var entitiesLiveData = recurringGoalDao.findAllAsLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(RecurringGoalEntity::toRecurringGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    @Override
+    public void saveOneTimeGoal(List<Goal> goals) {
         var entities = goals.stream()
                 .map(GoalEntity::fromGoal)
                 .collect(Collectors.toList());
         goalDao.insert(entities);
+    }
+
+    @Override
+    public void saveRecurringGoal(List<RecurringGoal> goals) {
+        var entities = goals.stream()
+                .map(RecurringGoalEntity::fromRecurringGoal)
+                .collect(Collectors.toList());
+        recurringGoalDao.insert(entities);
     }
 
     @Override

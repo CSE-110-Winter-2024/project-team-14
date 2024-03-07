@@ -48,7 +48,7 @@ public interface RecurringGoalDao {
     default int addRecurringGoal(RecurringGoalEntity goal) {
         var maxSortOrder = getMaxSortOrderForUncompletedGoals();
         var newRecurringGoal = new RecurringGoalEntity(goal.taskText,
-                goal.completed, maxSortOrder + 1, goal.startDate, goal.nextDate);
+                goal.completed, maxSortOrder + 1, goal.startDate, goal.nextDate, goal.type);
         return Math.toIntExact(insert(newRecurringGoal));
     }
 
