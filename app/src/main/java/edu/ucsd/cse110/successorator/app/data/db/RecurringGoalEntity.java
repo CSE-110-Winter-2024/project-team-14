@@ -29,28 +29,28 @@ public class RecurringGoalEntity {
     public int sortOrder;
 
     @ColumnInfo(name = "start_date")
-    public LocalDateTime startDate;
+    public String startDate;
 
     @ColumnInfo(name= "next_date")
-    public LocalDateTime nextDate;
+    public String nextDate;
 
     @ColumnInfo(name="type")
     public String type;
 
 
     RecurringGoalEntity(@NonNull String taskText, boolean completed, int sortOrder,
-                        LocalDateTime startDate, LocalDateTime nextDate, String type) {
+                        String startDate, String nextDate, String type) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.startDate = startDate;
-        this.nextDate = nextDate;
+        this.nextDate = (nextDate);
         this.type = type;
     }
 
     public static RecurringGoalEntity fromRecurringGoal(@NonNull RecurringGoal goal) {
         var recurringGoal = new RecurringGoalEntity(goal.taskText(), goal.completed(),
-                goal.sortOrder(), goal.getStartDate(), goal.getNextDate(), goal.GetType());
+                goal.sortOrder(), goal.getStartDate().toString(), goal.getNextDate().toString(), goal.GetType());
         recurringGoal.id = goal.id();
         return recurringGoal;
     }
@@ -58,10 +58,10 @@ public class RecurringGoalEntity {
     public RecurringGoal toRecurringGoal() {
         switch(type) {
             case "monthly":
-                return new MonthlyGoal(id, taskText, completed, sortOrder, startDate);
+                return new MonthlyGoal(id, taskText, completed, sortOrder, LocalDateTime.parse(startDate));
 
             case "weekly" :
-                return new WeeklyGoal(id, taskText, completed, sortOrder, startDate);
+                return new WeeklyGoal(id, taskText, completed, sortOrder, LocalDateTime.parse(startDate));
 
             case "yearly":
                  //return new YearlyGoal(id, taskText, completed, sortOrder, startDate);

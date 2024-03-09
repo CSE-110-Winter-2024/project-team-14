@@ -18,8 +18,18 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
+    public Integer countRecurringGoals() {
+        return null;
+    }
+
+    @Override
     public Subject<Goal> findOneTimeGoal(int id) {
         return dataSource.getGoalSubject(id);
+    }
+
+    @Override
+    public Subject<RecurringGoal> findRecurringGoal(int id) {
+        return null;
     }
 
     @Override
@@ -28,8 +38,18 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
+    public Subject<List<RecurringGoal>> findAllRecurringGoals() {
+        return null;
+    }
+
+    @Override
     public void saveOneTimeGoal(List<Goal> goals) {
         dataSource.addGoals(goals);
+    }
+
+    @Override
+    public void saveRecurringGoal(List<RecurringGoal> goals) {
+
     }
 
     @Override

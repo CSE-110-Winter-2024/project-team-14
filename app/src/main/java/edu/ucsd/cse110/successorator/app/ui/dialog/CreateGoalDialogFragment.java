@@ -10,9 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
+import edu.ucsd.cse110.successorator.lib.domain.MonthlyGoal;
+import edu.ucsd.cse110.successorator.lib.domain.RecurringGoal;
 
 public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
@@ -52,6 +56,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
 
         var goal = new Goal(null, front,false,-1);
         activityModel.appendOneTimeGoal(goal);
+
 
         dialog.dismiss();
     }
