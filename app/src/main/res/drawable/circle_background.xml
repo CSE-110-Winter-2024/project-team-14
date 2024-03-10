@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <!-- Set the solid color for the circle -->
+    <solid android:color="#ADD8E6" />
+</shape>

@@ -12,12 +12,23 @@
         android:background="#BABABA"
         android:backgroundTint="#BABABA"
         android:fontFamily="@font/sample_font_family"
-        android:padding="10dp"
+        android:paddingStart="45dp"
+        android:paddingEnd="20dp"
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/context_dot"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/circle_background"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
