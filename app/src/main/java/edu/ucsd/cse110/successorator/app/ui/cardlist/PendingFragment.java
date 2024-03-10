@@ -105,6 +105,13 @@ public class PendingFragment extends Fragment {
         view.cardList.setAdapter(adapter);
 
         // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
+        view.addButton.setOnClickListener(v -> {
+            CreatePendingGoalDialogFragment dialog = CreatePendingGoalDialogFragment.newInstance();
+            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
+            dialog.show(getChildFragmentManager(), "CreatePendingGoalDialog");
+        });
+
+        // TODO: add popup menu functionality here when a goal is long pressed
     }
 
     @Override

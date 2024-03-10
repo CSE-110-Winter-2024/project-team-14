@@ -103,6 +103,11 @@ public class RecurringFragment extends Fragment {
         view.cardList.setAdapter(adapter);
 
         // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
+        view.addButton.setOnClickListener(v -> {
+            CreateRecurringGoalDialogFragment dialog = CreateRecurringGoalDialogFragment.newInstance();
+            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
+            dialog.show(getChildFragmentManager(), "CreateGoalDialog");
+        });
 
         //  binding.cardList.setAdapter(adapter); //added
 
