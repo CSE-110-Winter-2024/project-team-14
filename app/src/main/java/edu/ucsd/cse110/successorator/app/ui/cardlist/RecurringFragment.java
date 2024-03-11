@@ -52,7 +52,7 @@ public class RecurringFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now)
         this.adapter = new CardListAdapter(requireContext(), List.of());
-        activityModel.getOrderedGoals().observe(goals -> {
+        activityModel.getRecurringOrderedGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!

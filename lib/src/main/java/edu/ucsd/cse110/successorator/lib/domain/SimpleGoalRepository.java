@@ -12,9 +12,24 @@ public class SimpleGoalRepository implements GoalRepository {
         this.dataSource = dataSource;
     }
 
-    @Override
+
     public Integer count() {
         return dataSource.getGoals().size();
+    }
+
+    @Override
+    public Integer countAllGoals() {
+        return null;
+    }
+
+    @Override
+    public Integer countOneTimeGoals() {
+        return null;
+    }
+
+    @Override
+    public Integer countRecurringGoals() {
+        return null;
     }
 
     @Override
@@ -25,6 +40,16 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public Subject<List<Goal>> findAll() {
         return dataSource.getAllGoalsSubject();
+    }
+
+    @Override
+    public Subject<List<Goal>> findAllOneTimeGoals() {
+        return null;
+    }
+
+    @Override
+    public Subject<List<Goal>> findAllRecurringGoals() {
+        return null;
     }
 
     @Override
