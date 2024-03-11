@@ -86,6 +86,7 @@ public class MainViewModel extends ViewModel {
         return recurringOrderedGoals;
     }
 
+
     public void remove(int id) {
         goalRepository.remove(id);
     }

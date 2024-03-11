@@ -27,10 +27,10 @@ public class GoalEntity {
     public int sortOrder;
 
     @ColumnInfo(name = "type_of_goal")
-            public String typeOfGoal;
+    public String typeOfGoal;
 
     @ColumnInfo(name = "nextDate")
-            public String nextDate;
+    public String nextDate;
 
     GoalEntity(Integer id, @NonNull String taskText, boolean completed, int sortOrder, String typeOfGoal, String nextDate) {
         this.taskText = taskText;
@@ -40,6 +40,8 @@ public class GoalEntity {
         this.typeOfGoal = typeOfGoal;
         this.nextDate = nextDate;
     }
+
+    public GoalEntity() {};
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var card = new GoalEntity(goal.id(), goal.taskText(), goal.completed(), goal.sortOrder(),

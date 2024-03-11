@@ -100,7 +100,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, typeOfGoal);
+        var goal = new Goal(null, front,false,-1, typeOfGoal, LocalDateTime.now().toString());
         activityModel.append(goal);
 
         dialog.dismiss();
