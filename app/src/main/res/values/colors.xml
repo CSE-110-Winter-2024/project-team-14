@@ -8,8 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="gray">#BDBDBD</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="finishedDotColor">#C1C7C9</color>
     <color name="homeDotColor">#FFF36E</color>
     <color name="workDotColor">#ADD8E6</color>
     <color name="schoolDotColor">#CBC3E3</color>
     <color name="errandsDotColor">#90EE90</color>
+
 </resources>
