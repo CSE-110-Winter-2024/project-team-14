@@ -18,14 +18,37 @@ public class RoomGoalRepository implements GoalRepository {
     }
 
     @Override
-    public Integer count() { return goalDao.count(); }
+    public Integer countOneTimeGoals() {
+        return goalDao.countOneTimeGoals();
+    }
 
     @Override
-    public Subject<Goal> find(int id) {
-        var entityLiveData = goalDao.findAsLiveData(id);
-        var goalLiveData = Transformations.map(entityLiveData, GoalEntity::toGoal);
-        return new LiveDataSubjectAdapter<>(goalLiveData);
+    public Integer countRecurringGoals() {
+        return goalDao.countRecurringGoals();
     }
+
+    @Override
+    public Subject<List<Goal>> findAllOneTimeGoals() {
+        var entitiesLiveData = goalDao.findAllOneTimeGoalsAsLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    @Override
+    public Subject<List<Goal>> findAllRecurringGoals() {
+        var entitiesLiveData = goalDao.findAllRecurringGoalsAsLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
 
     @Override
     public Subject<List<Goal>> findAll() {
@@ -58,4 +81,16 @@ public class RoomGoalRepository implements GoalRepository {
 
     @Override
     public void updateGoal(Goal goal) { goalDao.updateGoal(GoalEntity.fromGoal(goal)); }
+
+    //The following two methods might be unnecessary
+    @Override
+    public Integer countAllGoals() { return goalDao.countAll(); }
+
+    @Override
+    public Subject<Goal> find(int id) {
+        var entityLiveData = goalDao.findAsLiveData(id);
+        var goalLiveData = Transformations.map(entityLiveData, GoalEntity::toGoal);
+        return new LiveDataSubjectAdapter<>(goalLiveData);
+    }
+
 }

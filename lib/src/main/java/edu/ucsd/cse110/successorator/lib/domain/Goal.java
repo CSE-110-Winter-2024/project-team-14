@@ -65,15 +65,15 @@ public class Goal implements Serializable {
     }
 
     public Goal withId(int id) {
-        return new Goal(id, this.taskText, this.completed, this.sortOrder, this.typeOfGoal);
+        return new Goal(id, this.taskText, this.completed, this.sortOrder, this.typeOfGoal, this.nextDate);
     }
 
     public Goal withSortOrder(int sortOrder) {
-        return new Goal(this.id, this.taskText, this.completed, sortOrder, this.typeOfGoal);
+        return new Goal(this.id, this.taskText, this.completed, sortOrder, this.typeOfGoal, this.nextDate);
     }
 
     public Goal toggleCompleted() {
-        return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.typeOfGoal);
+        return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.typeOfGoal, this.nextDate);
     }
 
 
@@ -81,6 +81,9 @@ public class Goal implements Serializable {
     public LocalDateTime setNextDate() {
         var startDate =  LocalDateTime.now();
         switch(typeOfGoal) {
+
+            case "daily":
+                this.nextDate = LocalDateTime.now().plusDays(1);
 
             case "weekly":
                 this.nextDate = LocalDateTime.now().plusDays(7);
@@ -120,7 +123,7 @@ public class Goal implements Serializable {
             case "yearly":
                 return LocalDateTime.now().plusYears(1);
 
-            default: return startDate;
+            default: return null;
 
         }
         return startDate;
