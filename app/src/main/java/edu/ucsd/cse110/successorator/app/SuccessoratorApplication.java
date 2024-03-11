@@ -26,7 +26,7 @@ public class SuccessoratorApplication extends Application {
                 .allowMainThreadQueries()
                 .build();
 
-        this.goalRepository = new RoomGoalRepository(database.goalDao());
+        this.goalRepository = new RoomGoalRepository(database.goalDao(), database.tomorrowGoalDao());
 
         var sharedPreferences = getSharedPreferences("successorator", MODE_PRIVATE);
         var isFirstRun = sharedPreferences.getBoolean("isFirstRun", true);

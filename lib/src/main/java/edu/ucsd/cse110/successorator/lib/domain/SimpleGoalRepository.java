@@ -25,8 +25,18 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
+    public Subject<Goal> findTomorrow(int id) {
+        return null;
+    }
+
+    @Override
     public Subject<List<Goal>> findAll() {
         return dataSource.getAllGoalsSubject();
+    }
+
+    @Override
+    public Subject<List<Goal>> findTomorrowAll() {
+        return null;
     }
 
     @Override
@@ -35,8 +45,18 @@ public class SimpleGoalRepository implements GoalRepository {
     }
 
     @Override
+    public Subject<List<Goal>> findTomorrowByContext(@NonNull String context) {
+        return null;
+    }
+
+    @Override
     public void save(List<Goal> goals) {
         dataSource.addGoals(goals);
+    }
+
+    @Override
+    public void saveTomorrowGoal(List<TomorrowGoal> goals) {
+
     }
 
     @Override
@@ -52,6 +72,16 @@ public class SimpleGoalRepository implements GoalRepository {
     @Override
     public void updateGoal(Goal goal) {
         dataSource.updateGoal(goal);
+    }
+
+    @Override
+    public void appendTomorrowGoal(TomorrowGoal goal) {
+
+    }
+
+    @Override
+    public void removeTomorrowGoal(Integer id) {
+        dataSource.removeGoal(id);
     }
 
 }

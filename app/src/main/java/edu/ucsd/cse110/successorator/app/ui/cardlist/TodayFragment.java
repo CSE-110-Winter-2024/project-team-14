@@ -55,7 +55,7 @@ public class TodayFragment extends Fragment {
 
         // Initialize the Adapter (with an empty list for now)
         this.adapter = new CardListAdapter(requireContext(), List.of());
-        activityModel.getOrderedGoals().observe(goals -> {
+        activityModel.getOrderedTodayGoals().observe(goals -> {
             if (goals == null) return;
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals)); // remember the mutable copy here!
@@ -84,7 +84,7 @@ public class TodayFragment extends Fragment {
         // 3. M -> V (MAKE VIEWS MATCH MODEL)
         // Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
         // doesnt require live data so we do not need this, goals
-        activityModel.getOrderedGoals().observe(goals -> {
+        activityModel.getOrderedTodayGoals().observe(goals -> {
             if (goals == null) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
                 return;

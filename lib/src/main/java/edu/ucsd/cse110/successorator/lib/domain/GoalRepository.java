@@ -11,15 +11,28 @@ public interface GoalRepository {
 
     Subject<Goal> find(int id);
 
+    Subject<Goal> findTomorrow(int id);
+
     Subject<List<Goal>> findAll();
+
+    Subject<List<Goal>> findTomorrowAll();
 
     Subject<List<Goal>> findByContext(@NonNull String context);
 
+    Subject<List<Goal>> findTomorrowByContext(@NonNull String context);
+
     void save(List<Goal> goals);
+
+    void saveTomorrowGoal(List<TomorrowGoal> goals);
 
     void append(Goal goal);
 
     void remove(int id);
 
     void updateGoal(Goal goal);
+
+
+    void appendTomorrowGoal(TomorrowGoal goal);
+
+    void removeTomorrowGoal(Integer id);
 }

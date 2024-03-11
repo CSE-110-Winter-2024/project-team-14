@@ -16,6 +16,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 import edu.ucsd.cse110.successorator.lib.domain.InMemoryTimeKeeper;
 import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
+import edu.ucsd.cse110.successorator.lib.domain.TomorrowGoal;
 import edu.ucsd.cse110.successorator.lib.util.MutableSubject;
 import edu.ucsd.cse110.successorator.lib.util.SimpleSubject;
 import edu.ucsd.cse110.successorator.lib.util.Subject;
@@ -24,7 +25,11 @@ public class MainViewModel extends ViewModel {
     private final GoalRepository goalRepository;
 
     private final MutableSubject<LocalDateTime> currentDateTime;
-    private final MutableSubject<List<Goal>> orderedGoals;
+    private final MutableSubject<List<Goal>> orderedTodayGoals;
+    private final MutableSubject<List<Goal>> orderedTomorrowGoals;
+//    private final MutableSubject<List<Goal>> orderedPendingGoals;
+//
+//    private final MutableSubject<List<Goal>> orderedRecurringGoals;
     private final TimeKeeper timeKeeper;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -40,17 +45,32 @@ public class MainViewModel extends ViewModel {
         this.goalRepository = goalRepository;
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
-        this.orderedGoals = new SimpleSubject<>();
+        this.orderedTodayGoals = new SimpleSubject<>();
+//        this.orderedRecurringGoals = new SimpleSubject<>();
+//        this.orderedPendingGoals = new SimpleSubject<>();
+        this.orderedTomorrowGoals = new SimpleSubject<>();
+
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
             if (goals == null) return; // not ready yet, ignore
 
-            var newOrderedGoals = goals.stream()
+            var newOrderedTodayGoals = goals.stream()
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList());
 
-            orderedGoals.setValue(newOrderedGoals);
+            orderedTodayGoals.setValue(newOrderedTodayGoals);
+        });
+
+        //find all tmrow goals
+        goalRepository.findTomorrowAll().observe(goals -> {
+            if (goals == null) return; // not ready yet, ignore
+
+            var newOrderedTomorrowGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+
+            orderedTomorrowGoals.setValue(newOrderedTomorrowGoals);
         });
 
         currentDateTime.observe(dateTime -> {
@@ -59,6 +79,7 @@ public class MainViewModel extends ViewModel {
                         .plusDays(1).withHour(2).withMinute(0).withSecond(0);
                 if (dateTime.isAfter(twoAMNextDay)) {
                     rollover();
+                    //add/pull tomorrow tasks from tmrowDAO, and delete
                 }
             }
             // THEN mark the new past time.
@@ -66,9 +87,14 @@ public class MainViewModel extends ViewModel {
         });
     }
 
-    public Subject<List<Goal>> getOrderedGoals() {
-        return orderedGoals;
+    public Subject<List<Goal>> getOrderedTodayGoals() {
+        return orderedTodayGoals;
     }
+
+    public Subject<List<Goal>> getOrderedTomorrowGoals() {
+        return orderedTomorrowGoals;
+    }
+
 
     public void remove(int id) {
         goalRepository.remove(id);
@@ -77,6 +103,11 @@ public class MainViewModel extends ViewModel {
     public void append(Goal goal){
         goalRepository.append(goal);
     }
+
+    public void appendTomorrow(TomorrowGoal goal){
+        goalRepository.appendTomorrowGoal(goal);
+    }
+
 
     public void updateGoal(Goal goal) {
         goalRepository.updateGoal(goal);
@@ -89,12 +120,16 @@ public class MainViewModel extends ViewModel {
         return currentDateTime;
     }
     private void rollover() {
-        for (var g : orderedGoals.getValue()) {
+        for (var g : orderedTodayGoals.getValue()) {
             if (g.completed()) {
                 goalRepository.remove(g.id());
             }
         }
     }
+
+//    private void pullTomorrowTasks() {
+//        for (var tg : )
+//    }
 
     public void filterByContext(String context) {
         goalRepository.findByContext(context).observe(goals -> {
@@ -104,7 +139,7 @@ public class MainViewModel extends ViewModel {
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList());
 
-            orderedGoals.setValue(newOrderedGoals);
+            orderedTodayGoals.setValue(newOrderedGoals);
         });
     }
 
@@ -117,8 +152,12 @@ public class MainViewModel extends ViewModel {
                     .sorted(Comparator.comparingInt(Goal::sortOrder))
                     .collect(Collectors.toList());
 
-            orderedGoals.setValue(newOrderedGoals);
+            orderedTodayGoals.setValue(newOrderedGoals);
         });
+    }
+
+    public void deleteTomorrowGoal(TomorrowGoal goal) {
+        goalRepository.removeTomorrowGoal(goal.id());
     }
 }
 
