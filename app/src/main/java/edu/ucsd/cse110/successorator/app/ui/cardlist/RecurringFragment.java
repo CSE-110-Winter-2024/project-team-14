@@ -22,6 +22,7 @@ import java.util.Locale;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentRecurringBinding;
+import edu.ucsd.cse110.successorator.app.ui.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class RecurringFragment extends Fragment {

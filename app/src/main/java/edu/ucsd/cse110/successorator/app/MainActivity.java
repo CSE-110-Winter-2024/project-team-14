@@ -95,33 +95,33 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-        else {
-            popupMenu.getMenuInflater().inflate(R.menu.popup_menu_focus, popupMenu.getMenu());
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    // Handle menu item clicks here
-                    int itemId = item.getItemId();
-                    if (itemId == R.id.home_button) {
-                        activityModel.filterByContext("Home");
-                        return true;
-                    } else if (itemId == R.id.work_button) {
-                        activityModel.filterByContext("Work");
-                        return true;
-                    } else if (itemId == R.id.school_button) {
-                        activityModel.filterByContext("School");
-                        return true;
-                    } else if (itemId == R.id.errands_button) {
-                        activityModel.filterByContext("Errands");
-                        return true;
-                    } else if (itemId == R.id.cancel_button) {
-                        activityModel.cancelFilter();
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-        }
+//        else {
+////            popupMenu.getMenuInflater().inflate(R.menu.popup_menu_focus, popupMenu.getMenu());
+//            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                public boolean onMenuItemClick(MenuItem item) {
+//                    // Handle menu item clicks here
+//                    int itemId = item.getItemId();
+//                    if (itemId == R.id.home_button) {
+//                        activityModel.filterByContext("Home");
+//                        return true;
+//                    } else if (itemId == R.id.work_button) {
+//                        activityModel.filterByContext("Work");
+//                        return true;
+//                    } else if (itemId == R.id.school_button) {
+//                        activityModel.filterByContext("School");
+//                        return true;
+//                    } else if (itemId == R.id.errands_button) {
+//                        activityModel.filterByContext("Errands");
+//                        return true;
+//                    } else if (itemId == R.id.cancel_button) {
+//                        activityModel.cancelFilter();
+//                        return true;
+//                    } else {
+//                        return false;
+//                    }
+//                }
+//            });
+//        }
         popupMenu.show();
     }
 }
