@@ -36,13 +36,14 @@ public class Goal implements Serializable {
     //Constructor to make a goal from a Database record
     //and set the date to start recurring on
     public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed,
-                int sortOrder, String typeOfGoal,String nextDate) {
+                int sortOrder, String typeOfGoal ,@Nullable String nextDate) {
         this.id = id;
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
-            this.nextDate = setNextDate();
         this.typeOfGoal = typeOfGoal;
+        this.nextDate = setNextDate();
+
     }
 
     public @Nullable Integer id() {
@@ -123,7 +124,7 @@ public class Goal implements Serializable {
             case "yearly":
                 return LocalDateTime.now().plusYears(1);
 
-            default: return null;
+            default: return LocalDateTime.MIN;
 
         }
         return startDate;

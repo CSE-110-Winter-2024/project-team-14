@@ -69,6 +69,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
 //        view.schoolButton.setOnClickListener(v -> assignContext("School"));
 //        view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
+        view.dailyButton.setOnClickListener(v -> assignType("daily"));
         view.weeklyButton.setOnClickListener(v -> assignType("weekly"));
         view.monthlyButton.setOnClickListener(v -> assignType("monthly"));
         view.yearlyButton.setOnClickListener(v -> assignType("yearly"));
