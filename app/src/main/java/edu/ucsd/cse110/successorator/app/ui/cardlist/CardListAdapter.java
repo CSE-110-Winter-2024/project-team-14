@@ -47,18 +47,42 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         // Assuming Goal class has getDescription() method for the task description
         binding.taskText.setText(goal.taskText());
 
+        int dotColor;
         // Reference: https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
         if(goal.completed()) {
+            dotColor = R.color.finishedDotColor;
             binding.taskText.setPaintFlags(binding.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
             int color = ContextCompat.getColor(getContext(), R.color.gray);
             binding.taskText.setBackgroundColor(color);
         }
         else{
+            dotColor = getDotColorForContext(goal.context());
             binding.taskText.setPaintFlags(0);
             binding.taskText.setBackgroundColor(0);
         }
 
+        binding.contextDot.setColorFilter(dotColor);
+
         return binding.getRoot();
+    }
+
+    private int getDotColorForContext(String context) {
+        int color;
+        switch (context) {
+            case "Home":
+                color = ContextCompat.getColor(getContext(), R.color.homeDotColor);
+                break;
+            case "Work":
+                color = ContextCompat.getColor(getContext(), R.color.workDotColor);
+                break;
+            case "School":
+                color = ContextCompat.getColor(getContext(), R.color.schoolDotColor);
+                break;
+            default:
+                color = ContextCompat.getColor(getContext(), R.color.errandsDotColor);
+                break;
+        }
+        return color;
     }
 
     @Override

@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,21 +13,20 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
-import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
+import edu.ucsd.cse110.successorator.app.R;
+import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-
-public class CreateGoalDialogFragment extends DialogFragment{
+public class CreateRecurringGoalDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
-    private DialogCreateBinding view;
+    private DialogRecurringBinding view;
     private String context;
-    CreateGoalDialogFragment(){
+
+    CreateRecurringGoalDialogFragment(){
 
     }
 
-    public static CreateGoalDialogFragment newInstance(){
-        var fragment = new CreateGoalDialogFragment();
+    public static CreateRecurringGoalDialogFragment newInstance(){
+        var fragment = new CreateRecurringGoalDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -35,23 +36,31 @@ public class CreateGoalDialogFragment extends DialogFragment{
         this.context = context;
     }
 
+//    @Override
+//    public void onDateSelected(String date) {
+//        view.selectedDateTextView.setVisibility(View.VISIBLE);
+//        view.selectedDateTextView.setText(date);
+//    }
+
+//    // Inside showDatePickerDialog method
+//    private void showDatePickerDialog() {
+//        DatePickerFragment newFragment = new DatePickerFragment();
+//        newFragment.setDatePickerListener(this); // Set the listener
+//        newFragment.show(getParentFragmentManager(), "datePicker");
+//    }
+
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        this.view = DialogCreateBinding.inflate((getLayoutInflater()));
+        this.view = DialogRecurringBinding.inflate((getLayoutInflater()));
 
-        view.homeButton.setOnClickListener(v -> {
-            assignContext("Home");
-        });
-        view.workButton.setOnClickListener(v -> {
-            assignContext("Work");
-        });
-        view.schoolButton.setOnClickListener(v -> {
-            assignContext("School");
-        });
-        view.errandsButton.setOnClickListener(v -> {
-            assignContext("Errands");
-        });
+        view.homeButton.setOnClickListener(v -> assignContext("Home"));
+        view.workButton.setOnClickListener(v -> assignContext("Work"));
+        view.schoolButton.setOnClickListener(v -> assignContext("School"));
+        view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
+
+//        view.pickDateButton.setOnClickListener(v -> showDatePickerDialog());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Most Important Task")
@@ -69,6 +78,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
             dialog.dismiss();
             return;
         }
+
+//        String selectedDate = view.selectedDateTextView.getText().toString();
+
         if (context == null) {
             context = "Home";
         }

@@ -22,6 +22,7 @@ import java.util.Locale;
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.FragmentRecurringBinding;
+import edu.ucsd.cse110.successorator.app.ui.dialog.CreateRecurringGoalDialogFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 public class RecurringFragment extends Fragment {
@@ -103,6 +104,11 @@ public class RecurringFragment extends Fragment {
         view.cardList.setAdapter(adapter);
 
         // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
+        view.addButton.setOnClickListener(v -> {
+            CreateRecurringGoalDialogFragment dialog = CreateRecurringGoalDialogFragment.newInstance();
+            // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
+            dialog.show(getChildFragmentManager(), "CreateGoalDialog");
+        });
 
         //  binding.cardList.setAdapter(adapter); //added
 

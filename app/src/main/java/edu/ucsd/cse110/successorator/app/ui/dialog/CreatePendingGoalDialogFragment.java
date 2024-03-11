@@ -11,21 +11,21 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import edu.ucsd.cse110.successorator.app.MainViewModel;
-import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
-import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
+import edu.ucsd.cse110.successorator.app.databinding.DialogPendingBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 
-public class CreateGoalDialogFragment extends DialogFragment{
+public class CreatePendingGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
-    private DialogCreateBinding view;
+    private DialogPendingBinding view;
     private String context;
-    CreateGoalDialogFragment(){
+
+    CreatePendingGoalDialogFragment(){
 
     }
 
-    public static CreateGoalDialogFragment newInstance(){
-        var fragment = new CreateGoalDialogFragment();
+    public static CreatePendingGoalDialogFragment newInstance(){
+        var fragment = new CreatePendingGoalDialogFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -38,20 +38,12 @@ public class CreateGoalDialogFragment extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
-        this.view = DialogCreateBinding.inflate((getLayoutInflater()));
+        this.view = DialogPendingBinding.inflate((getLayoutInflater()));
 
-        view.homeButton.setOnClickListener(v -> {
-            assignContext("Home");
-        });
-        view.workButton.setOnClickListener(v -> {
-            assignContext("Work");
-        });
-        view.schoolButton.setOnClickListener(v -> {
-            assignContext("School");
-        });
-        view.errandsButton.setOnClickListener(v -> {
-            assignContext("Errands");
-        });
+        view.homeButton.setOnClickListener(v -> assignContext("Home"));
+        view.workButton.setOnClickListener(v -> assignContext("Work"));
+        view.schoolButton.setOnClickListener(v -> assignContext("School"));
+        view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Most Important Task")
@@ -72,7 +64,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
         if (context == null) {
             context = "Home";
         }
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, this.context);
         activityModel.append(goal);
 
         dialog.dismiss();

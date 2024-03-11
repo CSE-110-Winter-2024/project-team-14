@@ -23,7 +23,7 @@ public class MainViewModelTest {
         GoalRepository repo = new SimpleGoalRepository(data);
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        Goal g = new Goal(null, "do homework", false, 4);
+        Goal g = new Goal(null, "do homework", false, 4, "Home");
         mvm.append(g);
 
         assertEquals("do homework", mvm.getOrderedGoals().getValue().get(0).taskText());
@@ -36,7 +36,7 @@ public class MainViewModelTest {
         GoalRepository repo = new SimpleGoalRepository(data);
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        mvm.append(new Goal(null, "do homework", false, 4));
+        mvm.append(new Goal(null, "do homework", false, 4, "Home"));
         var orderedGoals = mvm.getOrderedGoals();
         assertEquals(1, orderedGoals.getValue().size());
     }
@@ -48,9 +48,9 @@ public class MainViewModelTest {
         GoalRepository repo = new SimpleGoalRepository(data);
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        Goal g1 = new Goal(null, "do homework", false, 0);
+        Goal g1 = new Goal(null, "do homework", false, 0, "Home");
         mvm.append(g1);
-        mvm.append(new Goal(null, "wash dishes", false, 1));
+        mvm.append(new Goal(null, "wash dishes", false, 1, "Home"));
         mvm.remove(1);
         var orderedGoals = mvm.getOrderedGoals();
 
@@ -65,7 +65,7 @@ public class MainViewModelTest {
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        Goal g = new Goal(null, "do homework", false, 1);
+        Goal g = new Goal(null, "do homework", false, 1, "Home");
         mvm.append(g);
         System.out.println(data.getGoals().get(0).taskText());
         //mvm.updateGoal(g);
@@ -92,11 +92,11 @@ public class MainViewModelTest {
 
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
-        Goal g = new Goal(null, "do homework", false, 1);
+        Goal g = new Goal(null, "do homework", false, 1, "Home");
         mainViewModel.append(g);
-        Goal g2 = new Goal(null, "do homework2", false, 2);
+        Goal g2 = new Goal(null, "do homework2", false, 2, "Home");
         mainViewModel.append(g2);
-        Goal g3 = new Goal(null, "do homework3", false, 3);
+        Goal g3 = new Goal(null, "do homework3", false, 3, "Home");
         mainViewModel.append(g3);
 
         // Get the current date and time
@@ -125,11 +125,11 @@ public class MainViewModelTest {
 
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
-        Goal g = new Goal(null, "do homework", false, 1);
+        Goal g = new Goal(null, "do homework", false, 1, "Home");
         mainViewModel.append(g);
-        Goal g2 = new Goal(null, "do homework2", false, 2);
+        Goal g2 = new Goal(null, "do homework2", false, 2, "Home");
         mainViewModel.append(g2);
-        Goal g3 = new Goal(null, "do homework3", true, 3);
+        Goal g3 = new Goal(null, "do homework3", true, 3, "Home");
         mainViewModel.append(g3);
 
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();
@@ -161,11 +161,11 @@ public class MainViewModelTest {
 
         mainViewModel.setCurrentDateTime(LocalDateTime.now());
 
-        Goal g = new Goal(null, "do homework", true, 1);
+        Goal g = new Goal(null, "do homework", true, 1, "Home");
         mainViewModel.append(g);
-        Goal g2 = new Goal(null, "do homework2", true, 2);
+        Goal g2 = new Goal(null, "do homework2", true, 2, "Home");
         mainViewModel.append(g2);
-        Goal g3 = new Goal(null, "do homework3", true, 3);
+        Goal g3 = new Goal(null, "do homework3", true, 3, "Home");
         mainViewModel.append(g3);
 
         List<Goal> orderedGoals = mainViewModel.getOrderedGoals().getValue();

@@ -23,19 +23,23 @@ public class GoalEntity {
     @ColumnInfo(name = "sort_order")
     public int sortOrder;
 
-    GoalEntity(@NonNull String taskText, boolean completed, int sortOrder) {
+    @ColumnInfo(name = "context")
+    public String context;
+
+    GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
+        this.context = context;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder());
+        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context());
         card.id = goal.id();
         return card;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, taskText, completed, sortOrder);
+        return new Goal(id, taskText, completed, sortOrder, context);
     }
 }
