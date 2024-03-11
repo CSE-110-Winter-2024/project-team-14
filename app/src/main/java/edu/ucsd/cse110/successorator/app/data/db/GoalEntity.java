@@ -12,6 +12,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 @Entity(tableName = "goals")
 
 public class GoalEntity {
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public Integer id = null;

@@ -26,6 +26,7 @@ public class MainViewModel extends ViewModel {
     private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
     private final TimeKeeper timeKeeper;
+    private final MutableSubject<List<Goal>> recurringOrderedGoals;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -41,6 +42,7 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
+        this.recurringOrderedGoals = new SimpleSubject<>();
 
         // When the list of goals changes (or is first loaded), reset the ordering.
         goalRepository.findAll().observe(goals -> {
@@ -51,6 +53,16 @@ public class MainViewModel extends ViewModel {
                     .collect(Collectors.toList());
 
             orderedGoals.setValue(newOrderedGoals);
+        });
+
+        goalRepository.findAllRecurringGoals().observe(goals -> {
+            if (goals == null) return; // not ready yet, ignore
+
+            var newOrderedGoals = goals.stream()
+                    .sorted(Comparator.comparingInt(Goal::sortOrder))
+                    .collect(Collectors.toList());
+
+            recurringOrderedGoals.setValue(newOrderedGoals);
         });
 
         currentDateTime.observe(dateTime -> {
@@ -68,6 +80,10 @@ public class MainViewModel extends ViewModel {
 
     public Subject<List<Goal>> getOrderedGoals() {
         return orderedGoals;
+    }
+
+    public Subject<List<Goal>> getRecurringOrderedGoals() {
+        return recurringOrderedGoals;
     }
 
     public void remove(int id) {
