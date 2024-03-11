@@ -24,7 +24,7 @@ public class GoalEntity {
     public int sortOrder;
 
     @ColumnInfo(name = "context")
-            public String context;
+    public String context;
 
     GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context) {
         this.taskText = taskText;

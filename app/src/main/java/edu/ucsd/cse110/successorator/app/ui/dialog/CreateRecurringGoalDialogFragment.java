@@ -81,6 +81,9 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
 
 //        String selectedDate = view.selectedDateTextView.getText().toString();
 
+        if (context == null) {
+            context = "Home";
+        }
         var goal = new Goal(null, front,false,-1, context);
         activityModel.append(goal);
 
