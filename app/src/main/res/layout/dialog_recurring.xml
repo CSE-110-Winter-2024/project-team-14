@@ -95,35 +95,52 @@
         app:layout_constraintTop_toBottomOf="@+id/contextRadioGroup">
 
         <RadioButton
-            android:id="@+id/onetimeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="one-time" />
-
-        <RadioButton
             android:id="@+id/dailyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="daily" />
+            android:text="Daily" />
 
         <RadioButton
             android:id="@+id/weeklyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="weekly on Tue" />
+            android:text="Weekly" />
 
         <RadioButton
             android:id="@+id/monthlyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="monthly on 3rd Tue" />
+            android:text="Monthly" />
 
         <RadioButton
             android:id="@+id/yearlyButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="yearly on 2/20" />
+            android:text="Yearly" />
+
     </RadioGroup>
+
+    <!--    Source: https://developer.android.com/develop/ui/views/components/pickers#java-->
+    <TextView
+        android:id="@+id/selectedDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Select Date"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recurringRadioGroup" />
+
+    <Button
+        android:id="@+id/pickDateButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Pick date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recurringRadioGroup" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
