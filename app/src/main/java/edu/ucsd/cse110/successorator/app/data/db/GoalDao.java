@@ -60,13 +60,13 @@ public interface GoalDao {
         if (goal.completed == false) {
             // append
             var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1, goal.context);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context);
+            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1, goal.context);
             newGoalId = Math.toIntExact(insert(newFlashcard));
         }
 
