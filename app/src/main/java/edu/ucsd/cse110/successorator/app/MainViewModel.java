@@ -25,6 +25,8 @@ public class MainViewModel extends ViewModel {
 
     private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
+    private List<Goal> originalGoals;
+    private String currentFilterContext;
     private final TimeKeeper timeKeeper;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -41,16 +43,18 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
+        currentFilterContext = null;
 
-        // When the list of goals changes (or is first loaded), reset the ordering.
+        // Retrieve all goals and store them as the original list
         goalRepository.findAll().observe(goals -> {
-            if (goals == null) return; // not ready yet, ignore
+            if (goals == null) return;
 
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList());
-
-            orderedGoals.setValue(newOrderedGoals);
+            originalGoals = goals;
+            if (currentFilterContext != null) {
+                filterByContext(currentFilterContext);
+            } else {
+                updateOrderedGoals(originalGoals);
+            }
         });
 
         currentDateTime.observe(dateTime -> {
@@ -96,29 +100,28 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    private void updateOrderedGoals(List<Goal> goals) {
+        var newOrderedGoals = goals.stream()
+                .sorted(Comparator.comparingInt(Goal::sortOrder))
+                .collect(Collectors.toList());
+
+        orderedGoals.setValue(newOrderedGoals);
+    }
+
     public void filterByContext(String context) {
-        goalRepository.findByContext(context).observe(goals -> {
-            if (goals == null) return;
+        currentFilterContext = context;
 
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList());
+        List<Goal> filteredGoals = originalGoals.stream()
+                .filter(goal -> goal.context().equals(context))
+                .collect(Collectors.toList());
 
-            orderedGoals.setValue(newOrderedGoals);
-        });
+        updateOrderedGoals(filteredGoals);
     }
 
 
     public void cancelFilter() {
-        goalRepository.findAll().observe(goals -> {
-            if (goals == null) return;
-
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList());
-
-            orderedGoals.setValue(newOrderedGoals);
-        });
+        currentFilterContext = null;
+        updateOrderedGoals(originalGoals);
     }
 }
 

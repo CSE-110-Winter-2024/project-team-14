@@ -21,7 +21,7 @@ import edu.ucsd.cse110.successorator.lib.domain.Goal;
 public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
-    private String context;
+    private String context = "Home";
 
     CreateGoalDialogFragment(){
 
@@ -85,6 +85,10 @@ public class CreateGoalDialogFragment extends DialogFragment{
 
         if(front.length() == 0 || front.length() > 30){
             dialog.dismiss();
+            return;
+        }
+
+        if (context == null) {
             return;
         }
 
