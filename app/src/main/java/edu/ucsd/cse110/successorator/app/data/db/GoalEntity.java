@@ -32,22 +32,23 @@ public class GoalEntity {
     @ColumnInfo(name = "nextDate")
             public String nextDate;
 
-    GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, String type, LocalDateTime nextDate) {
+    GoalEntity(Integer id, @NonNull String taskText, boolean completed, int sortOrder, String typeOfGoal, String nextDate) {
         this.taskText = taskText;
+        this.id = id;
         this.completed = completed;
         this.sortOrder = sortOrder;
-        this.typeOfGoal = type;
-        this.nextDate = nextDate.toString();
+        this.typeOfGoal = typeOfGoal;
+        this.nextDate = nextDate;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(),
-                goal.type(), goal.nextDate());
+        var card = new GoalEntity(goal.id(), goal.taskText(), goal.completed(), goal.sortOrder(),
+                goal.type(), goal.nextDate().toString());
         card.id = goal.id();
         return card;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, taskText, completed, sortOrder, typeOfGoal, LocalDateTime.parse(nextDate));
+        return new Goal(id, taskText, completed, sortOrder, typeOfGoal, nextDate);
     }
 }

@@ -23,25 +23,25 @@ public class Goal implements Serializable {
 
 
     //Constructor which automatically finds the next date to recur on
-    public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed,
-                int sortOrder, String typeOfGoal) {
-        this.id = id;
-        this.taskText = taskText;
-        this.completed = completed;
-        this.sortOrder = sortOrder;
-        this.nextDate = this.setNextDate();
-        this.typeOfGoal = typeOfGoal;
-    }
+//    public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed,
+//                int sortOrder, String typeOfGoal) {
+//        this.id = id;
+//        this.taskText = taskText;
+//        this.completed = completed;
+//        this.sortOrder = sortOrder;
+//        this.nextDate = this.setNextDate();
+//        this.typeOfGoal = typeOfGoal;
+//    }
 
     //Constructor to make a goal from a Database record
     //and set the date to start recurring on
     public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed,
-                int sortOrder, String typeOfGoal, LocalDateTime nextDate) {
+                int sortOrder, String typeOfGoal,String nextDate) {
         this.id = id;
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
-        this.nextDate = nextDate;
+            this.nextDate = setNextDate();
         this.typeOfGoal = typeOfGoal;
     }
 
@@ -65,15 +65,15 @@ public class Goal implements Serializable {
     }
 
     public Goal withId(int id) {
-        return new Goal(id, this.taskText, this.completed, this.sortOrder, this.typeOfGoal, this.nextDate);
+        return new Goal(id, this.taskText, this.completed, this.sortOrder, this.typeOfGoal, this.nextDate.toString());
     }
 
     public Goal withSortOrder(int sortOrder) {
-        return new Goal(this.id, this.taskText, this.completed, sortOrder, this.typeOfGoal, this.nextDate);
+        return new Goal(this.id, this.taskText, this.completed, this.sortOrder, this.typeOfGoal, this.nextDate.toString());
     }
 
     public Goal toggleCompleted() {
-        return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.typeOfGoal, this.nextDate);
+        return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.typeOfGoal, this.nextDate.toString());
     }
 
 

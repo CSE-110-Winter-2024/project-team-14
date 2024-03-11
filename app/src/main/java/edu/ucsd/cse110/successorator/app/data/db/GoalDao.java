@@ -84,8 +84,8 @@ public interface GoalDao {
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrderForUncompletedOneTimeGoals();
-        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1,
-                goal.typeOfGoal, LocalDateTime.parse(goal.nextDate));
+        var newGoal = new GoalEntity(goal.id, goal.taskText, goal.completed, maxSortOrder + 1,
+                goal.typeOfGoal, goal.nextDate);
         return Math.toIntExact(insert(newGoal));
     }
 
@@ -98,13 +98,13 @@ public interface GoalDao {
         if (!goal.completed) {
             // append
             var maxSortOrder = getMaxSortOrderOneTime();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.typeOfGoal, LocalDateTime.parse(goal.nextDate));
+            var newGoal = new GoalEntity(goal.id, goal.taskText, !goal.completed, maxSortOrder + 1000, goal.typeOfGoal, goal.nextDate);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrderOneTime(), getMaxSortOrderOneTime(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrderOneTime() - 1000, goal.typeOfGoal, LocalDateTime.parse(goal.nextDate));
+            var newFlashcard = new GoalEntity(goal.id, goal.taskText, !goal.completed, getMinSortOrderOneTime() - 1000, goal.typeOfGoal, goal.nextDate);
             newGoalId = Math.toIntExact(insert(newFlashcard));
         }
 

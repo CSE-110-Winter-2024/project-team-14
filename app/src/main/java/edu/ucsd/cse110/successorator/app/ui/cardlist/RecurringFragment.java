@@ -84,7 +84,7 @@ public class RecurringFragment extends Fragment {
         // 3. M -> V (MAKE VIEWS MATCH MODEL)
         // Observe changes in the ordered goals from the ViewModel and update the adapter accordingly
         // doesnt require live data so we do not need this, goals
-        activityModel.getOrderedGoals().observe(goals -> {
+        activityModel.getRecurringOrderedGoals().observe(goals -> {
             if (goals == null) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
                 return;
@@ -109,7 +109,7 @@ public class RecurringFragment extends Fragment {
         view.cardList.setOnItemClickListener((parent, view, position, id) -> {
             Goal clickedGoal = adapter.getItem(position);
             if (clickedGoal == null) return;
-            activityModel.updateGoal(clickedGoal);
+            //activityModel.updateGoal(clickedGoal);
             //adapter.notifyDataSetChanged(); //added
         });
 
