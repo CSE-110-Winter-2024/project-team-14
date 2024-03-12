@@ -98,6 +98,7 @@ public class PendingFragment extends Fragment {
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
@@ -160,12 +161,6 @@ public class PendingFragment extends Fragment {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

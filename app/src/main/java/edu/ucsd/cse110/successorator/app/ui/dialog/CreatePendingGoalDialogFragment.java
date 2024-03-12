@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogPendingBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -62,7 +64,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), "one_time");
         activityModel.append(goal);
 
         dialog.dismiss();

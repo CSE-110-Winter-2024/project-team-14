@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringBinding;
@@ -21,6 +23,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
     private String context;
+    private String recurrence;
 
     CreateRecurringGoalDialogFragment(){
 
@@ -31,6 +34,10 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void assignRecurrence(@NonNull String recurrence) {
+        this.recurrence = recurrence;
     }
 
     public void assignContext(@NonNull String context) {
@@ -61,6 +68,11 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         view.schoolButton.setOnClickListener(v -> assignContext("School"));
         view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
+        view.dailyButton.setOnClickListener(v -> assignRecurrence("daily"));
+        view.weeklyButton.setOnClickListener(v -> assignRecurrence("weekly"));
+        view.monthlyButton.setOnClickListener(v -> assignRecurrence("monthly"));
+        view.yearlyButton.setOnClickListener(v -> assignRecurrence("yearly"));
+
         view.pickDateButton.setOnClickListener(v -> showDatePickerDialog());
 
         return new AlertDialog.Builder(getActivity())
@@ -82,7 +94,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
 
         String selectedDate = view.selectedDateTextView.getText().toString();
 
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence);
         activityModel.append(goal);
 
         dialog.dismiss();
