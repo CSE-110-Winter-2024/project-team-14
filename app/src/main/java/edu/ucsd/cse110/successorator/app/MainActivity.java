@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,27 +108,38 @@ public class MainActivity extends AppCompatActivity {
             popupMenu.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
                 int color = 0;
+                String focusText = "";
 
                 // Handle menu item clicks here
                 if (itemId == R.id.home_button) {
                     activityModel.filterByContext("Home");
+                    focusText = "Focus Mode: Home";
                     color = ContextCompat.getColor(this, R.color.homeDotColor);
                 } else if (itemId == R.id.work_button) {
                     activityModel.filterByContext("Work");
+                    focusText = "Focus Mode: Work";
                     color = ContextCompat.getColor(this, R.color.workDotColor);
                 } else if (itemId == R.id.school_button) {
                     activityModel.filterByContext("School");
+                    focusText = "Focus Mode: School";
                     color = ContextCompat.getColor(this, R.color.schoolDotColor);
                 } else if (itemId == R.id.errands_button) {
                     activityModel.filterByContext("Errands");
+                    focusText = "Focus Mode: Errands";
                     color = ContextCompat.getColor(this, R.color.errandsDotColor);
                 } else if (itemId == R.id.cancel_button) {
                     activityModel.cancelFilter();
                 } else {
+                    view.findViewById(R.id.contextIndicator).setVisibility(View.INVISIBLE);
                     return false;
                 }
 
                 view.findViewById(buttonId).setBackgroundColor(color);
+
+                TextView contextIndicator = findViewById(R.id.contextIndicator);
+                contextIndicator.setTextColor(color);
+                contextIndicator.setText(focusText);
+                contextIndicator.setVisibility(View.VISIBLE);
                 return true;
             });
         }
