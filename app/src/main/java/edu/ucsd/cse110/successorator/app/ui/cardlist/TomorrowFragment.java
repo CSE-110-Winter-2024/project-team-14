@@ -88,9 +88,19 @@ public class TomorrowFragment extends Fragment {
                 return;
             }
 
+//            List<Goal> tomorrowGoals = new ArrayList<>();
+//            LocalDateTime tomorrow = LocalDateTime.now();
+//
+//            for (Goal goal: goals) {
+//                if (goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow)) {
+//                    tomorrowGoals.add(goal);
+//                }
+//            }
+
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
@@ -130,12 +140,6 @@ public class TomorrowFragment extends Fragment {
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
@@ -149,4 +153,22 @@ public class TomorrowFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    private boolean isReccuringTomorrow(Goal goal, LocalDateTime tomorrow) {
+//        switch (goal.getReccurence()) {
+//            case "one-time":
+//                return false;
+//            case "daily":
+//                return true;
+//            case "weekly":
+//                return goal.getDateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
+//            case "monthly":
+//                return goal.getDateAdded().getDayOfMonth() == tomorrow.getDayOfMonth();
+//            case "yearly":
+//                return goal.getDateAdded().getDayOfYear() == tomorrow.getDayOfYear();
+//            default:
+//                return false;
+//        }
+//    }
+
 }

@@ -90,9 +90,19 @@ public class TodayFragment extends Fragment {
                 return;
             }
 
+            List<Goal> todayGoals = new ArrayList<>();
+            LocalDateTime today = LocalDateTime.now();
+
+//            for (Goal goal: goals) {
+//                if (goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today)) {
+//                    todayGoals.add(goal);
+//                }
+//            }
+
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
@@ -144,4 +154,22 @@ public class TodayFragment extends Fragment {
         }
         return super.onOptionsItemSelected(item);
     }
+
+//    private boolean isReccuringToday(Goal goal, LocalDateTime today) {
+//        switch (goal.getReccurence()) {
+//            case "one-time":
+//                return false;
+//            case "daily":
+//                return true;
+//            case "weekly":
+//                return goal.getDateAdded().getDayOfWeek() == today.getDayOfWeek();
+//            case "monthly":
+//                return goal.getDateAdded().getDayOfMonth() == today.getDayOfMonth();
+//            case "yearly":
+//                return goal.getDateAdded().getDayOfYear() == today.getDayOfYear();
+//            default:
+//                return false;
+//        }
+//    }
+
 }

@@ -91,9 +91,18 @@ public class RecurringFragment extends Fragment {
                 return;
             }
 
+//            List<Goal> recurringGoals = new ArrayList<>();
+//
+//            for (Goal goal : goals) {
+//                if (goal.getRecurrence() != "one-time") {
+//                    recurringGoals.add(goal);
+//                }
+//            }
+
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
