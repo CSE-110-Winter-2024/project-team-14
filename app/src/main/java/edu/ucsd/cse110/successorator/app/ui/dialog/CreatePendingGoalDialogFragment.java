@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogPendingBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -19,6 +21,8 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogPendingBinding view;
     private String context;
+
+    private String TYPEOFGOAL = "today";
 
     CreatePendingGoalDialogFragment(){
 
@@ -34,6 +38,9 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
     public void assignContext(@NonNull String context) {
         this.context = context;
     }
+
+    public void assignType(@NonNull String typeOfGoal) {this.TYPEOFGOAL = typeOfGoal;}
+
 
     @NonNull
     @Override
@@ -64,7 +71,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
         if (context == null) {
             context = "Home";
         }
-        var goal = new Goal(null, front,false,-1, this.context);
+        var goal = new Goal(null, front,false,-1, this.context, TYPEOFGOAL, LocalDateTime.now().toString());
         activityModel.append(goal);
 
         dialog.dismiss();

@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
@@ -112,7 +113,42 @@ public class PendingFragment extends Fragment {
             dialog.show(getChildFragmentManager(), "CreatePendingGoalDialog");
         });
 
-        // TODO: add popup menu functionality here when a goal is long pressed
+        view.cardList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Goal clickedGoal = adapter.getItem(position);
+                if (clickedGoal == null) return false;
+                showPopupMenu(view, clickedGoal);
+                return true;
+            }
+        });
+    }
+
+    public void showPopupMenu(View view, Goal goal) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.long_press_goal, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle menu item clicks here
+                int itemId = item.getItemId();
+                if (itemId == R.id.moveToday_button) {
+                    Goal todayGoal = new Goal(goal.id(), goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), "today", goal.nextDate().toString());
+                    return true;
+                } else if (itemId == R.id.moveTomorrow_button) {
+                    Goal tomorrowGoal = new Goal(goal.id(), goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), "tomorrow", goal.nextDate().toString());
+                    return true;
+                } else if (itemId == R.id.finish_button) {
+                    activityModel.updateGoal(goal);
+                    return true;
+                } else if (itemId == R.id.delete_button) {
+                    activityModel.remove(goal.id());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        popupMenu.show();
     }
 
     @Override

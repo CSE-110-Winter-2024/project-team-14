@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
 import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
@@ -20,6 +22,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
     private String context;
+
+    private String typeOfGoal;
+
     CreateGoalDialogFragment(){
 
     }
@@ -34,6 +39,8 @@ public class CreateGoalDialogFragment extends DialogFragment{
     public void assignContext(@NonNull String context) {
         this.context = context;
     }
+
+    public void assignType(@NonNull String typeOfGoal) {this.typeOfGoal = typeOfGoal;}
 
     @NonNull
     @Override
@@ -72,7 +79,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
         if (context == null) {
             context = "Home";
         }
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, context, typeOfGoal, LocalDateTime.now().toString());
         activityModel.append(goal);
 
         dialog.dismiss();

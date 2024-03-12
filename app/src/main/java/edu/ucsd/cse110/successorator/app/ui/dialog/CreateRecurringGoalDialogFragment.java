@@ -12,6 +12,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringBinding;
@@ -20,6 +22,8 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
     private String context;
+
+    private String typeOfGoal;
 
     CreateRecurringGoalDialogFragment(){
 
@@ -35,6 +39,8 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
     public void assignContext(@NonNull String context) {
         this.context = context;
     }
+
+    public void assignType(@NonNull String typeOfGoal) { this.typeOfGoal = typeOfGoal;}
 
 //    @Override
 //    public void onDateSelected(String date) {
@@ -84,7 +90,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
         if (context == null) {
             context = "Home";
         }
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, context, typeOfGoal, LocalDateTime.now().toString());
         activityModel.append(goal);
 
         dialog.dismiss();
