@@ -22,7 +22,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
     private String context = "Home";
-    private String recurrence = "daily";
+    private String recurrence = "one_time";
 
     CreateGoalDialogFragment(){
 

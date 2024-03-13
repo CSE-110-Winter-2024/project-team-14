@@ -23,7 +23,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
     private String context;
-    private String recurrence;
+    private String recurrence = "daily";
 
     CreateRecurringGoalDialogFragment(){
 

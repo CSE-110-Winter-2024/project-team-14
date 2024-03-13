@@ -160,7 +160,7 @@ public class TodayFragment extends Fragment {
             case "one_time":
                 return false;
             case "daily":
-                return true;
+                return goal.getDateAdded().isBefore(LocalDateTime.now());
             case "weekly":
                 return goal.getDateAdded().getDayOfWeek() == today.getDayOfWeek();
             case "monthly":
