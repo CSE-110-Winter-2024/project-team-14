@@ -29,6 +29,9 @@ public interface GoalDao {
     @Query("SELECT * FROM goals ORDER BY sort_order")
     LiveData<List<GoalEntity>> findAllAsLiveData();
 
+    @Query("SELECT * FROM goals WHERE context = :context ORDER BY sort_order")
+    LiveData<List<GoalEntity>> findByContextAsLiveData(String context);
+
     @Query("SELECT COUNT(*) FROM goals")
     int count();
 
@@ -60,13 +63,13 @@ public interface GoalDao {
         if (goal.completed == false) {
             // append
             var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1, goal.context);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1, goal.context);
+            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context);
             newGoalId = Math.toIntExact(insert(newFlashcard));
         }
 

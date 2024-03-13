@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/moveToday_button"
+        android:title="Move to Today" />
+    <item
+        android:id="@+id/moveTomorrow_button"
+        android:title="Move to Tomorrow" />
+    <item
+        android:id="@+id/finish_button"
+        android:title="Finish" />
+    <item
+        android:id="@+id/delete_button"
+        android:title="Delete" />
+</menu>

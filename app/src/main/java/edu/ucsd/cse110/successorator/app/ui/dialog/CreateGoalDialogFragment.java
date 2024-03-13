@@ -10,16 +10,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
-import edu.ucsd.cse110.successorator.app.databinding.DialogCreateBinding;
+import edu.ucsd.cse110.successorator.app.ui.cardlist.TomorrowFragment;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
-
 public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
-    private String context;
+    private String context = "Home";
+
     CreateGoalDialogFragment(){
 
     }
@@ -40,18 +43,33 @@ public class CreateGoalDialogFragment extends DialogFragment{
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState){
         this.view = DialogCreateBinding.inflate((getLayoutInflater()));
 
-        view.homeButton.setOnClickListener(v -> {
-            assignContext("Home");
-        });
-        view.workButton.setOnClickListener(v -> {
-            assignContext("Work");
-        });
-        view.schoolButton.setOnClickListener(v -> {
-            assignContext("School");
-        });
-        view.errandsButton.setOnClickListener(v -> {
-            assignContext("Errands");
-        });
+        view.homeButton.setOnClickListener(v -> assignContext("Home"));
+        view.workButton.setOnClickListener(v -> assignContext("Work"));
+        view.schoolButton.setOnClickListener(v -> assignContext("School"));
+        view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
+
+        if (getParentFragment() instanceof TomorrowFragment) {
+            activityModel.getCurrentDateTime().observe((dateTime) -> {
+                LocalDateTime tomorrow = dateTime.plusDays(1);
+                var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
+                var monthlyFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
+                var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
+
+                view.weeklyButton.setText(tomorrow.format(weeklyFormatter));
+                view.monthlyButton.setText(tomorrow.format(monthlyFormatter));
+                view.yearlyButton.setText(tomorrow.format(yearlyFormatter));
+            });
+        } else {
+            activityModel.getCurrentDateTime().observe((dateTime) -> {
+                var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
+                var monthylFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
+                var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
+
+                view.weeklyButton.setText(dateTime.format(weeklyFormatter));
+                view.monthlyButton.setText(dateTime.format(monthylFormatter));
+                view.yearlyButton.setText(dateTime.format(yearlyFormatter));
+            });
+        }
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Most Important Task")
@@ -69,9 +87,11 @@ public class CreateGoalDialogFragment extends DialogFragment{
             dialog.dismiss();
             return;
         }
+
         if (context == null) {
-            context = "Home";
+            return;
         }
+
         var goal = new Goal(null, front,false,-1, context);
         activityModel.append(goal);
 

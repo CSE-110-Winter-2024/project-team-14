@@ -16,7 +16,8 @@ import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringBinding;
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
-public class CreateRecurringGoalDialogFragment extends DialogFragment {
+public class CreateRecurringGoalDialogFragment extends DialogFragment
+        implements DatePickerFragment.DatePickerListener {
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
     private String context;
@@ -36,18 +37,18 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
         this.context = context;
     }
 
-//    @Override
-//    public void onDateSelected(String date) {
-//        view.selectedDateTextView.setVisibility(View.VISIBLE);
-//        view.selectedDateTextView.setText(date);
-//    }
+    @Override
+    public void onDateSelected(String date) {
+        view.selectedDateTextView.setVisibility(View.VISIBLE);
+        view.selectedDateTextView.setText(date);
+    }
 
-//    // Inside showDatePickerDialog method
-//    private void showDatePickerDialog() {
-//        DatePickerFragment newFragment = new DatePickerFragment();
-//        newFragment.setDatePickerListener(this); // Set the listener
-//        newFragment.show(getParentFragmentManager(), "datePicker");
-//    }
+    // Inside showDatePickerDialog method
+    private void showDatePickerDialog() {
+        DatePickerFragment newFragment = new DatePickerFragment();
+        newFragment.setDatePickerListener(this); // Set the listener
+        newFragment.show(getParentFragmentManager(), "datePicker");
+    }
 
 
     @NonNull
@@ -60,7 +61,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
         view.schoolButton.setOnClickListener(v -> assignContext("School"));
         view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
-//        view.pickDateButton.setOnClickListener(v -> showDatePickerDialog());
+        view.pickDateButton.setOnClickListener(v -> showDatePickerDialog());
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Most Important Task")
@@ -79,11 +80,8 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment {
             return;
         }
 
-//        String selectedDate = view.selectedDateTextView.getText().toString();
+        String selectedDate = view.selectedDateTextView.getText().toString();
 
-        if (context == null) {
-            context = "Home";
-        }
         var goal = new Goal(null, front,false,-1, context);
         activityModel.append(goal);
 

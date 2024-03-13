@@ -1,5 +1,6 @@
 package edu.ucsd.cse110.successorator.app.data.db;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.Transformations;
 
 import java.util.List;
@@ -30,6 +31,17 @@ public class RoomGoalRepository implements GoalRepository {
     @Override
     public Subject<List<Goal>> findAll() {
         var entitiesLiveData = goalDao.findAllAsLiveData();
+        var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
+            return entities.stream()
+                    .map(GoalEntity::toGoal)
+                    .collect(Collectors.toList());
+        });
+        return new LiveDataSubjectAdapter<>(goalsLiveData);
+    }
+
+    @Override
+    public Subject<List<Goal>> findByContext(@NonNull String context) {
+        var entitiesLiveData = goalDao.findByContextAsLiveData(context);
         var goalsLiveData = Transformations.map(entitiesLiveData, entities -> {
             return entities.stream()
                     .map(GoalEntity::toGoal)

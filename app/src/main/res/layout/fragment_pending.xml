@@ -59,6 +59,20 @@
         app:layout_constraintTop_toTopOf="parent"
         android:onClick="showPopupMenu" />
 
+    <ImageButton
+        android:id="@+id/focus_menu_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintBottom_toTopOf="@+id/padView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:onClick="showPopupMenu"/>
+
     <TextView
         android:id="@+id/dateTextView"
         android:layout_width="wrap_content"
@@ -72,6 +86,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/contextIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textSize="20dp"
+        android:text="TextView"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/no_goals_text"

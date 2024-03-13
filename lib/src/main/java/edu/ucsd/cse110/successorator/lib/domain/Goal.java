@@ -13,7 +13,6 @@ public class Goal implements Serializable {
     private final boolean completed;
 
     private final @NonNull Integer sortOrder;
-
     private final @NonNull String context;
 
 
@@ -37,10 +36,7 @@ public class Goal implements Serializable {
     public int sortOrder() {
         return sortOrder;
     }
-
-    public @NonNull String context() {
-        return context;
-    }
+    public @NonNull String context() { return context; }
 
     public Goal withId(int id) {
         return new Goal(id, this.taskText, this.completed, this.sortOrder, this.context);
@@ -59,7 +55,7 @@ public class Goal implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
-        return completed == goal.completed && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context());
+        return completed == goal.completed && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context);
     }
 
     @Override

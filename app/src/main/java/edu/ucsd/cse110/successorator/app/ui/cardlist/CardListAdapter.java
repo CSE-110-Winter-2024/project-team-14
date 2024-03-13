@@ -47,16 +47,16 @@ public class CardListAdapter extends ArrayAdapter<Goal> {
         // Assuming Goal class has getDescription() method for the task description
         binding.taskText.setText(goal.taskText());
 
-        int dotColor;
+        int dotColor = getDotColorForContext(goal.context());
+
         // Reference: https://stackoverflow.com/questions/9786544/creating-a-strikethrough-text
         if(goal.completed()) {
-            dotColor = R.color.finishedDotColor;
+            dotColor = ContextCompat.getColor(getContext(), R.color.finishedDotColor);
             binding.taskText.setPaintFlags(binding.taskText.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);;
             int color = ContextCompat.getColor(getContext(), R.color.gray);
             binding.taskText.setBackgroundColor(color);
         }
         else{
-            dotColor = getDotColorForContext(goal.context());
             binding.taskText.setPaintFlags(0);
             binding.taskText.setBackgroundColor(0);
         }

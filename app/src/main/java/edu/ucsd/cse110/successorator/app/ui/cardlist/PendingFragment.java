@@ -112,7 +112,42 @@ public class PendingFragment extends Fragment {
             dialog.show(getChildFragmentManager(), "CreatePendingGoalDialog");
         });
 
-        // TODO: add popup menu functionality here when a goal is long pressed
+        //  binding.cardList.setAdapter(adapter); //added
+
+        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
+            Goal clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return;
+            showPopupMenu(view);
+            //adapter.notifyDataSetChanged(); //added
+        });
+    }
+
+    public void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.long_press_goal, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle menu item clicks here
+                int itemId = item.getItemId();
+                if (itemId == R.id.moveToday_button) {
+                    // Need to implement moving to today
+                    return true;
+                } else if (itemId == R.id.moveTomorrow_button) {
+                    // Need to implement moving to tomorrow
+                    return true;
+                } else if (itemId == R.id.finish_button) {
+
+                    return true;
+                } else if (itemId == R.id.delete_button) {
+
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     @Override

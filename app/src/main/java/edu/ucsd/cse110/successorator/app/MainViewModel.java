@@ -5,11 +5,9 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
-import java.sql.Time;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
@@ -25,6 +23,8 @@ public class MainViewModel extends ViewModel {
 
     private final MutableSubject<LocalDateTime> currentDateTime;
     private final MutableSubject<List<Goal>> orderedGoals;
+    private List<Goal> originalGoals;
+    private String currentFilterContext;
     private final TimeKeeper timeKeeper;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
@@ -41,16 +41,18 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
+        currentFilterContext = null;
 
-        // When the list of goals changes (or is first loaded), reset the ordering.
+        // Retrieve all goals and store them as the original list
         goalRepository.findAll().observe(goals -> {
-            if (goals == null) return; // not ready yet, ignore
+            if (goals == null) return;
 
-            var newOrderedGoals = goals.stream()
-                    .sorted(Comparator.comparingInt(Goal::sortOrder))
-                    .collect(Collectors.toList());
-
-            orderedGoals.setValue(newOrderedGoals);
+            originalGoals = goals;
+            if (currentFilterContext != null) {
+                filterByContext(currentFilterContext);
+            } else {
+                updateOrderedGoals(originalGoals);
+            }
         });
 
         currentDateTime.observe(dateTime -> {
@@ -59,6 +61,7 @@ public class MainViewModel extends ViewModel {
                         .plusDays(1).withHour(2).withMinute(0).withSecond(0);
                 if (dateTime.isAfter(twoAMNextDay)) {
                     rollover();
+                    this.currentDateTime.setValue(dateTime);
                 }
             }
             // THEN mark the new past time.
@@ -96,5 +99,28 @@ public class MainViewModel extends ViewModel {
         }
     }
 
+    private void updateOrderedGoals(List<Goal> goals) {
+        var newOrderedGoals = goals.stream()
+                .sorted(Comparator.comparingInt(Goal::sortOrder))
+                .collect(Collectors.toList());
+
+        orderedGoals.setValue(newOrderedGoals);
+    }
+
+    public void filterByContext(String context) {
+        currentFilterContext = context;
+
+        List<Goal> filteredGoals = originalGoals.stream()
+                .filter(goal -> goal.context().equals(context))
+                .collect(Collectors.toList());
+
+        updateOrderedGoals(filteredGoals);
+    }
+
+
+    public void cancelFilter() {
+        currentFilterContext = null;
+        updateOrderedGoals(originalGoals);
+    }
 }
 
