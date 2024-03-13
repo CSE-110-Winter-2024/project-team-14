@@ -56,7 +56,7 @@ public class Goal implements Serializable {
         return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.context, this.dateAdded);
     }
 
-    public Goal.
+    // add setDataAdded method here?
 
     @Override
     public boolean equals(Object o) {
