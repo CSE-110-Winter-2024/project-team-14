@@ -91,16 +91,16 @@ public class RecurringFragment extends Fragment {
                 return;
             }
 
-//            List<Goal> recurringGoals = new ArrayList<>();
-//
-//            for (Goal goal : goals) {
-//                if (goal.getRecurrence() != "one-time") {
-//                    recurringGoals.add(goal);
-//                }
-//            }
+            List<Goal> recurringGoals = new ArrayList<>();
+
+            for (Goal goal : goals) {
+                if (!goal.getRecurrence().equals("one_time")) {
+                    recurringGoals.add(goal);
+                }
+            }
 
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(recurringGoals));
             adapter.notifyDataSetChanged();
 
             if (goals.size() == 0) {
@@ -135,12 +135,6 @@ public class RecurringFragment extends Fragment {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
