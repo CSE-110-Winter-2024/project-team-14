@@ -3,8 +3,8 @@ package edu.ucsd.cse110.successorator.app;
 import android.os.Bundle;
 
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AlphaAnimation;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -12,9 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.PendingFragment;
@@ -48,29 +45,56 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void swapToToday() {
+        // if current fragment is not different, don't swap
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+                instanceof TodayFragment) {
+            return;
+        }
+
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
                 .replace(R.id.fragment_container, TodayFragment.newInstance())
                 .commit();
     }
 
     public void swapToTomorrow() {
+        // if current fragment is not different, don't swap
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+                instanceof TomorrowFragment) {
+            return;
+        }
+
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                 .replace(R.id.fragment_container, TomorrowFragment.newInstance())
                 .commit();
     }
 
     public void swapToPending() {
+        // if current fragment is not different, don't swap
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+                instanceof PendingFragment) {
+            return;
+        }
+
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                 .replace(R.id.fragment_container, PendingFragment.newInstance())
                 .commit();
     }
 
     public void swapToRecurring() {
+        // if current fragment is not different, don't swap
+        if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+                instanceof RecurringFragment) {
+            return;
+        }
         getSupportFragmentManager()
                 .beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                 .replace(R.id.fragment_container, RecurringFragment.newInstance())
                 .commit();
     }
@@ -109,8 +133,10 @@ public class MainActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
                 int color = 0;
                 String focusText = "";
+                TextView contextIndicator = findViewById(R.id.contextIndicator);
 
                 // Handle menu item clicks here
+                // Also handles notifying user that they are in Focus mode.
                 if (itemId == R.id.home_button) {
                     activityModel.filterByContext("Home");
                     focusText = "Focus Mode: Home";
@@ -136,15 +162,21 @@ public class MainActivity extends AppCompatActivity {
 
                 view.findViewById(buttonId).setBackgroundColor(color);
 
-                TextView contextIndicator = findViewById(R.id.contextIndicator);
                 contextIndicator.setTextColor(color);
                 contextIndicator.setText(focusText);
                 contextIndicator.setVisibility(View.VISIBLE);
+                fadeInAnimation(contextIndicator);
                 return true;
             });
         }
 
         popupMenu.show();
+    }
+
+    private void fadeInAnimation(View view) {
+        AlphaAnimation fadeIn = new AlphaAnimation(0, 1);
+        fadeIn.setDuration(500);
+        view.startAnimation(fadeIn);
     }
 }
 
