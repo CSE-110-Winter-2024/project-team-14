@@ -91,7 +91,7 @@ public class TodayFragment extends Fragment {
             }
 
             List<Goal> todayGoals = new ArrayList<>();
-            LocalDateTime today = LocalDateTime.now();
+            LocalDateTime today = LocalDateTime.now().plusDays(activityModel.buttonCount);
 
             for (Goal goal: goals) {
                 if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today))
@@ -114,8 +114,9 @@ public class TodayFragment extends Fragment {
         view.cardList.setAdapter(adapter);
 
         activityModel.getCurrentDateTime().observe((dateTime) -> {
+            LocalDateTime today = LocalDateTime.now().plusDays(activityModel.buttonCount);
             var formatter = DateTimeFormatter.ofPattern("'Today, 'E M/d", Locale.getDefault());
-            view.dateTextView.setText(dateTime.format(formatter));
+            view.dateTextView.setText(today.format(formatter));
         });
 
         // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
@@ -136,20 +137,6 @@ public class TodayFragment extends Fragment {
     public void onResume() {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        var itemId = item.getItemId();
-        if (itemId == R.id.action_bar_menu_move_views) {
-            var tomorrowJustPast2Am = activityModel.getCurrentDateTime().getValue()
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .plusDays(1)
-                    .withHour(2)
-                    .withMinute(1);
-            activityModel.setCurrentDateTime(tomorrowJustPast2Am);
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private boolean isReccuringToday(Goal goal, LocalDateTime today) {

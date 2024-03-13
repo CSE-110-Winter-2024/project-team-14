@@ -27,6 +27,7 @@ public class MainViewModel extends ViewModel {
     private List<Goal> originalGoals;
     private String currentFilterContext;
     private final TimeKeeper timeKeeper;
+    public int buttonCount;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -43,6 +44,7 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
         currentFilterContext = null;
+        buttonCount = 0;
 
         // Retrieve all goals and store them as the original list
         goalRepository.findAll().observe(goals -> {

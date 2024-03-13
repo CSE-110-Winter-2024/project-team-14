@@ -18,6 +18,7 @@ public class DatePickerFragment extends DialogFragment
 
     public interface DatePickerListener {
         void onDateSelected(String date);
+        void setDateTime(LocalDateTime date);
     }
 
     private DatePickerListener listener;
@@ -48,6 +49,7 @@ public class DatePickerFragment extends DialogFragment
         // Pass the selected date to the listener
         if (listener != null) {
             listener.onDateSelected(selectedDate);
+            listener.setDateTime(date);
         }
     }
 }

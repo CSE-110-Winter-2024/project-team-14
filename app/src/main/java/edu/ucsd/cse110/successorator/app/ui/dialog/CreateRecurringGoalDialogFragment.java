@@ -25,6 +25,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     private DialogRecurringBinding view;
     private String context = "Home";
     private String recurrence = "daily";
+    private LocalDateTime selectedDate;
 
     CreateRecurringGoalDialogFragment(){
 
@@ -49,6 +50,11 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     public void onDateSelected(String date) {
         view.selectedDateTextView.setVisibility(View.VISIBLE);
         view.selectedDateTextView.setText(date);
+    }
+
+    @Override
+    public void setDateTime(LocalDateTime date) {
+        selectedDate = date;
     }
 
     // Inside showDatePickerDialog method
@@ -93,9 +99,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
             return;
         }
 
-        String selectedDate = view.selectedDateTextView.getText().toString();
-
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence, false);
+        var goal = new Goal(null, front,false,-1, context, selectedDate, recurrence, false);
         activityModel.append(goal);
 
         dialog.dismiss();

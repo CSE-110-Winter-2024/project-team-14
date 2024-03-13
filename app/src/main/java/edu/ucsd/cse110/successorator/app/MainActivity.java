@@ -3,15 +3,19 @@ package edu.ucsd.cse110.successorator.app;
 import android.os.Bundle;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+
+import java.time.temporal.ChronoUnit;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.PendingFragment;
@@ -177,6 +181,21 @@ public class MainActivity extends AppCompatActivity {
         AlphaAnimation fadeIn = new AlphaAnimation(0, 1);
         fadeIn.setDuration(500);
         view.startAnimation(fadeIn);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        var itemId = item.getItemId();
+        if (itemId == R.id.action_bar_menu_move_views) {
+            var tomorrowJustPast2Am = activityModel.getCurrentDateTime().getValue()
+                    .truncatedTo(ChronoUnit.DAYS)
+                    .plusDays(1)
+                    .withHour(2)
+                    .withMinute(1);
+            activityModel.setCurrentDateTime(tomorrowJustPast2Am);
+        }
+        activityModel.buttonCount++;
+        return super.onOptionsItemSelected(item);
     }
 }
 
