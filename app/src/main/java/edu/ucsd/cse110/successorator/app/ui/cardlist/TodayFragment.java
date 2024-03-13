@@ -93,14 +93,17 @@ public class TodayFragment extends Fragment {
             List<Goal> todayGoals = new ArrayList<>();
             LocalDateTime today = LocalDateTime.now();
 
-//            for (Goal goal: goals) {
-//                if (goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today)) {
-//                    todayGoals.add(goal);
-//                }
-//            }
+            for (Goal goal: goals) {
+                // check recurring here too later
+                if (goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate())) {
+                    todayGoals.add(goal);
+                }
+            }
+
+            // add recurring functionality
 
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(todayGoals));
             adapter.notifyDataSetChanged();
 
             if (goals.size() == 0) {

@@ -5,6 +5,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 @Entity(tableName = "goals")
@@ -26,20 +29,25 @@ public class GoalEntity {
     @ColumnInfo(name = "context")
     public String context;
 
-    GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context) {
+    @ColumnInfo(name = "dateAdded")
+    public LocalDateTime dateAdded;
+
+    GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context,
+               LocalDateTime dateAdded) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.context = context;
+        this.dateAdded = dateAdded;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context());
+        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), goal.getDateAdded());
         card.id = goal.id();
         return card;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, taskText, completed, sortOrder, context);
+        return new Goal(id, taskText, completed, sortOrder, context, dateAdded);
     }
 }

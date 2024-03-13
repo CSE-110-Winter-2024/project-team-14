@@ -88,17 +88,20 @@ public class TomorrowFragment extends Fragment {
                 return;
             }
 
-//            List<Goal> tomorrowGoals = new ArrayList<>();
-//            LocalDateTime tomorrow = LocalDateTime.now();
-//
-//            for (Goal goal: goals) {
-//                if (goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow)) {
-//                    tomorrowGoals.add(goal);
-//                }
-//            }
+            List<Goal> tomorrowGoals = new ArrayList<>();
+            LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+
+            for (Goal goal: goals) {
+                // add recurring logic check here later too
+                if (goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate())) {
+                    tomorrowGoals.add(goal);
+                }
+            }
+
+            // add recurring check method here
 
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(tomorrowGoals));
             adapter.notifyDataSetChanged();
 
             if (goals.size() == 0) {

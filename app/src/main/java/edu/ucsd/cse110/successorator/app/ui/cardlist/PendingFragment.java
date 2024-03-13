@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,7 @@ public class PendingFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentPendingBinding view;
     private CardListAdapter adapter;
+    private Goal clickedGoal;
 
     public PendingFragment() {
         // Required empty public constructor
@@ -114,11 +116,12 @@ public class PendingFragment extends Fragment {
 
         //  binding.cardList.setAdapter(adapter); //added
 
-        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
-            Goal clickedGoal = adapter.getItem(position);
-            if (clickedGoal == null) return;
+        view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
+            clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return false;
             showPopupMenu(view);
             //adapter.notifyDataSetChanged(); //added
+            return true;
         });
     }
 
@@ -130,16 +133,17 @@ public class PendingFragment extends Fragment {
                 // Handle menu item clicks here
                 int itemId = item.getItemId();
                 if (itemId == R.id.moveToday_button) {
-                    // Need to implement moving to today
+//                    clickedGoal.setDateAdded(LocalDate.now());
                     return true;
                 } else if (itemId == R.id.moveTomorrow_button) {
-                    // Need to implement moving to tomorrow
+//                    clickedGoal.setDateAdded(LocalDate.now().plusDays(1));
                     return true;
                 } else if (itemId == R.id.finish_button) {
-
+                    activityModel.updateGoal(clickedGoal);
                     return true;
                 } else if (itemId == R.id.delete_button) {
 
+                    activityModel.remove(clickedGoal.id());
                     return true;
                 } else {
                     return false;
