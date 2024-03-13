@@ -23,7 +23,7 @@ public class MainViewModelTest {
         GoalRepository repo = new SimpleGoalRepository(data);
         var mvm = new MainViewModel(repo, timeKeeper);
 
-        Goal g = new Goal(null, "do homework", false, 4);
+        Goal g = new Goal(null, "do homework", false, 4, "school");
         mvm.append(g);
 
         assertEquals("do homework", mvm.getOrderedGoals().getValue().get(0).taskText());

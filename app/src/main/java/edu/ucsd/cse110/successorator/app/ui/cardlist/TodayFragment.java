@@ -124,15 +124,11 @@ public class TodayFragment extends Fragment {
             dialog.show(getChildFragmentManager(), "CreateGoalDialog");
         });
 
-        //  binding.cardList.setAdapter(adapter); //added
-
         view.cardList.setOnItemClickListener((parent, view, position, id) -> {
             Goal clickedGoal = adapter.getItem(position);
             if (clickedGoal == null) return;
             activityModel.updateGoal(clickedGoal);
-            //adapter.notifyDataSetChanged(); //added
         });
-
     }
 
     @Override
