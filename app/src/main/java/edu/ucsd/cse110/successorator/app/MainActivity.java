@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.action_bar_menu_move_views) {
+            activityModel.buttonCount++;
             var tomorrowJustPast2Am = activityModel.getCurrentDateTime().getValue()
                     .truncatedTo(ChronoUnit.DAYS)
                     .plusDays(1)
@@ -194,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
                     .withMinute(1);
             activityModel.setCurrentDateTime(tomorrowJustPast2Am);
         }
-        activityModel.buttonCount++;
         return super.onOptionsItemSelected(item);
     }
 }
