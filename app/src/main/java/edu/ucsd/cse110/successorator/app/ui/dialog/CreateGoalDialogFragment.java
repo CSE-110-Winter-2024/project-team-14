@@ -103,9 +103,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence, false);
         if (getParentFragment() instanceof TomorrowFragment) {
-            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), recurrence);
+            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), recurrence, false);
         }
         activityModel.append(goal);
 

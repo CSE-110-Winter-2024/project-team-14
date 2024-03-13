@@ -95,8 +95,16 @@ public class PendingFragment extends Fragment {
                 return;
             }
 
+            List<Goal> pendingGoals = new ArrayList<>();
+
+            for (Goal goal : goals) {
+                if (goal.isPending()) {
+                    pendingGoals.add(goal);
+                }
+            }
+
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(pendingGoals));
             adapter.notifyDataSetChanged();
 
             if (goals.size() == 0) {
@@ -135,11 +143,12 @@ public class PendingFragment extends Fragment {
                 int itemId = item.getItemId();
                 if (itemId == R.id.moveToday_button) {
                     // Need to implement moving to today
-//                    clickedGoal.setDateAdded(LocalDate.now());
+                    activityModel.switchPending(clickedGoal);
                     return true;
                 } else if (itemId == R.id.moveTomorrow_button) {
                     // Need to implement moving to tomorrow
-//                    clickedGoal.setDateAdded(LocalDate.now().plusDays(1));
+                    activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
                     return true;
                 } else if (itemId == R.id.finish_button) {
                     activityModel.updateGoal(clickedGoal);

@@ -92,7 +92,8 @@ public class TomorrowFragment extends Fragment {
             LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
 
             for (Goal goal: goals) {
-                if (goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow)) {
+                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow))
+                    && (!goal.isPending())) {
                     tomorrowGoals.add(goal);
                 }
             }

@@ -35,24 +35,28 @@ public class GoalEntity {
     @ColumnInfo(name = "recurrence")
     public String recurrence;
 
+    @ColumnInfo(name = "isPending")
+    public boolean isPending;
+
     GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context,
-               LocalDateTime dateAdded, @NonNull String recurrence) {
+               LocalDateTime dateAdded, @NonNull String recurrence, boolean isPending) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.context = context;
         this.dateAdded = dateAdded;
         this.recurrence = recurrence;
+        this.isPending = isPending;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(),
-                goal.getDateAdded(), goal.getRecurrence());
+                goal.getDateAdded(), goal.getRecurrence(), goal.isPending());
         card.id = goal.id();
         return card;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, taskText, completed, sortOrder, context, dateAdded, recurrence);
+        return new Goal(id, taskText, completed, sortOrder, context, dateAdded, recurrence, isPending);
     }
 }

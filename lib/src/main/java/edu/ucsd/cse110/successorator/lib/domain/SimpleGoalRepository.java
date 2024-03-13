@@ -2,6 +2,7 @@ package edu.ucsd.cse110.successorator.lib.domain;
 
 import androidx.annotation.NonNull;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import edu.ucsd.cse110.successorator.lib.data.InMemoryDataSource;
@@ -54,4 +55,9 @@ public class SimpleGoalRepository implements GoalRepository {
         dataSource.updateGoal(goal);
     }
 
+    @Override
+    public void setDate(Goal goal, LocalDateTime date) { }
+
+    @Override
+    public void switchPending(Goal goal) { }
 }

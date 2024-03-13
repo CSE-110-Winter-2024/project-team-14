@@ -20,7 +20,7 @@ import edu.ucsd.cse110.successorator.lib.domain.GoalRepository;
 public class CreatePendingGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogPendingBinding view;
-    private String context;
+    private String context = "Home";
 
     CreatePendingGoalDialogFragment(){
 
@@ -64,7 +64,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), "one_time");
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), "one_time", true);
         activityModel.append(goal);
 
         dialog.dismiss();

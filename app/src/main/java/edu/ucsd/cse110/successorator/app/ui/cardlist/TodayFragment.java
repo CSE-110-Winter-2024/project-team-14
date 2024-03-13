@@ -94,13 +94,14 @@ public class TodayFragment extends Fragment {
             LocalDateTime today = LocalDateTime.now();
 
             for (Goal goal: goals) {
-                if (goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today)) {
+                if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today))
+                    && (!goal.isPending())) {
                     todayGoals.add(goal);
                 }
             }
 
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(todayGoals));
             adapter.notifyDataSetChanged();
 
             if (goals.size() == 0) {

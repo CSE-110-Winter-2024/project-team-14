@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Dao
@@ -50,7 +51,8 @@ public interface GoalDao {
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrderForUncompletedGoals();
-        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1, goal.context, goal.dateAdded, goal.recurrence);
+        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1, goal.context,
+                goal.dateAdded, goal.recurrence, goal.isPending);
         return Math.toIntExact(insert(newGoal));
     }
 
@@ -63,17 +65,35 @@ public interface GoalDao {
         if (goal.completed == false) {
             // append
             var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context, goal.dateAdded, goal.recurrence);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context,
+                    goal.dateAdded, goal.recurrence, goal.isPending);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context, goal.dateAdded, goal.recurrence);
+            var newFlashcard = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context,
+                    goal.dateAdded, goal.recurrence, goal.isPending);
             newGoalId = Math.toIntExact(insert(newFlashcard));
         }
 
         delete(goal.id);
         return newGoalId;
+    }
+
+    @Query("UPDATE goals SET dateAdded = :date WHERE id = :id")
+    void setDateDB(int id, LocalDateTime date);
+
+    @Query("UPDATE goals SET isPending = false WHERE id = :id")
+    void switchPendingDB(int id);
+
+    @Transaction
+    default void setDate(GoalEntity goal, LocalDateTime date) {
+        setDateDB(goal.id, date);
+    }
+
+    @Transaction
+    default void switchPending(GoalEntity goal) {
+        switchPendingDB(goal.id);
     }
 }

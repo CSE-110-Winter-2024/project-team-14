@@ -5,6 +5,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -82,6 +83,14 @@ public class MainViewModel extends ViewModel {
 
     public void updateGoal(Goal goal) {
         goalRepository.updateGoal(goal);
+    }
+
+    public void setDate(Goal goal, LocalDateTime date) {
+        goalRepository.setDate(goal, date);
+    }
+
+    public void switchPending(Goal goal) {
+        goalRepository.switchPending(goal);
     }
 
     public void setCurrentDateTime(LocalDateTime newDateTime) {
