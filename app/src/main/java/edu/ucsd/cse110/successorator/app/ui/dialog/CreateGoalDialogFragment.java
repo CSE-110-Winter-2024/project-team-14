@@ -23,7 +23,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
     private DialogCreateBinding view;
     private String context;
 
-    private String typeOfGoal;
+    private String typeOfGoal = "one_time";
 
     CreateGoalDialogFragment(){
 

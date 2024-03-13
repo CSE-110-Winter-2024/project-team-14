@@ -15,10 +15,10 @@ public class Goal implements Serializable {
 
     private LocalDateTime nextDate;
 
-    private final @NonNull String typeOfGoal;
+    private final String typeOfGoal;
 
 
-    public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder, @NonNull String context, @NonNull String typeOfGoal, @NonNull String nextDate) {
+    public Goal(@Nullable Integer id, @NonNull String taskText, boolean completed, int sortOrder, @NonNull String context, @NonNull String typeOfGoal, @Nullable String nextDate) {
         this.id = id;
         this.taskText = taskText;
         this.completed = completed;
@@ -103,7 +103,7 @@ public class Goal implements Serializable {
                 return nextDate;
             case "yearly":
                 return LocalDateTime.now().plusYears(1);
-            default: return null;
+            default: return LocalDateTime.MIN;
         }
         return startDate;
     }
@@ -149,7 +149,7 @@ public class Goal implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, taskText, completed, sortOrder, context, nextDate, typeOfGoal);
+        return Objects.hash(id, taskText, completed, sortOrder, context, typeOfGoal, nextDate);
     }
 
 }

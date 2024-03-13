@@ -22,7 +22,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
     private DialogPendingBinding view;
     private String context;
 
-    private String TYPEOFGOAL = "today";
+    private String TYPEOFGOAL = "one_time";
 
     CreatePendingGoalDialogFragment(){
 
