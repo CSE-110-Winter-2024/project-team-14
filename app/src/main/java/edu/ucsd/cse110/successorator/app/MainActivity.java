@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
         fadeIn.setDuration(500);
         view.startAnimation(fadeIn);
     }
+
 }
 
 
