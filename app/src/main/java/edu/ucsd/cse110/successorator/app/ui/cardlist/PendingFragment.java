@@ -95,9 +95,18 @@ public class PendingFragment extends Fragment {
                 return;
             }
 
+            List<Goal> pendingGoals = new ArrayList<>();
+
+            for (Goal goal : goals) {
+                if (goal.isPending()) {
+                    pendingGoals.add(goal);
+                }
+            }
+
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(pendingGoals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
@@ -113,8 +122,6 @@ public class PendingFragment extends Fragment {
             // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
             dialog.show(getChildFragmentManager(), "CreatePendingGoalDialog");
         });
-
-        //  binding.cardList.setAdapter(adapter); //added
 
         view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
             clickedGoal = adapter.getItem(position);
@@ -133,16 +140,16 @@ public class PendingFragment extends Fragment {
                 // Handle menu item clicks here
                 int itemId = item.getItemId();
                 if (itemId == R.id.moveToday_button) {
-//                    clickedGoal.setDateAdded(LocalDate.now());
+                    activityModel.switchPending(clickedGoal);
                     return true;
                 } else if (itemId == R.id.moveTomorrow_button) {
-//                    clickedGoal.setDateAdded(LocalDate.now().plusDays(1));
+                    activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
                     return true;
                 } else if (itemId == R.id.finish_button) {
                     activityModel.updateGoal(clickedGoal);
                     return true;
                 } else if (itemId == R.id.delete_button) {
-
                     activityModel.remove(clickedGoal.id());
                     return true;
                 } else {
@@ -159,12 +166,6 @@ public class PendingFragment extends Fragment {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

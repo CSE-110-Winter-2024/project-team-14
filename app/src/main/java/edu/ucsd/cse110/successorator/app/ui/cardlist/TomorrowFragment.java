@@ -89,16 +89,14 @@ public class TomorrowFragment extends Fragment {
             }
 
             List<Goal> tomorrowGoals = new ArrayList<>();
-            LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+            LocalDateTime tomorrow = LocalDateTime.now().plusDays(1 + activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                // add recurring logic check here later too
-                if (goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate())) {
+                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()))
+                        && (!goal.isPending())) {
                     tomorrowGoals.add(goal);
                 }
             }
-
-            // add recurring check method here
 
             adapter.clear();
             adapter.addAll(new ArrayList<>(tomorrowGoals));
@@ -114,7 +112,7 @@ public class TomorrowFragment extends Fragment {
         view.cardList.setAdapter(adapter);
 
         activityModel.getCurrentDateTime().observe((dateTime) -> {
-            LocalDateTime tomorrow = dateTime.plusDays(1);
+            LocalDateTime tomorrow = LocalDateTime.now().plusDays(1 + activityModel.buttonCount);
             var formatter = DateTimeFormatter.ofPattern("'Tomorrow, 'E M/d", Locale.getDefault());
             view.dateTextView.setText(tomorrow.format(formatter));
         });
@@ -143,35 +141,5 @@ public class TomorrowFragment extends Fragment {
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        var itemId = item.getItemId();
-        if (itemId == R.id.action_bar_menu_move_views) {
-            var tomorrowJustPast2Am = activityModel.getCurrentDateTime().getValue()
-                    .truncatedTo(ChronoUnit.DAYS)
-                    .plusDays(1)
-                    .withHour(2)
-                    .withMinute(1);
-            activityModel.setCurrentDateTime(tomorrowJustPast2Am);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-//    private boolean isReccuringTomorrow(Goal goal, LocalDateTime tomorrow) {
-//        switch (goal.getReccurence()) {
-//            case "one-time":
-//                return false;
-//            case "daily":
-//                return true;
-//            case "weekly":
-//                return goal.getDateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
-//            case "monthly":
-//                return goal.getDateAdded().getDayOfMonth() == tomorrow.getDayOfMonth();
-//            case "yearly":
-//                return goal.getDateAdded().getDayOfYear() == tomorrow.getDayOfYear();
-//            default:
-//                return false;
-//        }
-//    }
-
+    // add recurring method here probably for filtering check
 }

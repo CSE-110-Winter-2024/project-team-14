@@ -32,22 +32,26 @@ public class GoalEntity {
     @ColumnInfo(name = "dateAdded")
     public LocalDateTime dateAdded;
 
+    @ColumnInfo(name = "isPending")
+    public boolean isPending;
+
     GoalEntity(@NonNull String taskText, boolean completed, int sortOrder, @NonNull String context,
-               LocalDateTime dateAdded) {
+               LocalDateTime dateAdded, boolean isPending) {
         this.taskText = taskText;
         this.completed = completed;
         this.sortOrder = sortOrder;
         this.context = context;
         this.dateAdded = dateAdded;
+        this.isPending = isPending;
     }
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
-        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), goal.getDateAdded());
+        var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), goal.getDateAdded(), goal.isPending());
         card.id = goal.id();
         return card;
     }
 
     public @NonNull Goal toGoal() {
-        return new Goal(id, taskText, completed, sortOrder, context, dateAdded);
+        return new Goal(id, taskText, completed, sortOrder, context, dateAdded, isPending);
     }
 }

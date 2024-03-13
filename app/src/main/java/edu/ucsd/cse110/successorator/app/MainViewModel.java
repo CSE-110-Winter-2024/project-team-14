@@ -5,6 +5,7 @@ import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLI
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +27,7 @@ public class MainViewModel extends ViewModel {
     private List<Goal> originalGoals;
     private String currentFilterContext;
     private final TimeKeeper timeKeeper;
+    public int buttonCount;
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -41,7 +43,8 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
-        currentFilterContext = null;
+        this.currentFilterContext = null;
+        this.buttonCount = 0;
 
         // Retrieve all goals and store them as the original list
         goalRepository.findAll().observe(goals -> {
@@ -83,6 +86,14 @@ public class MainViewModel extends ViewModel {
 
     public void updateGoal(Goal goal) {
         goalRepository.updateGoal(goal);
+    }
+
+    public void setDate(Goal goal, LocalDateTime date) {
+        goalRepository.setDate(goal, date);
+    }
+
+    public void switchPending(Goal goal) {
+        goalRepository.switchPending(goal);
     }
 
     public void setCurrentDateTime(LocalDateTime newDateTime) {
