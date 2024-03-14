@@ -3,6 +3,7 @@ package edu.ucsd.cse110.successorator.app.data.db;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Transformations;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,4 +71,10 @@ public class RoomGoalRepository implements GoalRepository {
 
     @Override
     public void updateGoal(Goal goal) { goalDao.updateGoal(GoalEntity.fromGoal(goal)); }
+
+    @Override
+    public void setDate(Goal goal, LocalDateTime date) { goalDao.setDate(GoalEntity.fromGoal(goal), date); }
+
+    @Override
+    public void switchPending(Goal goal) { goalDao.switchPending(GoalEntity.fromGoal(goal)); }
 }

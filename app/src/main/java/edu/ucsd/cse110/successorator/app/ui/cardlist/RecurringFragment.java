@@ -91,14 +91,7 @@ public class RecurringFragment extends Fragment {
                 return;
             }
 
-//            List<Goal> recurringGoals = new ArrayList<>();
-//
-//            for (Goal goal : goals) {
-//                if (goal.getRecurrence() != "one-time") {
-//                    recurringGoals.add(goal);
-//                }
-//            }
-
+//          // filter the recurring goals here
             adapter.clear();
             adapter.addAll(new ArrayList<>(goals));
             adapter.notifyDataSetChanged();

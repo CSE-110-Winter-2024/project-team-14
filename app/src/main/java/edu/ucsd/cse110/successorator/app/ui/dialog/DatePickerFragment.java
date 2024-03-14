@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import java.text.DateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 
 // Source: https://developer.android.com/develop/ui/views/components/pickers#java
@@ -17,6 +18,7 @@ public class DatePickerFragment extends DialogFragment
 
     public interface DatePickerListener {
         void onDateSelected(String date);
+        void setDateTime(LocalDateTime date);
     }
 
     private DatePickerListener listener;
@@ -42,10 +44,12 @@ public class DatePickerFragment extends DialogFragment
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
         String selectedDate = DateFormat.getDateInstance().format(calendar.getTime());
+        LocalDateTime date = LocalDateTime.of(year, month + 1, day, 0, 0);
 
         // Pass the selected date to the listener
         if (listener != null) {
             listener.onDateSelected(selectedDate);
+            listener.setDateTime(date);
         }
     }
 }

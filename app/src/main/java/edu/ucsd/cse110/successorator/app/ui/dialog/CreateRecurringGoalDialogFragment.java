@@ -12,6 +12,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import edu.ucsd.cse110.successorator.app.MainViewModel;
 import edu.ucsd.cse110.successorator.app.R;
 import edu.ucsd.cse110.successorator.app.databinding.DialogRecurringBinding;
@@ -20,7 +23,8 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         implements DatePickerFragment.DatePickerListener {
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
-    private String context;
+    private String context = "Home";
+    private LocalDateTime selectedDate;
 
     CreateRecurringGoalDialogFragment(){
 
@@ -41,6 +45,11 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     public void onDateSelected(String date) {
         view.selectedDateTextView.setVisibility(View.VISIBLE);
         view.selectedDateTextView.setText(date);
+    }
+
+    @Override
+    public void setDateTime(LocalDateTime date) {
+        selectedDate = date;
     }
 
     // Inside showDatePickerDialog method
@@ -80,9 +89,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
             return;
         }
 
-        String selectedDate = view.selectedDateTextView.getText().toString();
-
-        var goal = new Goal(null, front,false,-1, context);
+        var goal = new Goal(null, front,false,-1, context, selectedDate, false);
         activityModel.append(goal);
 
         dialog.dismiss();

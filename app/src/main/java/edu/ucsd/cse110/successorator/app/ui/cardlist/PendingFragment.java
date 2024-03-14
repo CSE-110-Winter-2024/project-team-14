@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -31,6 +32,7 @@ public class PendingFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentPendingBinding view;
     private CardListAdapter adapter;
+    private Goal clickedGoal;
 
     public PendingFragment() {
         // Required empty public constructor
@@ -93,9 +95,18 @@ public class PendingFragment extends Fragment {
                 return;
             }
 
+            List<Goal> pendingGoals = new ArrayList<>();
+
+            for (Goal goal : goals) {
+                if (goal.isPending()) {
+                    pendingGoals.add(goal);
+                }
+            }
+
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(pendingGoals));
             adapter.notifyDataSetChanged();
+
             if (goals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
@@ -112,13 +123,12 @@ public class PendingFragment extends Fragment {
             dialog.show(getChildFragmentManager(), "CreatePendingGoalDialog");
         });
 
-        //  binding.cardList.setAdapter(adapter); //added
-
-        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
-            Goal clickedGoal = adapter.getItem(position);
-            if (clickedGoal == null) return;
+        view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
+            clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return false;
             showPopupMenu(view);
             //adapter.notifyDataSetChanged(); //added
+            return true;
         });
     }
 
@@ -130,16 +140,17 @@ public class PendingFragment extends Fragment {
                 // Handle menu item clicks here
                 int itemId = item.getItemId();
                 if (itemId == R.id.moveToday_button) {
-                    // Need to implement moving to today
+                    activityModel.switchPending(clickedGoal);
                     return true;
                 } else if (itemId == R.id.moveTomorrow_button) {
-                    // Need to implement moving to tomorrow
+                    activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
                     return true;
                 } else if (itemId == R.id.finish_button) {
-
+                    activityModel.updateGoal(clickedGoal);
                     return true;
                 } else if (itemId == R.id.delete_button) {
-
+                    activityModel.remove(clickedGoal.id());
                     return true;
                 } else {
                     return false;
@@ -155,12 +166,6 @@ public class PendingFragment extends Fragment {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
