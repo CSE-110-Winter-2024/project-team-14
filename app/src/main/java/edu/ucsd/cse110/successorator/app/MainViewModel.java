@@ -64,7 +64,6 @@ public class MainViewModel extends ViewModel {
                         .plusDays(1).withHour(2).withMinute(0).withSecond(0);
                 if (dateTime.isAfter(twoAMNextDay)) {
                     rollover();
-                    this.currentDateTime.setValue(dateTime);
                 }
             }
             // THEN mark the new past time.
