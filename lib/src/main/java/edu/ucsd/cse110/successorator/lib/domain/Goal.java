@@ -44,8 +44,11 @@ public class Goal implements Serializable {
         return sortOrder;
     }
     public @NonNull String context() { return context; }
-    public LocalDateTime getDateAdded() { return dateAdded; }
+
+    public LocalDateTime dateAdded() {return dateAdded;
+    }
     public boolean isPending() { return isPending; }
+
     public Goal withId(int id) {
         return new Goal(id, this.taskText, this.completed, this.sortOrder, this.context, this.dateAdded, this.isPending);
     }
@@ -58,20 +61,16 @@ public class Goal implements Serializable {
         return new Goal(this.id, this.taskText, !this.completed, this.sortOrder, this.context, this.dateAdded, this.isPending);
     }
 
-    // add setDataAdded method here?
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
-        return completed == goal.completed && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context)
-                && Objects.equals(dateAdded, goal.dateAdded) && Objects.equals(isPending, goal.isPending);
+        return completed == goal.completed && isPending() == goal.isPending() && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context) && Objects.equals(dateAdded.toLocalDate(), goal.dateAdded.toLocalDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, taskText, completed, sortOrder, context, dateAdded, isPending);
+        return Objects.hash(id, taskText, completed, sortOrder, context, dateAdded, isPending());
     }
-
 }

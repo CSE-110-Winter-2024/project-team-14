@@ -95,7 +95,7 @@ public class TodayFragment extends Fragment {
 
             for (Goal goal: goals) {
                 // add check condition for recurring type here too
-                if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()))
+                if ((goal.dateAdded().toLocalDate().isEqual(today.toLocalDate()))
                         && (!goal.isPending())) {
                     todayGoals.add(goal);
                 }

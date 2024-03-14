@@ -92,7 +92,7 @@ public class TomorrowFragment extends Fragment {
             LocalDateTime tomorrow = LocalDateTime.now().plusDays(1 + activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()))
+                if ((goal.dateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()))
                         && (!goal.isPending())) {
                     tomorrowGoals.add(goal);
                 }

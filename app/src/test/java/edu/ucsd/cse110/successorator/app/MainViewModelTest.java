@@ -217,7 +217,7 @@ public class MainViewModelTest {
         assertEquals(4, orderedGoals.getValue().size());
 
         // check if todayGoals list should only have 1 today goal
-        List<Goal> todayGoals = orderedGoals.getValue().stream().filter(goal -> goal.getDateAdded()
+        List<Goal> todayGoals = orderedGoals.getValue().stream().filter(goal -> goal.dateAdded()
                 .toLocalDate().equals(LocalDateTime.now().toLocalDate()) && !goal.isPending()).collect(Collectors.toList());
         assertEquals(2, todayGoals.size());
     }
@@ -253,7 +253,7 @@ public class MainViewModelTest {
         assertEquals(4, orderedGoals.getValue().size());
 
         // check if tomorrowGoals list should only have 1 today goal
-        List<Goal> tomorrowGoals = orderedGoals.getValue().stream().filter(goal -> goal.getDateAdded()
+        List<Goal> tomorrowGoals = orderedGoals.getValue().stream().filter(goal -> goal.dateAdded()
                 .toLocalDate().equals(LocalDateTime.now().plusDays(1).toLocalDate()) && !goal.isPending()).collect(Collectors.toList());
         assertEquals(2, tomorrowGoals.size());
     }
