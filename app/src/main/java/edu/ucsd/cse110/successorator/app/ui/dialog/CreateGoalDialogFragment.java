@@ -22,6 +22,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
     private String context = "Home";
+    private String recurrence = "one_time";
 
     CreateGoalDialogFragment(){
 
@@ -32,6 +33,10 @@ public class CreateGoalDialogFragment extends DialogFragment{
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void assignRecurrence(@NonNull String recurrence) {
+        this.recurrence = recurrence;
     }
 
     public void assignContext(@NonNull String context) {
@@ -47,6 +52,12 @@ public class CreateGoalDialogFragment extends DialogFragment{
         view.workButton.setOnClickListener(v -> assignContext("Work"));
         view.schoolButton.setOnClickListener(v -> assignContext("School"));
         view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
+
+        view.onetimeButton.setOnClickListener(v -> assignRecurrence("one_time"));
+        view.dailyButton.setOnClickListener(v -> assignRecurrence("daily"));
+        view.weeklyButton.setOnClickListener(v -> assignRecurrence("weekly"));
+        view.monthlyButton.setOnClickListener(v -> assignRecurrence("monthly"));
+        view.yearlyButton.setOnClickListener(v -> assignRecurrence("yearly"));
 
         if (getParentFragment() instanceof TomorrowFragment) {
             activityModel.getCurrentDateTime().observe((dateTime) -> {
@@ -92,9 +103,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), false);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence, false);
         if (getParentFragment() instanceof TomorrowFragment) {
-            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), false);
+            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), recurrence, false);
         }
         activityModel.append(goal);
 

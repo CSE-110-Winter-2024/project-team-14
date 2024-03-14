@@ -92,8 +92,8 @@ public class TomorrowFragment extends Fragment {
             LocalDateTime tomorrow = LocalDateTime.now().plusDays(1 + activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()))
-                        && (!goal.isPending())) {
+                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow))
+                    && (!goal.isPending())) {
                     tomorrowGoals.add(goal);
                 }
             }
@@ -141,5 +141,20 @@ public class TomorrowFragment extends Fragment {
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
 
-    // add recurring method here probably for filtering check
+    private boolean isReccuringTomorrow(Goal goal, LocalDateTime tomorrow) {
+        switch (goal.getRecurrence()) {
+            case "one_time":
+                return false;
+            case "daily":
+                return goal.getDateAdded().isBefore(tomorrow);
+            case "weekly":
+                return goal.getDateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
+            case "monthly":
+                return goal.getDateAdded().getDayOfMonth() == tomorrow.getDayOfMonth();
+            case "yearly":
+                return goal.getDateAdded().getDayOfYear() == tomorrow.getDayOfYear();
+            default:
+                return false;
+        }
+    }
 }

@@ -94,14 +94,11 @@ public class TodayFragment extends Fragment {
             LocalDateTime today = LocalDateTime.now().plusDays(activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                // add check condition for recurring type here too
-                if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()))
+                if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) || isReccuringToday(goal, today))
                         && (!goal.isPending())) {
                     todayGoals.add(goal);
                 }
             }
-
-            // add recurring functionality
 
             adapter.clear();
             adapter.addAll(new ArrayList<>(todayGoals));
@@ -142,5 +139,21 @@ public class TodayFragment extends Fragment {
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
 
-    // recurring method should go here probably
+    private boolean isReccuringToday(Goal goal, LocalDateTime today) {
+        switch (goal.getRecurrence()) {
+            case "one_time":
+                return false;
+            case "daily":
+                return goal.getDateAdded().isBefore(LocalDateTime.now());
+            case "weekly":
+                return goal.getDateAdded().getDayOfWeek() == today.getDayOfWeek();
+            case "monthly":
+                return goal.getDateAdded().getDayOfMonth() == today.getDayOfMonth();
+            case "yearly":
+                return goal.getDateAdded().getDayOfYear() == today.getDayOfYear();
+            default:
+                return false;
+        }
+    }
+
 }

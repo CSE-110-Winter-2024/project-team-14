@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Dao
@@ -16,7 +17,7 @@ public interface GoalDao {
     Long insert(GoalEntity goal);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    List<Long> insert(List<GoalEntity> goal);
+    List<Long> insert(List<GoalEntity> goals);
 
     @Query("SELECT * FROM goals WHERE id = :id")
     GoalEntity find(int id);
@@ -51,7 +52,8 @@ public interface GoalDao {
     @Transaction
     default int append(GoalEntity goal) {
         var maxSortOrder = getMaxSortOrderForUncompletedGoals();
-        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1, goal.context, goal.dateAdded, goal.isPending);
+        var newGoal = new GoalEntity(goal.taskText, goal.completed, maxSortOrder + 1, goal.context,
+                goal.dateAdded, goal.recurrence, goal.isPending);
         return Math.toIntExact(insert(newGoal));
     }
 
@@ -64,13 +66,15 @@ public interface GoalDao {
         if (goal.completed == false) {
             // append
             var maxSortOrder = getMaxSortOrder();
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context, goal.dateAdded, goal.isPending);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, maxSortOrder + 1000, goal.context,
+                    goal.dateAdded, goal.recurrence, goal.isPending);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
         else {
             // prepend
             shiftSortOrders(getMinSortOrder(), getMaxSortOrder(), 1);
-            var newGoal = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context, goal.dateAdded, goal.isPending);
+            var newGoal = new GoalEntity(goal.taskText, !goal.completed, getMinSortOrder() - 1000, goal.context,
+                    goal.dateAdded, goal.recurrence, goal.isPending);
             newGoalId = Math.toIntExact(insert(newGoal));
         }
 

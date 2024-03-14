@@ -24,6 +24,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
     private MainViewModel activityModel;
     private DialogRecurringBinding view;
     private String context = "Home";
+    private String recurrence = "daily";
     private LocalDateTime selectedDate;
 
     CreateRecurringGoalDialogFragment(){
@@ -35,6 +36,10 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void assignRecurrence(@NonNull String recurrence) {
+        this.recurrence = recurrence;
     }
 
     public void assignContext(@NonNull String context) {
@@ -70,6 +75,11 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         view.schoolButton.setOnClickListener(v -> assignContext("School"));
         view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
+        view.dailyButton.setOnClickListener(v -> assignRecurrence("daily"));
+        view.weeklyButton.setOnClickListener(v -> assignRecurrence("weekly"));
+        view.monthlyButton.setOnClickListener(v -> assignRecurrence("monthly"));
+        view.yearlyButton.setOnClickListener(v -> assignRecurrence("yearly"));
+
         view.pickDateButton.setOnClickListener(v -> showDatePickerDialog());
 
         return new AlertDialog.Builder(getActivity())
@@ -89,7 +99,7 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, selectedDate, false);
+        var goal = new Goal(null, front,false,-1, context, selectedDate, recurrence, false);
         activityModel.append(goal);
 
         dialog.dismiss();
