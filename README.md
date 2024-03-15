@@ -43,6 +43,5 @@ Work hours per iteration = 0.467 velocity * 36 work hours = 18.6 work hours per 
 Velocity based off of I2 of Milestone
 
 Reflection:
-We stayed relatively up-to-date with our proposed and calculated velocity from our I2 from M1. The velocity accounted for our initial concerns and was estimated from our real velocity from the previous milestone. 
-
+We stayed relatively up-to-date with our proposed and calculated velocity from our I2 from M1. The velocity accounted for our initial concerns and was estimated from our real velocity from the previous milestone. For this milestone, the I1 velocity was closer to 0.44 as we worked roughly 40 hours and estimated 17.5 total work hours for I1. Our I2 velocity was closer to 0.5 as we worked roughly 35 hours cumulatively and estimated 17.5 total work hours. 
 
