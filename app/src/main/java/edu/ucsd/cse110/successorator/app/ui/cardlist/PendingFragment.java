@@ -10,6 +10,7 @@ import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -81,6 +82,7 @@ public class PendingFragment extends Fragment {
 
         // Set the adapter on the ListView
         view.cardList.setAdapter(adapter);
+        setContext();
 
         return view.getRoot();
     }
@@ -183,5 +185,43 @@ public class PendingFragment extends Fragment {
             activityModel.setCurrentDateTime(tomorrowJustPast2Am);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private int getContextColor() {
+        String context = activityModel.getContext();
+        if (context == null) {
+            return 0;
+        }
+
+        switch (context) {
+            case "Work":
+                return ContextCompat.getColor(requireContext(), R.color.workDotColor);
+            case "School":
+                return ContextCompat.getColor(requireContext(), R.color.schoolDotColor);
+            case "Home":
+                return ContextCompat.getColor(requireContext(), R.color.homeDotColor);
+            case "Errands":
+                return ContextCompat.getColor(requireContext(), R.color.errandsDotColor);
+            default:
+                return 0;
+        }
+    }
+
+    private String getContextText() {
+        String context = activityModel.getContext();
+        if (context == null) {
+            return "";
+        }
+
+        return "Focus Mode: " + context;
+    }
+
+    private void setContext() {
+        int color = getContextColor();
+        String text = getContextText();
+        view.focusMenuButton.setBackgroundColor(color);
+        view.contextIndicator.setTextColor(color);
+        view.contextIndicator.setText(text);
+        view.contextIndicator.setVisibility(View.VISIBLE);
     }
 }
