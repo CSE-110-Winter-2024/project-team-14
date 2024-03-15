@@ -24,7 +24,7 @@ Successorator is a task management application designed to help users focus on t
 - **Local Testing**: Integrates testing with tools like JUnit, Espresso, or Robolectric to facilitate automated local testing.
 - **Continuous Integration**: Utilizes GitHub Actions for running tests, ensuring consistent code quality and functionality
 
-##Velocity
+## Velocity
 
 Estimation of initial Velocity with justification
 7 hours/week per person
