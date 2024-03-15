@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "edu.ucsd.cse110.successorator"
+    namespace = "edu.ucsd.cse110.successorator.app"
     compileSdk = 34
 
     defaultConfig {
@@ -12,16 +12,14 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
@@ -37,7 +35,13 @@ android {
 }
 
 dependencies {
-    project(":lib")
+    implementation("androidx.room:room-common:2.6.1")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    implementation(project(":lib"))
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")

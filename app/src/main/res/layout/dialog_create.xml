@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <EditText
+        android:id="@+id/goal_front_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Most Important Task..."
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RadioGroup
+        android:id="@+id/contextRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_front_edit_text">
+
+        <RadioButton
+            android:id="@+id/homeButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_background"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/ic_home"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Home" />
+
+        <RadioButton
+            android:id="@+id/workButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_background"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_work"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Work" />
+
+        <RadioButton
+            android:id="@+id/schoolButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_background"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_school"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="School" />
+
+        <RadioButton
+            android:id="@+id/errandsButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/radio_button_background"
+            android:button="@null"
+            android:drawableTop="@drawable/ic_errands"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Errands" />
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/recurringRadioGroup"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/contextRadioGroup">
+
+        <RadioButton
+            android:id="@+id/onetimeButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="one-time" />
+
+        <RadioButton
+            android:id="@+id/dailyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="daily" />
+
+        <RadioButton
+            android:id="@+id/weeklyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="weekly on Tue" />
+
+        <RadioButton
+            android:id="@+id/monthlyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="monthly on 3rd Tue" />
+
+        <RadioButton
+            android:id="@+id/yearlyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="yearly on 2/20" />
+    </RadioGroup>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
