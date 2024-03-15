@@ -36,18 +36,25 @@ public class Goal implements Serializable {
     public @Nullable Integer id() {
         return id;
     }
+
     public @NonNull String taskText() {
         return taskText;
     }
+
     public boolean completed() {
         return completed;
     }
+
     public int sortOrder() {
         return sortOrder;
     }
+
     public @NonNull String context() { return context; }
-    public LocalDateTime getDateAdded() { return dateAdded; }
+
+    public LocalDateTime dateAdded() {return dateAdded;}
+
     public @NonNull String getRecurrence() { return recurrence; }
+
     public boolean isPending() { return isPending; }
 
     public Goal withId(int id) {
@@ -67,8 +74,12 @@ public class Goal implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Goal goal = (Goal) o;
-        return completed == goal.completed && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText) && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context)
-                && Objects.equals(dateAdded, goal.dateAdded) && Objects.equals(recurrence, goal.recurrence) && Objects.equals(isPending, goal.isPending);
+
+        return completed == goal.completed && isPending() == goal.isPending()
+                && Objects.equals(id, goal.id) && Objects.equals(taskText, goal.taskText)
+                && Objects.equals(sortOrder, goal.sortOrder) && Objects.equals(context, goal.context)
+                && Objects.equals(dateAdded.toLocalDate(), goal.dateAdded.toLocalDate())
+                && Objects.equals(recurrence, goal.recurrence);
     }
 
     @Override

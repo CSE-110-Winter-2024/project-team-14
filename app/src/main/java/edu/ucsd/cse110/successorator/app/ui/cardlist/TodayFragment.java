@@ -104,12 +104,12 @@ public class TodayFragment extends Fragment {
                 if(goal.taskText().equals("DUMMY")){
                     continue;
                 }
-                if((goal.getDateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
+                if((goal.dateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
                     todayGoals.add(goal);
                 }
-                else if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) ||
+                else if ((goal.dateAdded().toLocalDate().isEqual(today.toLocalDate()) ||
                         isReccuringToday(goal, today)) && (!goal.isPending()) ||
-                        (goal.getDateAdded().isBefore(today) && (!goal.completed()) && (isReccuringToday(goal, today)))) {
+                        (goal.dateAdded().isBefore(today) && (!goal.completed()) && (isReccuringToday(goal, today)))) {
                     //Goal temp = new Goal(goal.id(), goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(), goal.getDateAdded(), "one_time", false);
                     todayGoals.add(goal);
                 }
@@ -202,13 +202,13 @@ public class TodayFragment extends Fragment {
             case "one_time":
                 return false;
             case "daily":
-                return goal.getDateAdded().isBefore(today);
+                return goal.dateAdded().isBefore(today);
             case "weekly":
-                return goal.getDateAdded().getDayOfWeek() == today.getDayOfWeek();
+                return goal.dateAdded().getDayOfWeek() == today.getDayOfWeek();
             case "monthly":
-                return isSameWeekAndDayOfMonth(goal.getDateAdded(), today);
+                return isSameWeekAndDayOfMonth(goal.dateAdded(), today);
             case "yearly":
-                return goal.getDateAdded().getDayOfYear() == today.getDayOfYear();
+                return goal.dateAdded().getDayOfYear() == today.getDayOfYear();
             default:
                 return false;
         }

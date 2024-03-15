@@ -97,7 +97,7 @@ public class TomorrowFragment extends Fragment {
             LocalDateTime tomorrow = LocalDateTime.now().plusDays(1 + activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                if ((goal.getDateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow))
+                if ((goal.dateAdded().toLocalDate().isEqual(tomorrow.toLocalDate()) || isReccuringTomorrow(goal, tomorrow))
                     && (!goal.isPending())) {
                     tomorrowGoals.add(goal);
                 }
@@ -128,16 +128,6 @@ public class TomorrowFragment extends Fragment {
             // Assuming getParentFragmentManager() is valid. If you face issues, try getSupportFragmentManager() instead.
             dialog.show(getChildFragmentManager(), "CreateGoalDialog");
         });
-
-        //  binding.cardList.setAdapter(adapter); //added
-
-//        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
-//            Goal clickedGoal = adapter.getItem(position);
-//            if (clickedGoal == null) return;
-//            activityModel.updateGoal(clickedGoal);
-//
-//            //adapter.notifyDataSetChanged(); //added
-//        });
 
         view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
             clickedGoal = adapter.getItem(position);
@@ -192,13 +182,13 @@ public class TomorrowFragment extends Fragment {
             case "one_time":
                 return false;
             case "daily":
-                return goal.getDateAdded().isBefore(tomorrow);
+                return goal.dateAdded().isBefore(tomorrow);
             case "weekly":
-                return goal.getDateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
+                return goal.dateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
             case "monthly":
-                return isSameWeekAndDayOfMonth(goal.getDateAdded(), tomorrow);
+                return isSameWeekAndDayOfMonth(goal.dateAdded(), tomorrow);
             case "yearly":
-                return goal.getDateAdded().getDayOfYear() == tomorrow.getDayOfYear();
+                return goal.dateAdded().getDayOfYear() == tomorrow.getDayOfYear();
             default:
                 return false;
         }

@@ -51,7 +51,7 @@ public class GoalEntity {
 
     public static GoalEntity fromGoal(@NonNull Goal goal) {
         var card = new GoalEntity(goal.taskText(), goal.completed(), goal.sortOrder(), goal.context(),
-                goal.getDateAdded(), goal.getRecurrence(), goal.isPending());
+                goal.dateAdded(), goal.getRecurrence(), goal.isPending());
         card.id = goal.id();
         return card;
     }
