@@ -103,8 +103,12 @@ public class MainViewModel extends ViewModel {
     }
     private void rollover() {
         for (var g : orderedGoals.getValue()) {
-            if (g.completed()) {
+            if (g.completed() && g.getRecurrence().equals("one_time")) {
                 goalRepository.remove(g.id());
+            }
+
+            if(!g.getRecurrence().equals("one_time") && (g.completed())){
+                goalRepository.updateGoal(g);
             }
         }
     }

@@ -61,7 +61,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
 
         if (getParentFragment() instanceof TomorrowFragment) {
             activityModel.getCurrentDateTime().observe((dateTime) -> {
-                LocalDateTime tomorrow = dateTime.plusDays(1);
+                LocalDateTime tomorrow = dateTime.plusDays(1 + activityModel.buttonCount);
                 var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
                 var monthlyFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
                 var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
@@ -72,13 +72,14 @@ public class CreateGoalDialogFragment extends DialogFragment{
             });
         } else {
             activityModel.getCurrentDateTime().observe((dateTime) -> {
+                LocalDateTime today = dateTime.plusDays(activityModel.buttonCount);
                 var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
                 var monthylFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
                 var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
 
-                view.weeklyButton.setText(dateTime.format(weeklyFormatter));
-                view.monthlyButton.setText(dateTime.format(monthylFormatter));
-                view.yearlyButton.setText(dateTime.format(yearlyFormatter));
+                view.weeklyButton.setText(today.format(weeklyFormatter));
+                view.monthlyButton.setText(today.format(monthylFormatter));
+                view.yearlyButton.setText(today.format(yearlyFormatter));
             });
         }
 
@@ -103,9 +104,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), recurrence, false);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(activityModel.buttonCount), recurrence, false);
         if (getParentFragment() instanceof TomorrowFragment) {
-            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), recurrence, false);
+            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1 + activityModel.buttonCount), recurrence, false);
         }
         activityModel.append(goal);
 
