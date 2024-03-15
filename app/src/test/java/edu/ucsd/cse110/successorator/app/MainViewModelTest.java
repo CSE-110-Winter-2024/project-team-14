@@ -18,7 +18,7 @@ import edu.ucsd.cse110.successorator.lib.domain.TimeKeeper;
 public class MainViewModelTest {
 
     @Test
-    public void append() {
+    public void appendTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         GoalRepository repo = new SimpleGoalRepository(data);
@@ -31,7 +31,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void getOrderedGoals() {
+    public void getOrderedGoalsTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         GoalRepository repo = new SimpleGoalRepository(data);
@@ -43,7 +43,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void remove() {
+    public void removeTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         GoalRepository repo = new SimpleGoalRepository(data);
@@ -60,7 +60,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void updateGoal() {
+    public void updateGoalTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         GoalRepository repo = new SimpleGoalRepository(data);
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
@@ -73,7 +73,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void updateTime() {
+    public void updateTimeTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         GoalRepository repo = new SimpleGoalRepository(data);
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
@@ -85,7 +85,7 @@ public class MainViewModelTest {
 
     }
     @Test
-    public void listPersistence3TaskRollover() {
+    public void listPersistence3TaskRolloverTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         GoalRepository repo = new SimpleGoalRepository(data);
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
@@ -118,7 +118,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void listPersistence2TaskRollover1Complete() {
+    public void listPersistence2TaskRollover1CompleteTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         GoalRepository repo = new SimpleGoalRepository(data);
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
@@ -154,7 +154,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void listPersistenceAllTasksComplete() {
+    public void listPersistenceAllTasksCompleteTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         GoalRepository repo = new SimpleGoalRepository(data);
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
@@ -187,7 +187,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void movePendingToToday() {
+    public void movePendingToTodayTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         GoalRepository repo = new SimpleGoalRepository(data);
@@ -223,7 +223,7 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void movePendingToTomorrow() {
+    public void movePendingToTomorrowTest() {
         InMemoryDataSource data = new InMemoryDataSource();
         TimeKeeper timeKeeper = new InMemoryTimeKeeper();
         GoalRepository repo = new SimpleGoalRepository(data);
