@@ -27,11 +27,11 @@ Successorator is a task management application designed to help users focus on t
 ## Velocity
 
 Estimation of initial Velocity with justification
-7 hours/week per person
-80 total hours for the project
-0.467 velocity (Velocity based off of I2 of Milestone)
+- **7 hours/week per person
+- **80 total hours for the project
+- **0.467 velocity (Velocity based off of I2 of Milestone)
 
-Some of the main concerns we have are:
+Some of the main concerns we had are:
 Figuring out how to implement the logic in some of the features may require some dedicated thinking time
 We expect communication between the teammates to be relatively frequent, which will take up time
 Running, testing, and debugging the code (especially understanding bugs) will take extra time
@@ -41,3 +41,5 @@ Iteration length is one week
 40 work-hours distributed amongst 6 members (~6 hours per person/week)
 Work hours per iteration = 0.467 velocity * 36 work hours = 18.6 work hours per iteration
 Velocity based off of I2 of Milestone
+
+
