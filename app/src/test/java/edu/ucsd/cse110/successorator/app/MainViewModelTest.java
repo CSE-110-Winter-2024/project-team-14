@@ -258,6 +258,51 @@ public class MainViewModelTest {
         assertEquals(2, tomorrowGoals.size());
     }
 
+
+    @Test
+    public void filterContextTest() {
+        InMemoryDataSource data = new InMemoryDataSource();
+        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
+        GoalRepository repo = new SimpleGoalRepository(data);
+        var mvm = new MainViewModel(repo, timeKeeper);
+
+        // add a goal with "School" context
+        Goal g0 = new Goal(null, "do homework", false, 0,
+                "School", LocalDateTime.now(), false);
+        mvm.append(g0);
+
+        // add another goal with "School" context
+        Goal g1 = new Goal(null, "do homework", false, 0,
+                "School", LocalDateTime.now(), false);
+        mvm.append(g1);
+
+        // add a goal with "Work" context
+        Goal g2 = new Goal(null, "wash laundry", false, 0,
+                "Work", LocalDateTime.now(), false);
+        mvm.append(g2);
+
+        // add a goal with "Home" context
+        Goal g3 = new Goal(0, "do homework", false, 0,
+                "Home", LocalDateTime.now(), false);
+        mvm.append(g3);
+
+        var orderedGoals = mvm.getOrderedGoals();
+        assertEquals(4, orderedGoals.getValue().size());
+
+        List<Goal> schoolContextGoals = orderedGoals.getValue().stream().filter(goal -> goal.context().equals("School")).collect(Collectors.toList());
+        assertEquals(2, schoolContextGoals.size());
+
+        List<Goal> workContextGoals = orderedGoals.getValue().stream().filter(goal -> goal.context().equals("Work")).collect(Collectors.toList());
+        assertEquals(1, workContextGoals.size());
+
+        List<Goal> homeContextGoals = orderedGoals.getValue().stream().filter(goal -> goal.context().equals("Home")).collect(Collectors.toList());
+        assertEquals(1, homeContextGoals.size());
+
+        mvm.remove(g3.id());
+        List<Goal> newHomeContextGoals = orderedGoals.getValue().stream().filter(goal -> goal.context().equals("Home")).collect(Collectors.toList());
+        assertEquals(0, newHomeContextGoals.size());
+    }
+
     @Test
     public void pendingPersistenceTest() {
         InMemoryDataSource data = new InMemoryDataSource();
