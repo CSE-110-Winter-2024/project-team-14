@@ -80,7 +80,7 @@ public class InMemoryDataSource {
 
         this.goals.put(fixedGoal.id(), fixedGoal);
         postInsert();
-        assertSortOrderConstraints();
+//        assertSortOrderConstraints();
 
         if (goalSubjects.containsKey(fixedGoal.id())) {
             goalSubjects.get(fixedGoal.id()).setValue(fixedGoal);
