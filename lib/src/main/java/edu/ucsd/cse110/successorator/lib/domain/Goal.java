@@ -34,15 +34,19 @@ public class Goal implements Serializable {
     public @Nullable Integer id() {
         return id;
     }
+
     public @NonNull String taskText() {
         return taskText;
     }
+
     public boolean completed() {
         return completed;
     }
+
     public int sortOrder() {
         return sortOrder;
     }
+
     public @NonNull String context() { return context; }
 
     public LocalDateTime dateAdded() {return dateAdded;

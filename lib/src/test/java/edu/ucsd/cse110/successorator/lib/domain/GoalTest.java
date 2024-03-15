@@ -65,6 +65,30 @@ public class GoalTest {
         assertEquals(isPending, goal.isPending());
     }
 
+    @Test
+    public void withIdTest() {
+        var goal = new Goal(0, "get groceries", false, 0,
+                "School", LocalDateTime.now().plusDays(1), true);
+        Goal newGoal = goal.withId(1);
+        assertEquals((Integer)1, newGoal.id());
+    }
+
+    @Test
+    public void withSortOrderTest() {
+        var goal = new Goal(0, "get groceries", false, 0,
+                "School", LocalDateTime.now().plusDays(1), true);
+        Goal newGoal = goal.withSortOrder(1);
+        assertEquals(1, newGoal.sortOrder());
+    }
+
+    @Test
+    public void toggleCompletedTest() {
+        var goal = new Goal(0, "get groceries", true, 0,
+                "School", LocalDateTime.now().plusDays(1), true);
+        Goal newGoal = goal.toggleCompleted();
+        assertEquals(false, newGoal.completed());
+    }
+
 
 
     @Test
