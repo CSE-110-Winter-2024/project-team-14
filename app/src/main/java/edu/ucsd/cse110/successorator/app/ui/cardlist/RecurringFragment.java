@@ -103,7 +103,7 @@ public class RecurringFragment extends Fragment {
             adapter.addAll(new ArrayList<>(recurringGoals));
             adapter.notifyDataSetChanged();
 
-            if (goals.size() == 0) {
+            if (recurringGoals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
             else {

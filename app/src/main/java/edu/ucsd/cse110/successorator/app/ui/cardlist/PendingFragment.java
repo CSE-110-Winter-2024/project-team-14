@@ -107,7 +107,7 @@ public class PendingFragment extends Fragment {
             adapter.addAll(new ArrayList<>(pendingGoals));
             adapter.notifyDataSetChanged();
 
-            if (goals.size() == 0) {
+            if (pendingGoals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
             else {

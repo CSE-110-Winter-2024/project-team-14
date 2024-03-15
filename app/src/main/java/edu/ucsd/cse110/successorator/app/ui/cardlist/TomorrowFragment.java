@@ -102,7 +102,7 @@ public class TomorrowFragment extends Fragment {
             adapter.addAll(new ArrayList<>(tomorrowGoals));
             adapter.notifyDataSetChanged();
 
-            if (goals.size() == 0) {
+            if (tomorrowGoals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
             else {
@@ -130,6 +130,7 @@ public class TomorrowFragment extends Fragment {
             Goal clickedGoal = adapter.getItem(position);
             if (clickedGoal == null) return;
             activityModel.updateGoal(clickedGoal);
+
             //adapter.notifyDataSetChanged(); //added
         });
 

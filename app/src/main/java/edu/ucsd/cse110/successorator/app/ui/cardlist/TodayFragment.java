@@ -99,7 +99,10 @@ public class TodayFragment extends Fragment {
             LocalDateTime today = LocalDateTime.now().plusDays(activityModel.buttonCount);
 
             for (Goal goal: goals) {
-                if((goal.getDateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
+                if(goal.taskText().equals("DUMMY")){
+
+                }
+                else if((goal.getDateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
                     todayGoals.add(goal);
                 }
                 else if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) ||
@@ -114,7 +117,7 @@ public class TodayFragment extends Fragment {
             adapter.addAll(new ArrayList<>(todayGoals));
             adapter.notifyDataSetChanged();
 
-            if (goals.size() == 0) {
+            if (todayGoals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
             else {
@@ -122,11 +125,13 @@ public class TodayFragment extends Fragment {
             }
         });
         view.cardList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
         activityModel.getCurrentDateTime().observe((dateTime) -> {
             LocalDateTime today = LocalDateTime.now().plusDays(activityModel.buttonCount);
             var formatter = DateTimeFormatter.ofPattern("'Today, 'E M/d", Locale.getDefault());
             view.dateTextView.setText(today.format(formatter));
+            //adapter.notifyDataSetChanged();
         });
 
         // 4. V -> M (BIND VIEW CLICKS TO MODEL UPDATES)
@@ -149,6 +154,8 @@ public class TodayFragment extends Fragment {
             //adapter.notifyDataSetChanged(); //added
             return true;
         });
+
+
     }
 
     public void showPopupMenu(View view) {

@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
@@ -22,12 +23,15 @@ import edu.ucsd.cse110.successorator.app.ui.cardlist.PendingFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.RecurringFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.TodayFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.TomorrowFragment;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
 
+
 public class MainActivity extends AppCompatActivity {
     private MainViewModel activityModel;
+    private Goal DUMYGOAL = new Goal (99999, "DUMMY", false, 99999, "Home", LocalDateTime.MIN, "one_time", false);
     private ActivityMainBinding view;
 
     @Override
@@ -194,7 +198,11 @@ public class MainActivity extends AppCompatActivity {
                     .withHour(2)
                     .withMinute(1);
             activityModel.setCurrentDateTime(tomorrowJustPast2Am);
+            //activityModel.rollover();
         }
+
+        activityModel.append(DUMYGOAL);
+        activityModel.remove(DUMYGOAL.id());
         return super.onOptionsItemSelected(item);
     }
 }

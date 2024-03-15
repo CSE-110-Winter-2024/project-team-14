@@ -97,11 +97,12 @@ public class MainViewModel extends ViewModel {
 
     public void setCurrentDateTime(LocalDateTime newDateTime) {
         currentDateTime.setValue(newDateTime);
+
     }
     public MutableSubject<LocalDateTime> getCurrentDateTime() {
         return currentDateTime;
     }
-    private void rollover() {
+    public void rollover() {
         for (var g : orderedGoals.getValue()) {
             if (g.completed() && g.getRecurrence().equals("one_time")) {
                 goalRepository.remove(g.id());
