@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         activityModel.append(DUMYGOAL);
+        activityModel.cleanDUMMY();
         activityModel.remove(DUMYGOAL.id());
         return super.onOptionsItemSelected(item);
     }

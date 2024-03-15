@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ public class TomorrowFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentTomorrowBinding view;
     private CardListAdapter adapter;
+
+    private Goal clickedGoal;
 
     public TomorrowFragment() {
         // Required empty public constructor
@@ -126,14 +129,53 @@ public class TomorrowFragment extends Fragment {
 
         //  binding.cardList.setAdapter(adapter); //added
 
-        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
-            Goal clickedGoal = adapter.getItem(position);
-            if (clickedGoal == null) return;
-            activityModel.updateGoal(clickedGoal);
+//        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
+//            Goal clickedGoal = adapter.getItem(position);
+//            if (clickedGoal == null) return;
+//            activityModel.updateGoal(clickedGoal);
+//
+//            //adapter.notifyDataSetChanged(); //added
+//        });
 
+        view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
+            clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return false;
+            showPopupMenu(view);
             //adapter.notifyDataSetChanged(); //added
+            return true;
         });
 
+    }
+
+    public void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.long_press_goal, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle menu item clicks here
+                int itemId = item.getItemId();
+                if (itemId == R.id.moveToday_button) {
+                    // Need to implement moving to today
+                    activityModel.switchPending(clickedGoal);
+                    return true;
+                } else if (itemId == R.id.moveTomorrow_button) {
+                    // Need to implement moving to tomorrow
+                    activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
+                    return true;
+                } else if (itemId == R.id.finish_button) {
+                    activityModel.updateGoal(clickedGoal);
+                    return true;
+                } else if (itemId == R.id.delete_button) {
+                    activityModel.remove(clickedGoal.id());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     @Override

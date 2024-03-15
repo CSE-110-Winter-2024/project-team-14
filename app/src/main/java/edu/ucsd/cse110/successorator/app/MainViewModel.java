@@ -108,8 +108,17 @@ public class MainViewModel extends ViewModel {
                 goalRepository.remove(g.id());
             }
 
-            if(!g.getRecurrence().equals("one_time") && (g.completed())){
+            if(g.completed() && !g.getRecurrence().equals("one_time")){
                 goalRepository.updateGoal(g);
+            }
+
+        }
+    }
+
+    public void cleanDUMMY() {
+        for (var g : orderedGoals.getValue()) {
+            if(g.taskText().equals("DUMMY")){
+                goalRepository.remove(g.id());
             }
         }
     }
