@@ -22,6 +22,7 @@ public class CreateGoalDialogFragment extends DialogFragment{
     private MainViewModel activityModel;
     private DialogCreateBinding view;
     private String context = "Home";
+    private String recurrence = "one_time";
 
     CreateGoalDialogFragment(){
 
@@ -32,6 +33,10 @@ public class CreateGoalDialogFragment extends DialogFragment{
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void assignRecurrence(@NonNull String recurrence) {
+        this.recurrence = recurrence;
     }
 
     public void assignContext(@NonNull String context) {
@@ -48,9 +53,15 @@ public class CreateGoalDialogFragment extends DialogFragment{
         view.schoolButton.setOnClickListener(v -> assignContext("School"));
         view.errandsButton.setOnClickListener(v -> assignContext("Errands"));
 
+        view.onetimeButton.setOnClickListener(v -> assignRecurrence("one_time"));
+        view.dailyButton.setOnClickListener(v -> assignRecurrence("daily"));
+        view.weeklyButton.setOnClickListener(v -> assignRecurrence("weekly"));
+        view.monthlyButton.setOnClickListener(v -> assignRecurrence("monthly"));
+        view.yearlyButton.setOnClickListener(v -> assignRecurrence("yearly"));
+
         if (getParentFragment() instanceof TomorrowFragment) {
             activityModel.getCurrentDateTime().observe((dateTime) -> {
-                LocalDateTime tomorrow = dateTime.plusDays(1);
+                LocalDateTime tomorrow = dateTime.plusDays(1 + activityModel.buttonCount);
                 var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
                 var monthlyFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
                 var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
@@ -61,13 +72,14 @@ public class CreateGoalDialogFragment extends DialogFragment{
             });
         } else {
             activityModel.getCurrentDateTime().observe((dateTime) -> {
+                LocalDateTime today = dateTime.plusDays(activityModel.buttonCount);
                 var weeklyFormatter = DateTimeFormatter.ofPattern("'weekly on 'E", Locale.getDefault());
                 var monthylFormatter = DateTimeFormatter.ofPattern("'monthly 'E", Locale.getDefault());
                 var yearlyFormatter = DateTimeFormatter.ofPattern("'yearly on 'M/d", Locale.getDefault());
 
-                view.weeklyButton.setText(dateTime.format(weeklyFormatter));
-                view.monthlyButton.setText(dateTime.format(monthylFormatter));
-                view.yearlyButton.setText(dateTime.format(yearlyFormatter));
+                view.weeklyButton.setText(today.format(weeklyFormatter));
+                view.monthlyButton.setText(today.format(monthylFormatter));
+                view.yearlyButton.setText(today.format(yearlyFormatter));
             });
         }
 
@@ -92,9 +104,9 @@ public class CreateGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), false);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(activityModel.buttonCount), recurrence, false);
         if (getParentFragment() instanceof TomorrowFragment) {
-            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1), false);
+            goal = new Goal(null, front,false,-1, context, LocalDateTime.now().plusDays(1 + activityModel.buttonCount), recurrence, false);
         }
         activityModel.append(goal);
 

@@ -64,7 +64,7 @@ public class CreatePendingGoalDialogFragment extends DialogFragment{
             return;
         }
 
-        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), true);
+        var goal = new Goal(null, front,false,-1, context, LocalDateTime.now(), "one_time", true);
         activityModel.append(goal);
 
         dialog.dismiss();

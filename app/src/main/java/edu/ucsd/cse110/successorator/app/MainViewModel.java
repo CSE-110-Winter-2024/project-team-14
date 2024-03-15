@@ -43,8 +43,8 @@ public class MainViewModel extends ViewModel {
         this.currentDateTime = new SimpleSubject<>();
         this.currentDateTime.setValue(LocalDateTime.now());
         this.orderedGoals = new SimpleSubject<>();
-        this.currentFilterContext = null;
-        this.buttonCount = 0;
+        currentFilterContext = null;
+        buttonCount = 0;
 
         // Retrieve all goals and store them as the original list
         goalRepository.findAll().observe(goals -> {
@@ -64,7 +64,6 @@ public class MainViewModel extends ViewModel {
                         .plusDays(1).withHour(2).withMinute(0).withSecond(0);
                 if (dateTime.isAfter(twoAMNextDay)) {
                     rollover();
-                    this.currentDateTime.setValue(dateTime);
                 }
             }
             // THEN mark the new past time.
@@ -98,13 +97,27 @@ public class MainViewModel extends ViewModel {
 
     public void setCurrentDateTime(LocalDateTime newDateTime) {
         currentDateTime.setValue(newDateTime);
+
     }
     public MutableSubject<LocalDateTime> getCurrentDateTime() {
         return currentDateTime;
     }
-    private void rollover() {
+    public void rollover() {
         for (var g : orderedGoals.getValue()) {
-            if (g.completed()) {
+            if (g.completed() && g.getRecurrence().equals("one_time")) {
+                goalRepository.remove(g.id());
+            }
+
+            if(g.completed() && !g.getRecurrence().equals("one_time")){
+                goalRepository.updateGoal(g);
+            }
+
+        }
+    }
+
+    public void cleanDUMMY() {
+        for (var g : orderedGoals.getValue()) {
+            if(g.taskText().equals("DUMMY")){
                 goalRepository.remove(g.id());
             }
         }

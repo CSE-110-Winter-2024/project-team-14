@@ -2,8 +2,8 @@ package edu.ucsd.cse110.successorator.app;
 
 import android.os.Bundle;
 
-import android.view.MenuItem;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.PopupMenu;
@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 import edu.ucsd.cse110.successorator.app.databinding.ActivityMainBinding;
@@ -22,12 +23,15 @@ import edu.ucsd.cse110.successorator.app.ui.cardlist.PendingFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.RecurringFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.TodayFragment;
 import edu.ucsd.cse110.successorator.app.ui.cardlist.TomorrowFragment;
+import edu.ucsd.cse110.successorator.lib.domain.Goal;
 
 // Assuming CardListAdapter is suitable for displaying Goal objects.
 // If not, replace CardListAdapter with your Goal-specific adapter.
 
+
 public class MainActivity extends AppCompatActivity {
     private MainViewModel activityModel;
+    private Goal DUMYGOAL = new Goal (99999, "DUMMY", false, 99999, "Home", LocalDateTime.MIN, "one_time", false);
     private ActivityMainBinding view;
 
     @Override
@@ -187,17 +191,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         var itemId = item.getItemId();
         if (itemId == R.id.action_bar_menu_move_views) {
+            activityModel.buttonCount++;
             var tomorrowJustPast2Am = activityModel.getCurrentDateTime().getValue()
                     .truncatedTo(ChronoUnit.DAYS)
                     .plusDays(1)
                     .withHour(2)
                     .withMinute(1);
             activityModel.setCurrentDateTime(tomorrowJustPast2Am);
+            //activityModel.rollover();
         }
-        activityModel.buttonCount++;
+
+        activityModel.append(DUMYGOAL);
+        activityModel.cleanDUMMY();
+        activityModel.remove(DUMYGOAL.id());
         return super.onOptionsItemSelected(item);
     }
-
 }
 
 

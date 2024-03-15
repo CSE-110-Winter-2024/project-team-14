@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,6 +30,8 @@ public class RecurringFragment extends Fragment {
     private MainViewModel activityModel;
     private FragmentRecurringBinding view;
     private CardListAdapter adapter;
+
+    private Goal clickedGoal;
 
     public RecurringFragment() {
         // Required empty public constructor
@@ -91,12 +94,19 @@ public class RecurringFragment extends Fragment {
                 return;
             }
 
-//          // filter the recurring goals here
+            List<Goal> recurringGoals = new ArrayList<>();
+
+            for (Goal goal : goals) {
+                if (!goal.getRecurrence().equals("one_time")) {
+                    recurringGoals.add(goal);
+                }
+            }
+
             adapter.clear();
-            adapter.addAll(new ArrayList<>(goals));
+            adapter.addAll(new ArrayList<>(recurringGoals));
             adapter.notifyDataSetChanged();
 
-            if (goals.size() == 0) {
+            if (recurringGoals.size() == 0) {
                 view.noGoalsText.setVisibility(View.VISIBLE);
             }
             else {
@@ -114,13 +124,52 @@ public class RecurringFragment extends Fragment {
 
         //  binding.cardList.setAdapter(adapter); //added
 
-        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
-            Goal clickedGoal = adapter.getItem(position);
-            if (clickedGoal == null) return;
-            activityModel.updateGoal(clickedGoal);
+//        view.cardList.setOnItemClickListener((parent, view, position, id) -> {
+//            Goal clickedGoal = adapter.getItem(position);
+//            if (clickedGoal == null) return;
+//            activityModel.updateGoal(clickedGoal);
+//            //adapter.notifyDataSetChanged(); //added
+//        });
+
+        view.cardList.setOnItemLongClickListener((parent, view, position, id) -> {
+            clickedGoal = adapter.getItem(position);
+            if (clickedGoal == null) return false;
+            showPopupMenu(view);
             //adapter.notifyDataSetChanged(); //added
+            return true;
         });
 
+    }
+
+    public void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+        popupMenu.getMenuInflater().inflate(R.menu.long_press_goal, popupMenu.getMenu());
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                // Handle menu item clicks here
+                int itemId = item.getItemId();
+                if (itemId == R.id.moveToday_button) {
+                    // Need to implement moving to today
+                    activityModel.switchPending(clickedGoal);
+                    return true;
+                } else if (itemId == R.id.moveTomorrow_button) {
+                    // Need to implement moving to tomorrow
+                    activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
+                    return true;
+                } else if (itemId == R.id.finish_button) {
+                    activityModel.updateGoal(clickedGoal);
+                    return true;
+                } else if (itemId == R.id.delete_button) {
+                    activityModel.remove(clickedGoal.id());
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        popupMenu.show();
     }
 
     @Override
@@ -128,12 +177,6 @@ public class RecurringFragment extends Fragment {
         super.onResume();
         activityModel.setCurrentDateTime(LocalDateTime.now());
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.action_bar, menu);
-//        return true;
-//    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

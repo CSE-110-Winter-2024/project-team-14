@@ -60,5 +60,4 @@ public class SimpleGoalRepository implements GoalRepository {
 
     @Override
     public void switchPending(Goal goal) { }
-
 }
