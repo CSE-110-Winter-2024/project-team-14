@@ -104,7 +104,7 @@ public class TodayFragment extends Fragment {
                 if(goal.taskText().equals("DUMMY")){
                     continue;
                 }
-                if((goal.dateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
+                if((goal.dateAdded().isBefore(today)) && (goal.getRecurrence().equals("one_time"))){
                     todayGoals.add(goal);
                 }
                 else if ((goal.dateAdded().toLocalDate().isEqual(today.toLocalDate()) ||

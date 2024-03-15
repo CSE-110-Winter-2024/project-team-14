@@ -2,6 +2,8 @@ package edu.ucsd.cse110.successorator.app;
 
 import static androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY;
 
+import android.util.Log;
+
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
@@ -29,8 +31,10 @@ public class MainViewModel extends ViewModel {
     private String currentFilterContext;
     private final TimeKeeper timeKeeper;
     public int buttonCount;
+    private LocalDate lastOneTimeGoalAddedDate = null;
 
     List<Goal> shouldRecur = new ArrayList<>();
+    List<Goal> oneTimeGoals = new ArrayList<>();
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -107,24 +111,57 @@ public class MainViewModel extends ViewModel {
     }
     public void rollover() {
         for (var g : orderedGoals.getValue()) {
-            if (g.completed() && g.getRecurrence().equals("one_time")) {
-//                shouldRecur.remove(find(g, shouldRecur));
-                goalRepository.remove(g.id());
-                continue;
-            }
-
-            if (g.completed() && !g.getRecurrence().equals("one_time")){
+            if (g.completed()
+                    && !g.getRecurrence().equals("one_time")
+                    && isReccuringToday(g, LocalDateTime.now().plusDays(buttonCount))){
                 goalRepository.updateGoal(g);
             }
 
             if (!g.completed() && !g.getRecurrence().equals("one_time")) {
                 if (!inList(g, shouldRecur)) {
-                    goalRepository.append(new Goal(g.id() + 100, g.taskText(), g.completed(), g.sortOrder(),
-                            g.context(), g.dateAdded().plusDays(1), "one_time", g.isPending()));
+                    Goal temp = new Goal(g.id() + 100, g.taskText(), g.completed(), g.sortOrder(),
+                            g.context(), LocalDateTime.now(), "one_time", g.isPending());
+                    goalRepository.append(temp);
+                    oneTimeGoals.add(temp);
                     shouldRecur.add(g);
                 }
+
+                if (isReccuringToday(g, LocalDateTime.now().plusDays(buttonCount))) {
+                    shouldRecur.remove(find(g, shouldRecur));
+                    removeOneTime(g);
+                }
+            }
+
+            if (g.completed() && g.getRecurrence().equals("one_time")) {
+                goalRepository.remove(g.id());
             }
         }
+    }
+
+    private boolean isReccuringToday(Goal goal, LocalDateTime today) {
+        switch (goal.getRecurrence()) {
+            case "one_time":
+                return false;
+            case "daily":
+                return goal.dateAdded().isBefore(today);
+            case "weekly":
+                return goal.dateAdded().getDayOfWeek() == today.getDayOfWeek();
+            case "monthly":
+                return isSameWeekAndDayOfMonth(goal.dateAdded(), today);
+            case "yearly":
+                return goal.dateAdded().getDayOfYear() == today.getDayOfYear();
+            default:
+                return false;
+        }
+    }
+
+    private boolean isSameWeekAndDayOfMonth(LocalDateTime dateAdded, LocalDateTime today) {
+        return getWeekOfMonth(dateAdded) == getWeekOfMonth(today) &&
+                dateAdded.getDayOfWeek() == today.getDayOfWeek();
+    }
+
+    private int getWeekOfMonth(LocalDateTime date) {
+        return (date.getDayOfMonth() - 1) / 7 + 1;
     }
 
     public boolean inList(Goal goal, List<Goal> goals) {
@@ -137,8 +174,17 @@ public class MainViewModel extends ViewModel {
         return false;
     }
 
+    public void removeOneTime(Goal goal) {
+        for (var g : orderedGoals.getValue()) {
+            if (g.taskText().equals(goal.taskText()) && g.getRecurrence().equals("one_time")) {
+                goalRepository.remove(g.id());
+            }
+        }
+    }
+
     public int find(Goal goal, List<Goal> goals) {
         int count = 0;
+
         for (Goal g : goals) {
             if (g.taskText().equals(goal.taskText())) {
                 return count;
@@ -146,7 +192,7 @@ public class MainViewModel extends ViewModel {
             count++;
         }
 
-        return -1;
+        return count;
     }
 
     public void cleanDUMMY() {
