@@ -150,7 +150,7 @@ public class PendingFragment extends Fragment {
                 } else if (itemId == R.id.moveTomorrow_button) {
                     // Need to implement moving to tomorrow
                     activityModel.switchPending(clickedGoal);
-                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1 + activityModel.buttonCount));
                     return true;
                 } else if (itemId == R.id.finish_button) {
                     activityModel.updateGoal(clickedGoal);

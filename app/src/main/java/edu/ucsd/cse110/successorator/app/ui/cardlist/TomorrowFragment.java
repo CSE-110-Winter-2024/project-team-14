@@ -159,11 +159,12 @@ public class TomorrowFragment extends Fragment {
                 if (itemId == R.id.moveToday_button) {
                     // Need to implement moving to today
                     activityModel.switchPending(clickedGoal);
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(activityModel.buttonCount));
                     return true;
                 } else if (itemId == R.id.moveTomorrow_button) {
                     // Need to implement moving to tomorrow
                     activityModel.switchPending(clickedGoal);
-                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1));
+                    activityModel.setDate(clickedGoal, LocalDateTime.now().plusDays(1 + activityModel.buttonCount));
                     return true;
                 } else if (itemId == R.id.finish_button) {
                     activityModel.updateGoal(clickedGoal);
