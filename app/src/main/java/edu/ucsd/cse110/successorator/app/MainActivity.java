@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private MainViewModel activityModel;
     private ActivityMainBinding view;
 
+    private int contextColor = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        var today = TodayFragment.newInstance();
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_from_left, R.anim.slide_out_to_right)
-                .replace(R.id.fragment_container, TodayFragment.newInstance())
+                .replace(R.id.fragment_container, today)
                 .commit();
     }
 
@@ -101,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 .setCustomAnimations(R.anim.slide_in_from_right, R.anim.slide_out_to_left)
                 .replace(R.id.fragment_container, RecurringFragment.newInstance())
                 .commit();
+
     }
 
     public void showPopupMenu(View view) {
@@ -144,29 +149,30 @@ public class MainActivity extends AppCompatActivity {
                 if (itemId == R.id.home_button) {
                     activityModel.filterByContext("Home");
                     focusText = "Focus Mode: Home";
-                    color = ContextCompat.getColor(this, R.color.homeDotColor);
+                    contextColor = ContextCompat.getColor(this, R.color.homeDotColor);
                 } else if (itemId == R.id.work_button) {
                     activityModel.filterByContext("Work");
                     focusText = "Focus Mode: Work";
-                    color = ContextCompat.getColor(this, R.color.workDotColor);
+                    contextColor = ContextCompat.getColor(this, R.color.workDotColor);
                 } else if (itemId == R.id.school_button) {
                     activityModel.filterByContext("School");
                     focusText = "Focus Mode: School";
-                    color = ContextCompat.getColor(this, R.color.schoolDotColor);
+                    contextColor = ContextCompat.getColor(this, R.color.schoolDotColor);
                 } else if (itemId == R.id.errands_button) {
                     activityModel.filterByContext("Errands");
                     focusText = "Focus Mode: Errands";
-                    color = ContextCompat.getColor(this, R.color.errandsDotColor);
+                    contextColor = ContextCompat.getColor(this, R.color.errandsDotColor);
                 } else if (itemId == R.id.cancel_button) {
+                    contextColor = 0;
                     activityModel.cancelFilter();
                 } else {
                     view.findViewById(R.id.contextIndicator).setVisibility(View.INVISIBLE);
                     return false;
                 }
 
-                view.findViewById(buttonId).setBackgroundColor(color);
+                view.findViewById(buttonId).setBackgroundColor(contextColor);
 
-                contextIndicator.setTextColor(color);
+                contextIndicator.setTextColor(contextColor);
                 contextIndicator.setText(focusText);
                 contextIndicator.setVisibility(View.VISIBLE);
                 fadeInAnimation(contextIndicator);

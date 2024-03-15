@@ -132,5 +132,9 @@ public class MainViewModel extends ViewModel {
         currentFilterContext = null;
         updateOrderedGoals(originalGoals);
     }
+
+    public String getContext() {
+        return this.currentFilterContext;
+    }
 }
 
