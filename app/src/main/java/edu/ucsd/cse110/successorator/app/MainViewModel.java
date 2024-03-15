@@ -7,6 +7,7 @@ import androidx.lifecycle.viewmodel.ViewModelInitializer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ public class MainViewModel extends ViewModel {
     private String currentFilterContext;
     private final TimeKeeper timeKeeper;
     public int buttonCount;
+
+    List<Goal> shouldRecur = new ArrayList<>();
 
     public static final ViewModelInitializer<MainViewModel> initializer = new ViewModelInitializer<>(
             MainViewModel.class,
@@ -105,13 +108,45 @@ public class MainViewModel extends ViewModel {
     public void rollover() {
         for (var g : orderedGoals.getValue()) {
             if (g.completed() && g.getRecurrence().equals("one_time")) {
+//                shouldRecur.remove(find(g, shouldRecur));
                 goalRepository.remove(g.id());
+                continue;
             }
 
-            if(g.completed() && !g.getRecurrence().equals("one_time")){
+            if (g.completed() && !g.getRecurrence().equals("one_time")){
                 goalRepository.updateGoal(g);
             }
+
+            if (!g.completed() && !g.getRecurrence().equals("one_time")) {
+                if (!inList(g, shouldRecur)) {
+                    goalRepository.append(new Goal(g.id() + 100, g.taskText(), g.completed(), g.sortOrder(),
+                            g.context(), g.dateAdded().plusDays(1), "one_time", g.isPending()));
+                    shouldRecur.add(g);
+                }
+            }
         }
+    }
+
+    public boolean inList(Goal goal, List<Goal> goals) {
+        for (Goal g : goals) {
+            if (g.equals(goal)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int find(Goal goal, List<Goal> goals) {
+        int count = 0;
+        for (Goal g : goals) {
+            if (g.taskText().equals(goal.taskText())) {
+                return count;
+            }
+            count++;
+        }
+
+        return -1;
     }
 
     public void cleanDUMMY() {
