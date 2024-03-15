@@ -111,7 +111,6 @@ public class MainViewModel extends ViewModel {
             if(g.completed() && !g.getRecurrence().equals("one_time")){
                 goalRepository.updateGoal(g);
             }
-
         }
     }
 

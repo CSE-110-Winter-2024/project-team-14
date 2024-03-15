@@ -196,12 +196,21 @@ public class TomorrowFragment extends Fragment {
             case "weekly":
                 return goal.getDateAdded().getDayOfWeek() == tomorrow.getDayOfWeek();
             case "monthly":
-                return goal.getDateAdded().getDayOfMonth() == tomorrow.getDayOfMonth();
+                return isSameWeekAndDayOfMonth(goal.getDateAdded(), tomorrow);
             case "yearly":
                 return goal.getDateAdded().getDayOfYear() == tomorrow.getDayOfYear();
             default:
                 return false;
         }
+    }
+
+    private boolean isSameWeekAndDayOfMonth(LocalDateTime dateAdded, LocalDateTime today) {
+        return getWeekOfMonth(dateAdded) == getWeekOfMonth(today) &&
+                dateAdded.getDayOfWeek() == today.getDayOfWeek();
+    }
+
+    private int getWeekOfMonth(LocalDateTime date) {
+        return (date.getDayOfMonth() - 1) / 7 + 1;
     }
 
     private int getContextColor() {

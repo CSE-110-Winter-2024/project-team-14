@@ -102,9 +102,9 @@ public class TodayFragment extends Fragment {
 
             for (Goal goal: goals) {
                 if(goal.taskText().equals("DUMMY")){
-
+                    continue;
                 }
-                else if((goal.getDateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
+                if((goal.getDateAdded().isBefore(today)) &&(goal.getRecurrence().equals("one_time"))){
                     todayGoals.add(goal);
                 }
                 else if ((goal.getDateAdded().toLocalDate().isEqual(today.toLocalDate()) ||
@@ -202,7 +202,7 @@ public class TodayFragment extends Fragment {
             case "one_time":
                 return false;
             case "daily":
-                return goal.getDateAdded().isBefore(LocalDateTime.now());
+                return goal.getDateAdded().isBefore(today);
             case "weekly":
                 return goal.getDateAdded().getDayOfWeek() == today.getDayOfWeek();
             case "monthly":
