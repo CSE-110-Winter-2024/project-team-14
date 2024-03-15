@@ -100,7 +100,10 @@ public class CreateRecurringGoalDialogFragment extends DialogFragment
         }
 
         var goal = new Goal(null, front,false,-1, context, selectedDate, recurrence, false);
-        activityModel.append(goal);
+
+        if (goal.getDateAdded() != null) {
+            activityModel.append(goal);
+        }
 
         dialog.dismiss();
     }
