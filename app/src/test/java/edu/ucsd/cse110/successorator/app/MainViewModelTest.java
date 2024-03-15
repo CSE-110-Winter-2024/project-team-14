@@ -257,4 +257,34 @@ public class MainViewModelTest {
                 .toLocalDate().equals(LocalDateTime.now().plusDays(1).toLocalDate()) && !goal.isPending()).collect(Collectors.toList());
         assertEquals(2, tomorrowGoals.size());
     }
+
+    @Test
+    public void pendingPersistenceTest() {
+        InMemoryDataSource data = new InMemoryDataSource();
+        GoalRepository repo = new SimpleGoalRepository(data);
+        TimeKeeper timeKeeper = new InMemoryTimeKeeper();
+        var mainViewModel = new MainViewModel(repo, timeKeeper);
+        Goal g = new Goal(null, "do homework", true, 1, "school", LocalDateTime.now(), true);
+        mainViewModel.append(g);
+        Goal g2 = new Goal(null, "do homework2", true, 2, "school", LocalDateTime.now(), true);
+        mainViewModel.append(g2);
+        Goal g3 = new Goal(null, "do homework3", true, 3, "school", LocalDateTime.now(), false);
+        mainViewModel.append(g3);
+        var orderedGoals = mainViewModel.getOrderedGoals().getValue();
+        assertEquals(3, orderedGoals.size());
+        List<Goal> pendingGoals = orderedGoals.stream().filter(goal -> goal.dateAdded()
+                .toLocalDate().equals(LocalDateTime.now().toLocalDate()) && goal.isPending()).collect(Collectors.toList());
+        assertEquals(2, pendingGoals.size());
+        // Get the current date and time
+        LocalDateTime currentDateTime = mainViewModel.getCurrentDateTime().getValue();
+        // Add one day to get to the next day
+        LocalDateTime nextDayDateTime = currentDateTime.plusDays(1);
+        // Set the time to 2 AM
+        LocalDateTime nextDay2AM = nextDayDateTime.withHour(2).withMinute(0);
+        // Set the updated date and time in the mainViewModel
+        mainViewModel.setCurrentDateTime(nextDay2AM);
+        List<Goal> pendingGoalsNextDay = orderedGoals.stream().filter(goal -> goal.dateAdded()
+                .toLocalDate().equals(LocalDateTime.now().toLocalDate()) && goal.isPending()).collect(Collectors.toList());
+        assertEquals(2, pendingGoalsNextDay.size());
+    }
 }
